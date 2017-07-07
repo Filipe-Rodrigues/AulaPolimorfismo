@@ -1,6 +1,7 @@
 package application;
 
 import core.ManicomioDeZulu;
+
 // teste de alteracao
 public class Programa {
 
