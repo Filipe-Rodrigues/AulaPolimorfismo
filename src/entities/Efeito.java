@@ -31,7 +31,7 @@ public abstract class Efeito {
     /**
      * Método getter para o campo "nome".
      *
-     * @return O nome do Efeito.
+     * @return String com o nome do Efeito.
      */
     public String getNome () {
         return nome;
@@ -40,7 +40,7 @@ public abstract class Efeito {
     /**
      * Método getter para o campo "descricao".
      *
-     * @return A descrição do Efeito.
+     * @return String com a descrição do Efeito.
      */
     public String getDescricao () {
         return descricao;
@@ -52,7 +52,7 @@ public abstract class Efeito {
      * aplicado ao Ator.
      *
      * @param alvo Ator a ser afetado pelo efeito.
-     * @return true se o efeito foi aplicado corretamente, false caso contrário.
+     * @return bollean, true se o efeito foi aplicado corretamente, false caso contrário.
      */
     public abstract Resultado aplicar (Ator alvo);
 

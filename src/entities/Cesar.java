@@ -37,7 +37,7 @@ public class Cesar extends Ator {
      * 
      * Retorna o Status atual de Cesar
      *
-     * @return String
+     * @return String com o status de Cesar após ser afetado sua sanidade.
      */
     @Override
     public String getStatus () {
@@ -51,8 +51,8 @@ public class Cesar extends Ator {
      *
      * Afeta a sanidade do Cesar do tamanho da quantidade passada
      * 
-     * @param quantidade
-     * @return boolean
+     * @param quantidade inteiro com a quantidade a ser afetada.
+     * @return Resultado, com o resultado após afetar a sanidade. 
      */
     private Resultado afetarSanidade (int quantidade) {
         int sanidade = atributos.get(SANIDADE);
@@ -82,9 +82,9 @@ public class Cesar extends Ator {
      * 
      * Implementacao a partir da Classe Ator
      * 
-     * @param atributo
-     * @param quantidade
-     * @return Resultado 
+     * @param atributo, atributo a ser afetado.
+     * @param quantidade, inteiro com a quantidade a afetar.
+     * @return Resultado retorna o resultado da sanidade afetada pela quantia. 
      */
     @Override
     public Resultado afetarAtributo (Atributo atributo, int quantidade) {
@@ -100,7 +100,8 @@ public class Cesar extends Ator {
      * 
      * Verifica se Cesar ainda suporta os ataques sofridos
      *
-     * @return boolean
+     * @return boolean, true, se cesar estiver com sanidade menor ou igual 15,
+     * false, caso contrario.
      */
     public boolean taSuportando () {
         return (atributos.get(SANIDADE) <= 15 && atributos.get(SANIDADE) >= 10);
@@ -111,7 +112,8 @@ public class Cesar extends Ator {
      * 
      * Verifica se Cesar esta no estado insano.
      *
-     * @return boolean
+     * @return boolean, true, se cesar estiver com sanidade menor ou igual 15,
+     * false, caso contrario.
      */
     public boolean taInsano () {
         return (atributos.get(SANIDADE) <= 15 && atributos.get(SANIDADE) >= 10);
@@ -122,7 +124,8 @@ public class Cesar extends Ator {
      * 
      * Verifica se Cesar esta em um estado Muito Insano
      *
-     * @return boolean
+     * @return boolean, true, se Cesar estiver com sanidade menor que dez,
+     * false, caso contrario.
      */
     public boolean taMuitoInsano () {
         return (atributos.get(SANIDADE) < 10 && atributos.get(SANIDADE) > 0);
@@ -133,7 +136,8 @@ public class Cesar extends Ator {
      * 
      * retorna se ele ficou fora de controle
      *
-     * @return boolean
+     * @return boolean, true se a sanidade de Cesar chegou a zero, false, caso
+     * contrario.
      */
     public boolean enlouqueceuDeVez () {
         return (atributos.get(SANIDADE) == 0);
@@ -144,7 +148,7 @@ public class Cesar extends Ator {
      *
      * Retorna se Cesar conseguiu se curar de sua loucura.
      * 
-     * @return boolean
+     * @return boolean, true, se Cesar conseguiu se curar, false, caso contrario.
      */
     public boolean taCurado () {
         return (atributos.get(SANIDADE) >= 30);
@@ -155,7 +159,7 @@ public class Cesar extends Ator {
      *
      * Retorna se o Status da sanidade de Cesar.
      * 
-     * @return String
+     * @return String com o Status da Sanidade.
      */
     private String getStatusSanidade () {
         if (taCurado()) {
@@ -174,7 +178,7 @@ public class Cesar extends Ator {
     * Metodo implementado da Classe {@link Ator}, funciona como dialogo do 
     * Cesar com NPC.
     * 
-    * @return String
+    * @return String uma mensagem de conversa entre Cesar e um NPC.
     */
     @Override
     public String mensagemConversa () {

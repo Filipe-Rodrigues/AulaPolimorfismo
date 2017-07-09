@@ -35,35 +35,36 @@ public class EstadoDeJogo {
     }
     
     /**
-     * Metodo getEstadoAtual
+     * Metodo getEstadoAtual.
      *
      * Retorna o estado atual de Cesar.
      * 
-     * @return int
+     * @return inteiro com o estado atual do jogo de acordo com a classe
+     * do tipo enum {@link Resultado}.
      */
     public int getEstadoAtual () {
     	return estadoAtual;
     }
     
     /**
-     * Metodo getNomeDoNPCAtual
+     * Metodo getNomeDoNPCAtual.
      * 
      * retorna o nome do NPC que cesar esta interagindo.
      *
-     * @return String
+     * @return String com um nome de um NPC.
      */
     public String getNomeDoNPCAtual () {
     	return nomeDoNPCAtual;
     }
     
     /**
-     * Metodo setEstadoAtual
+     * Metodo setEstadoAtual.
      * 
      * recebe o estado e o nome de um NPC.
      *
      * @param estado estado em que um NPC esta
      * @param nome nome de um NPC
-     * @return boolean
+     * @return boolean, se conseguiu atualizar os dados, true, se não, false.
      */
     public boolean setEstadoAtual (int estado, String nome) {
         if (estado >= 0 && estado <= 2) {
@@ -75,31 +76,44 @@ public class EstadoDeJogo {
     }
     
     /**
-     * Metodo matou
+     * Metodo matou.
      * 
      * recebe se um NPC foi morto.
      *
-     * @param assassinato recebe true se um NPC foi morto
+     * @param assassinato recebe true se um NPC foi morto.
      */
     public void matou (boolean assassinato) {
         this.assassinato = assassinato;
     }
     
     /**
-     * Metodo teveMatanca
+     * Metodo teveMatanca.
      * 
      * retorna se houve morte de NPC.
      *
-     * @return boolean
+     * @return boolean, se houve morte, true, se não false.
      */
     public boolean teveMatanca () {
         return assassinato;
     }
     
+    /**Metodo taFinalizado.
+     * 
+     * retorna se o jogo foi finalizado.
+     * 
+     * @return boolean, se o jogo foi finalizado, true, se não, false.
+     */
     public boolean taFinalizado() {
         return finalizado;
     }
 
+    /**Metodo setFinalizado.
+     * 
+     * recebe um boolean dizendo se o jogo foi finalizado.
+     * 
+     * @param apagaTudo do tipo boolean que traz true, se o jogo foi
+     * finalizado, e false se o jogo não foi finalizado.
+     */
     public void setFinalizado(boolean apagaTudo) {
         this.finalizado = apagaTudo;
     }

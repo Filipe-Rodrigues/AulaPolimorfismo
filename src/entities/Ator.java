@@ -60,7 +60,7 @@ public abstract class Ator {
      *
      * @param efeitos Lista de efeitos para afetar um ator
      * @param alvo Alvo que recebera os efeitos
-     * @return Resultado
+     * @return List<Resultado> com os resultados após um ator sofrer ataque.
      */
     private List<Resultado> afetarAtor(List<Efeito> efeitos, Ator alvo) {
         List<Resultado> resultados = new ArrayList<>();
@@ -77,7 +77,7 @@ public abstract class Ator {
      *
      * @param nomeDoItem uma String com o nome do item que desejo verificar pelo
      * nome
-     * @return int
+     * @return int com a posicao do item a ser pego.
      */
     private int getItemPorNome(String nomeDoItem) {
         int encontrado = -1;
@@ -99,7 +99,7 @@ public abstract class Ator {
      * tem como funcao dar um determinado item passado por parametro.
      *
      * @param nomeDoItem uma String com o nome do item que desejo dar
-     * @return {@link Item}
+     * @return {@link Item} um Item a ser dado a um ator.
      */
     public Item darItem(String nomeDoItem) {
         int index = getItemPorNome(nomeDoItem);
@@ -118,7 +118,7 @@ public abstract class Ator {
      *
      * @param nomeDoItem uma String com o nome do item que desejo verificar a
      * descricao
-     * @return String
+     * @return String com a descricao dos itens possuidos.
      */
     public String getDescricaoItem(String nomeDoItem) {
         int index = getItemPorNome(nomeDoItem);
@@ -135,7 +135,7 @@ public abstract class Ator {
      *
      * @param nomeDoItem uma String que passa o nome do item a ser trabalhado
      * @param alvo um {@link Ator} para usar o item passado
-     * @return Resultado
+     * @return List<Resultado> apos usar um item.
      */
     public List<Resultado> usarItem(String nomeDoItem, Ator alvo) {
         int index = getItemPorNome(nomeDoItem);
@@ -158,7 +158,7 @@ public abstract class Ator {
      *
      * @param item um {@link Item} que aplica seus efeitos em um alvo
      * @param alvo um {@link Ator} que recebe os efeitos do item passado
-     * @return Resultado
+     * @return List<Resultado> com o resultado apos usar um item. 
      */
     public List<Resultado> usarItem(Item item, Ator alvo) {
         return afetarAtor(item.getEfeitos(), alvo);
@@ -170,7 +170,7 @@ public abstract class Ator {
      * Coleta um determinado item de um ambiente
      *
      * @param item um {@link Item} que coleta os itens de um ambiente
-     * @return Resultado
+     * @return Resultado após coletar tentar coletar um item.
      */
     public Resultado coletarItem(Item item) {
         if (bagagem.size() <= atributos.get(CAPACIDADE)) {
@@ -188,7 +188,7 @@ public abstract class Ator {
      *
      * @param alvo um {@link Ator} que recebera os danos da habilidade do ator
      * principal.
-     * @return Resultado
+     * @return Resultado resultado de um ator após sofrer ataque de uma habilidade.
      */
     public List<Resultado> usarHabilidade(Ator alvo) {
         return alvo.afetarAtor(habilidade.getEfeitos(), alvo);
@@ -201,7 +201,7 @@ public abstract class Ator {
      *
      * @param quantidade um inteiro que determina a quantidade de HP que um Ator
      * ira perder.
-     * @return Resultado
+     * @return Resultado resultado após um ator perder HP.
      */
     private Resultado afetarHP(int quantidade) {
         int hp = atributos.get(HP);
@@ -233,7 +233,7 @@ public abstract class Ator {
      * @param atributo um {@link Atributo} que ira sofrer danos
      * @param quantidade um inteiro que diz a quantidade que um atributo ira
      * perder.
-     * @return boolean
+     * @return Resultado resultado após sofrer ataque em um atributo.
      */
     public Resultado afetarAtributo(Atributo atributo, int quantidade) {
         if (atributo == HP) {
@@ -247,7 +247,7 @@ public abstract class Ator {
      *
      * Pega o status atual do Ator, retornando uma String com esse status.
      *
-     * @return String
+     * @return String com o status do Ator.
      */
     public String getStatus() {
         int hp = atributos.get(HP);
@@ -273,7 +273,7 @@ public abstract class Ator {
      *
      * Tem como funcao pegar o nome do ator e retornar como uma String
      *
-     * @return String
+     * @return String com o nome do Ator.
      */
     public String getNome() {
         return nome;
@@ -285,7 +285,7 @@ public abstract class Ator {
      * Tem como funcao pegar os atributos do Ator e retornar um inteiro.
      *
      * @param atributo os {@link Atributo} do ator.
-     * @return int
+     * @return int com a quantidade de atributos.
      */
     public int getAtributo(Atributo atributo) {
         if (atributo == HP) {
@@ -301,7 +301,7 @@ public abstract class Ator {
      *
      * Pega tudo que ator tem em sua bagagem e retorna como uma String
      *
-     * @return String
+     * @return String com uma lista de Itens que o ator Possui.
      */
     public String getListaItens() {
         int quantidadeDeItens = bagagem.size();
@@ -322,7 +322,7 @@ public abstract class Ator {
      *
      * retorna o nome da habilidade do ator naquele momento.
      *
-     * @return String
+     * @return String com o nome da habilidade atual do ator.
      */
     public String getNomeHabilidade() {
         return habilidade.getNome();
@@ -333,7 +333,7 @@ public abstract class Ator {
      *
      * retorna a descricao da habilidade que o ator tem naquele momento.
      *
-     * @return String
+     * @return String com a descricao da habilidade do ator.
      */
     public String getDescricaoHabilidade() {
         return habilidade.getDescricao();
@@ -344,7 +344,7 @@ public abstract class Ator {
      *
      * retorna um booleano se o Ator esta vivo ou morto.
      *
-     * @return boolean
+     * @return boolean se o ator está vivo, true, senão, false.
      */
     public boolean taVivo() {
         return ((atributos.get(HP) == 0) ? (false) : (true));
@@ -355,7 +355,7 @@ public abstract class Ator {
      *
      * tem funcao de setar um ator como seu aliado.
      *
-     * @param aliado
+     * @param aliado boolean pra definir se um ator é aliado do outro.
      */
     public void setAliado(boolean aliado) {
         this.aliado = aliado;
@@ -366,7 +366,7 @@ public abstract class Ator {
      *
      * retorna um booleano pra dizer se um ator eh seu aliado ou nao
      *
-     * @return boolean
+     * @return boolean se um ator é aliado do outro, true, senão, false.
      */
     public boolean ehAliado() {
         return aliado;
@@ -377,7 +377,7 @@ public abstract class Ator {
      *
      * retorna um booleano se o ator ta neutralizado ou nao.
      *
-     * @return boolean
+     * @return boolean se um ator foi neutralizado, true, senão, false.
      */
     public boolean taNeutralizado() {
         return neutralizado;
@@ -388,7 +388,7 @@ public abstract class Ator {
      *
      * retorna um booleano se o ator eh imortal ou nao.
      *
-     * @return boolean
+     * @return boolean se um ator é imortal, true, senão, false.
      */
     public boolean ehImortal() {
         return atributos.get(HP) < 0;
@@ -399,7 +399,7 @@ public abstract class Ator {
      *
      * retorna um booleano se tem espaco no inventario do ator.
      *
-     * @return boolean
+     * @return boolean se o ator tem espaco em seu inventario, true, senão, false.
      */
     public boolean temEspacoNoInventario() {
         return (bagagem.size() < atributos.get(CAPACIDADE));
@@ -409,8 +409,9 @@ public abstract class Ator {
      * Metodo temItem.
      *
      * retorna um booleano dizendo se tem o item atraves do nome passado.
-     *
-     * @return boolean
+     * 
+     * @param nome String com o nome do item para checar na bagagem.
+     * @return boolean se um ator tem um determinado Item, true, senão, false.
      */
     public boolean temItem(String nome) {
         for (Item item : bagagem) {

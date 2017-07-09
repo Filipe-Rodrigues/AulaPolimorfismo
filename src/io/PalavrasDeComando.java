@@ -32,7 +32,7 @@ public class PalavrasDeComando {
      * retorna true se a string dada eh um comando valido, false se nao eh.
      * 
      * @param umaString String a ser verificada
-     * @return boolean
+     * @return boolean se a String passada é um comando, true, se não, false.
      */
     public boolean ehComando(String umaString) {
         for(int i = 0; i < comandosValidos.length; i++) {

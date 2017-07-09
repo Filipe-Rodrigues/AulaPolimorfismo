@@ -58,7 +58,7 @@ public class Ambiente {
      *
      * retorna a descricao do ambiente.
      *
-     * @return String
+     * @return String com a descricao do ambiente.
      */
     public String getDescricao() {
         return this.descricao;
@@ -69,7 +69,7 @@ public class Ambiente {
      *
      * retorna a imagem do ambiente.
      *
-     * @return String
+     * @return String com o nome da Imagem do ambiente.
      */
     public String getImagem() {
         return this.nomeDaImagem;
@@ -80,7 +80,7 @@ public class Ambiente {
      *
      * retorna as saidas oportunas.
      *
-     * @return String
+     * @return String com a lista de saidas disponiveis em um ambiente.
      */
     public String listarSaidasDisponiveis() {
         String descricaoSaidas;
@@ -101,7 +101,7 @@ public class Ambiente {
      *
      * retorna as saidas oportunas.
      *
-     * @return String
+     * @return List<String> com a lista das saidas.
      */
     public List<String> getListaSaidas() {
         if (saidas.isEmpty()) {
@@ -116,7 +116,7 @@ public class Ambiente {
      * retorna um ambiente atraves de uma direcao passada no parametro.
      *
      * @param direcao do tipo String, indica uma direcao.
-     * @return {@link Ambiente}
+     * @return {@link Ambiente} com o ambiente seguindo a direcao passada.
      */
     public Ambiente getAmbiente(String direcao) {
         return saidas.get(direcao);
@@ -127,7 +127,7 @@ public class Ambiente {
      *
      * retorna uma String com uma lista de itens no ambiente.
      *
-     * @return String
+     * @return String Com a lista de itens no ambiente.
      */
     public String getListaItens() {
         String lista = "";
@@ -143,7 +143,7 @@ public class Ambiente {
      *
      * retorna uma String com todos os NPC's do ambiente.
      *
-     * @return String
+     * @return String com a lista de NPC's no ambiente.
      */
     public String getListaNPCs() {
         String lista = "";
@@ -200,7 +200,7 @@ public class Ambiente {
      * recolhe o item passado atraves do seu nome.
      *
      * @param nomeDoItem String com o nome do item a ser recolhido
-     * @return {@link Item}
+     * @return {@link Item} a ser recolhido.
      */
     public Item recolherItem(String nomeDoItem) {
         int index = getItemPorNome(nomeDoItem);
@@ -238,7 +238,7 @@ public class Ambiente {
      * Metodo selecionarNPC
      *
      * @param nomeDoNPC um String com o nome.
-     * @return {@link NPC}
+     * @return {@link NPC} com o NPC achado pelo nome, se não achar retorna null.
      */
     public NPC selecionarNPC(String nomeDoNPC) {
         int index = getNPCPorNome(nomeDoNPC);
@@ -256,7 +256,7 @@ public class Ambiente {
      *
      * @param efeitos lista de {@link Efeito} causados com um objeto
      * @param alvo {@link Ator} a sofrer os danos
-     * @return Resultado
+     * @return Resultado após o ator sofrer um ataque.
      */
     private List<Resultado> afetarAtor(List<Efeito> efeitos, Ator alvo) {
         List<Resultado> resultados = new ArrayList<>();
@@ -271,7 +271,7 @@ public class Ambiente {
      *
      * @param nomeDoItem String com o nome do item
      * @param alvo um {@link Ator} alvo que vai receber os danos.
-     * @return Resultado
+     * @return Resultado após o ator sofrer um ataque com um Item.
      */
     public List<Resultado> aplicarItem(String nomeDoItem, Ator alvo) {
         int index = getItemPorNome(nomeDoItem);
@@ -293,7 +293,7 @@ public class Ambiente {
      * verifica se existe algum item no ambiente.
      *
      * @param nome uma String com o nome do item
-     * @return boolean
+     * @return boolean se tem o item, true, senão, false.
      */
     public boolean temItem(String nome) {
         for (Item item : itens) {
@@ -310,7 +310,7 @@ public class Ambiente {
      * pega uma descricao do item no ambiente.
      *
      * @param nomeDoItem uma String com o nome do item
-     * @return String
+     * @return String com a descrição do item.
      */
     public String getDescricaoItem(String nomeDoItem) {
         int index = getItemPorNome(nomeDoItem);

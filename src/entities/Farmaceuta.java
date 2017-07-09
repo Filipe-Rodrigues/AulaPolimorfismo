@@ -47,7 +47,7 @@ public class Farmaceuta extends NPC {
      * Metodo implementado da Classe {@link Ator}, funciona como dialogo do 
      * ator principal com Farmaceuta.
      * 
-     * @return String
+     * @return String com uma mensagem de conversa entre o Farmaceuta e Cesar.
      */
     @Override
     public String mensagemConversa() {
@@ -65,7 +65,7 @@ public class Farmaceuta extends NPC {
      * 
      * Metodo implementado da Classe {@link NPC}.
      * 
-     * @return {@link Item} 
+     * @return {@link Item}, um remédio (Clonazepam) para Cesar.
      */
     @Override
     public Item entregarItemDeQuest() {

@@ -38,7 +38,7 @@ public class Comando {
      * Retorna a palavra de comando (a primeira palavra) deste comando.
      * Se o comando nao foi entendido, o resultado eh null.
      * 
-     * @return String .
+     * @return String com uma palavra de comando.
      */
      public String getPalavraDeComando() {
         return palavraDeComando;
@@ -50,7 +50,7 @@ public class Comando {
      * retorna  segunda palavra deste comando, Retorna null se 
      * nao existe segunda palavra.
      * 
-     * @return String
+     * @return String com a segunda palavra de um comando.
      */
     public String getSegundaPalavra() {
         return segundaPalavra;
@@ -61,7 +61,7 @@ public class Comando {
      * 
      * retorna true se o comando nao foi entendido. 
      * 
-     * @return boolean
+     * @return boolean se uma palavra de comando for igual a  null, true, senao, false.
      */
     public boolean ehDesconhecido() {
         return (palavraDeComando == null);
@@ -72,7 +72,8 @@ public class Comando {
      * 
      * retorna true se o comando tem uma segunda palavra. 
      * 
-     * @return boolean
+     * @return boolean se a segunda palavra do comando for igual a null,
+     * true, senao, false.
      */
     public boolean temSegundaPalavra() {
         return (segundaPalavra != null);

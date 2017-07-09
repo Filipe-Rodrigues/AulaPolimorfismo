@@ -41,9 +41,10 @@ public abstract class NPC extends Ator {
      * 
      * Metodo implementado da Classe {@link Ator}, afeta os atributos do NPC
      * 
-     * @param quantidade
-     * @param atributo
-     * @return Resultado
+     * @param quantidade inteiro com a quantidade que um atritubuto vai ser 
+     * alterado.
+     * @param atributo {@link Atributo} que vai ser afetado.
+     * @return {@link  Resultado} com o atributo afetado na quantidade passada. 
      */ 
     @Override
     public Resultado afetarAtributo (Atributo atributo, int quantidade) {

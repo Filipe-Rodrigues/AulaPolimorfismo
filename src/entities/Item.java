@@ -28,11 +28,11 @@ public class Item {
     /**
      * Construtor da Classes Item.
      *
-     * @param nome
-     * @param descricao
-     * @param efeitos
-     * @param consumivel
-     * @param coletavel
+     * @param nome String com o nome do Item
+     * @param descricao String com a Descricao Do Item
+     * @param efeitos List de Efeitos com os efeitos Causados pelo Item
+     * @param consumivel bollean Se é consumivel.
+     * @param coletavel bollean Se é coletavel.
      */
     public Item (String nome, String descricao, List<Efeito> efeitos, boolean consumivel, boolean coletavel) {
         this.nome = nome;
@@ -50,7 +50,7 @@ public class Item {
      * 
      * retorna o nome do Item com uma String.
      * 
-     * @return String
+     * @return String, retorna o nome do Item.
      */
     public String getNome () {
         return this.nome;
@@ -61,7 +61,7 @@ public class Item {
      * 
      * retorna com uma String a descricao do Item. 
      *
-     * @return String
+     * @return String, retorna uma String com a descrição do Item.
      */
     public String getDescricao () {
         return this.descricao;
@@ -72,7 +72,7 @@ public class Item {
      * 
      * retorna os efeitos de um Item.
      *
-     * @return List do tipo {@link Efeito)
+     * @return List do tipo {@link Efeito) com os efeitos causados
      */
     public List<Efeito> getEfeitos () {
         return Collections.unmodifiableList(efeitos);
