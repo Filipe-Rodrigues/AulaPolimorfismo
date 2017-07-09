@@ -39,7 +39,7 @@ public class AlteracaoDeSanidade extends Efeito {
      *
      * retorna A força de influência na sanidade de César. 
      * 
-     * @return int
+     * @return int com a quantidade a ser tirada na sanidade de César.
      */
     public int getQuantidade () {
         return quantidade;

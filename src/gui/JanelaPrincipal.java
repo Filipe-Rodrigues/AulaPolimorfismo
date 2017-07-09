@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import core.InterfaceDeJogoListener;
@@ -25,8 +20,17 @@ import javax.swing.ImageIcon;
 import javax.swing.text.JTextComponent;
 
 /**
+ * Classe JanelaPrincipal - Controla a janela Principal do jogo.
  *
- * @author biiirl
+ * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
+ * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.  
+ *
+ * A implementação dessa classe tem como objetivo implementar o codigo para exibição
+ * da janela do jogo, sendo uma facilitação e tornando o jogo mais empolgante.
+ * 
+ * 
+ * @author  Filipe Barros Rodrigues
+ * @version 2017.07.01
  */
 public class JanelaPrincipal extends javax.swing.JFrame {
 
@@ -36,7 +40,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private Mapa mapa;
 
     /**
-     * Creates new form JanelaPrincipal
+     * Construtor Da Classe JanelaPrincipal.
      */
     public JanelaPrincipal() {
         initComponents();
@@ -224,14 +228,22 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**Metodo initAtributos.
+     * 
+     * inicializa a janela.
+     */
     private void initAtributos() {
         initEntradas();
         inicializarMapa();
         initEngine();
         loadImagemNotFound();
     }
-
+    
+    /**Metodo initEntradas.
+     * 
+     * inicializa as entradas(Comandos) que o jogador pode usar durante o jogo.
+     * 
+     */
     private void initEntradas() {
         List<String> palavrasDeComando = new ArrayList<>();
         palavrasDeComando.add("ir");
@@ -252,6 +264,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         entrada = new Entrada(palavrasDeComando);
     }
 
+    /**Metodo initEngine.
+     *  
+     */
     private void initEngine() {
         jogo = new ManicomioDeZulu();
         jogo.adicionarInterfaceDeJogoListener(new InterfaceDeJogoListener() {
@@ -261,7 +276,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    /**Metodo loadImagemNotFound.
+     * 
+     * carrega a imagem not found para um ambiente que não tenha imagem.
+     * 
+     */
     private void loadImagemNotFound() {
         try {
             notFound = ImageIO.read(new File("res/images/404.png"));
@@ -270,48 +290,98 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }
     
+    /**Metodo inicializarMapa.
+     * 
+     * inicializa o mapa para o auxilio do jogador.
+     */
     private void inicializarMapa() {
         mapa = new Mapa(this, true);
     }
 
+    /**Metodo jButton1ActionPerformed.
+     * 
+     * @param evt java.awt.event.ActionEvent.
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         enviarComando();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**Metodo jTextField1KeyReleased.
+     * 
+     * @param evt java.awt.event.KeyEvent.
+     */
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             enviarComando();
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
+    /** Metodo formFocusGained
+     *
+     * @param evt java.awt.event.FocusEvent.
+     */
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
         jTextField1.requestFocus();
     }//GEN-LAST:event_formFocusGained
-
+    
+    /**Metodo jTextArea1KeyPressed.
+     * 
+     * @param evt java.awt.event.KeyEvent.
+     */
     private void jTextArea1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyPressed
         jTextField1.requestFocus();
     }//GEN-LAST:event_jTextArea1KeyPressed
 
+    /**Metodo botaoNorteActionPerformed.
+     * 
+     * metodo que cria o botão para ir para o norte.
+     * 
+     * @param evt java.awt.event.ActionEvent.
+     */
     private void botaoNorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNorteActionPerformed
         Comando comando = new Comando("ir", "norte");
         jogo.processarComando(comando);
     }//GEN-LAST:event_botaoNorteActionPerformed
-
+    
+    /**Metodo botaoLesteActionPerformed.
+     * 
+     * metodo que cria o botão para ir para o leste.
+     * 
+     * @param evt java.awt.event.ActionEvent
+     */
     private void botaoLesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoLesteActionPerformed
         Comando comando = new Comando("ir", "leste");
         jogo.processarComando(comando);
     }//GEN-LAST:event_botaoLesteActionPerformed
-
+    
+    /**Metodo botaoOesteActionPerformed.
+     * 
+     * metodo que cria o botão para ir para o oeste.
+     * 
+     * @param evt java.awt.event.ActionEvent 
+     */
     private void botaoOesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoOesteActionPerformed
         Comando comando = new Comando("ir", "oeste");
         jogo.processarComando(comando);
     }//GEN-LAST:event_botaoOesteActionPerformed
 
+    /**Metodo botaoSulActionPerformed.
+     * 
+     * metodo que cria o botão para ir para o sul.
+     * 
+     * @param evt java.awt.event.ActionEvent
+     */
     private void botaoSulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSulActionPerformed
         Comando comando = new Comando("ir", "sul");
         jogo.processarComando(comando);
     }//GEN-LAST:event_botaoSulActionPerformed
 
+    /**Metodo envioDeComandoDoManicomio.
+     * 
+     * envia um evento como um comando.
+     * 
+     * @param evt JogoEvent que é responsavel por passar o comando a ser executado.
+     */
     private void envioDeComandoDoManicomio(JogoEvent evt) {
         atualizarCampoDeTexto(evt);
         atualizarImagem(evt.getImagem() + ".png");
@@ -320,6 +390,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         verificarSeTerminou(evt.taFinalizado());
     }
     
+    /**Metodo atualizarCampoDeTexto.
+     * 
+     * Atualiza o campo de texto que é exibido na execução.
+     * 
+     * @param evt JogoEvent, que atualiza o campo de texto.
+     */
     private void atualizarCampoDeTexto(JogoEvent evt) {
         if (evt.deveLimparTela()) {
             jTextArea1.setText("");
@@ -327,6 +403,13 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jTextArea1.append(evt.getSaida() + "\n");
     }
     
+    /**Metodo atualizarBotoesDeNavegacao.
+     * 
+     * atualiza os botoes de navegação que são usados no jogo.
+     * 
+     * @param saidas List<String> com as saidas para que seja atualizado os 
+     * botões da navegação..
+     */
     private void atualizarBotoesDeNavegacao(List<String> saidas) {
         botaoLeste.setEnabled(false);
         botaoOeste.setEnabled(false);
@@ -345,12 +428,24 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }
     
+    /**Metodo mostrarMapa.
+     * 
+     * Metodo responsavel por exibir o mapa para o usuario do jogo.
+     * 
+     * @param querMapa boolean que verifica se o usuario quer ver o mapa.
+     */
     private void mostrarMapa(boolean querMapa) {
         if (querMapa) {
             mapa.setVisible(true);
         }
     }
     
+    /**Metodo verificarSeTerminou.
+     * 
+     * responsavel por verificar se o jogo chegou em seu fim.
+     * 
+     * @param taFinalizado boolean que serve de parametro para a verificação.
+     */
     private void verificarSeTerminou(boolean taFinalizado) {
         if (taFinalizado) {
             jTextField1.setEnabled(false);
@@ -358,6 +453,11 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }
 
+    /**Metodo enviarComando.
+     * 
+     * envia um comando a ser executado no jogo.
+     * 
+     */
     private void enviarComando() {
         if (!jTextField1.getText().trim().equals("")) {
             String linha = jTextField1.getText();
@@ -372,6 +472,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jTextField1.requestFocus();
     }
 
+    /**Metodo atualizarImagem.
+     * 
+     * metodo que atualiza a imagem dos ambientes.
+     * 
+     * @param nomeDaImagem String com o nome da nova imagem.
+     */
     private void atualizarImagem(String nomeDaImagem) {
         if (!nomeDaImagem.equals(".png")) {
             try {
@@ -383,7 +489,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }
 
-    /**
+    /**Metodo Main.
+     * 
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -418,6 +525,14 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         });
     }
 
+    /**Metodo mudarFonte.
+     * 
+     * muda da fonte padrão para uma outra fonte passada.
+     * 
+     * @param campo JTextComponent.
+     * @param fonte String nome da fonte.
+     * @param tamanho float com o tamanho da fonte.
+     */
     private void mudarFonte(JTextComponent campo, String fonte, float tamanho) {
         try {
             //create the font to use. Specify the size!

@@ -69,12 +69,21 @@ public class ManicomioDeZulu {
         protagonista = new Cesar();
     }
 
+    /**Metodo adicionarInterfaceDeJogoListener.
+     * 
+     * 
+     * @param listener InterfaceDeJogoListener com as interfaces do jogo.
+     */
     public void adicionarInterfaceDeJogoListener(InterfaceDeJogoListener listener) {
         interfacesDeJogo.add(listener);
         JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas());
         imprimirBoasVindas(evento);
     }
 
+    /**Metodo atualizarInterfaces.
+     * 
+     * @param evt JogoEvent com os eventos das interfaces.
+     */
     public void atualizarInterfaces(JogoEvent evt) {
         for (InterfaceDeJogoListener interfaceDeJogo : interfacesDeJogo) {
             interfaceDeJogo.envioDeComandoPerformed(evt);
@@ -389,13 +398,13 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo adicionarCachorrosEPedras
+     * Metodo adicionarCachorrosEPedras.
      *
      * coloca os objetos e os npc's nos ambientes.
      *
-     * @param rua
-     * @param contador
-     * @return int
+     * @param rua List<Ambiente> lista de ruas que receberão cachorros.
+     * @param contador Inteiro com um numero a ser contado.
+     * @return int com o numero de cachorros adicionados.
      */
     private int adicionarCachorrosEPedras(List<Ambiente> rua, int contador) {
         int contaCachorro = contador;
@@ -418,14 +427,13 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo processarComando
+     * Metodo processarComando.
      *
      * responsavel por processar o camando de entrada e indica o que fazer em
      * seguida com o comando passado.
      *
      * @param comando do tipo {@link Comando}, passa o comando de entrada do
      * usuario
-     * @return boolean.
      */
     public void processarComando(Comando comando) {
         JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas());
@@ -483,13 +491,15 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo atacar
+     * Metodo atacar.
      *
      * responsavel por atacar um npc que estiver no ambiente.
      *
      * @param comando do tipo {@link Comando}, recebe alem do comando atacar,
      * tambem indica quem atacar, caso não passe quem atacar nao ha o que fazer.
+     * @param evento JogoEvent, gera um evento na interface.
      */
+    
     private void atacar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
             evento.emendarSaida("Atacar quem?");
@@ -518,6 +528,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, recebe alem do comando conversar,
      * tambem com quem conversar.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void conversar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -552,6 +563,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, recebe alem do comando pedir,
      * tambem a quem pedir
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void pedir(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -580,10 +592,10 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo cancelar
+     * Metodo cancelar.
      *
      * cancela uma operacao.
-     *
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void cancelar(JogoEvent evento) {
         if (status.getEstadoAtual() == CONVERSANDO) {
@@ -597,11 +609,11 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo fugir
+     * Metodo fugir.
      *
      * foge de uma luta com um npc.
      *
-     *
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void fugir(JogoEvent evento) {
         if (status.getEstadoAtual() == ATACANDO) {
@@ -619,12 +631,13 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo usar
+     * Metodo usar.
      *
      * responsavel por fazer o usuario usar um item.
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando usar,
      * tambem qual item usar.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void usar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -664,7 +677,13 @@ public class ManicomioDeZulu {
             }
         }
     }
-
+    
+    /**Metodo verificarResultados
+     * 
+     * @param alvo {@link Ator}, o qual vai receber a verificação.
+     * @param resultados List<Resultado> com os resultados sofridos pelo ator.
+     * @param evento JogoEvent, gera um evento na interface. 
+     */
     private void verificarResultados(Ator alvo, List<Resultado> resultados, JogoEvent evento) {
         for (Resultado resultado : resultados) {
             switch (resultado) {
@@ -717,6 +736,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando checar,
      * tambem qual ambiente checar.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void checar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -742,6 +762,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando
      * descartar, tambem qual item descartar.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void descartar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -763,6 +784,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando coletar,
      * tambem qual item coletar.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void coletar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -794,6 +816,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando Mostrar,
      * tambem o inventario a mostrar.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void mostrarInventario(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -812,6 +835,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando detalhar,
      * tambem o que detalhar.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void detalhar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -834,6 +858,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando
      * descrever, tambem qual ambiente descrever.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void descrever(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -870,6 +895,7 @@ public class ManicomioDeZulu {
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando status,
      * tambem o status de quem deseja imprimir.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void imprimirStatus(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
@@ -891,11 +917,12 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo imprimirBoasVindas
+     * Metodo imprimirBoasVindas.
      *
      * Responsavel por imprimir as boas vindas do jogo (cabecalho).
      *
      * Chama o metodo exibir ambiente depois das boas vindas.
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void imprimirBoasVindas(JogoEvent evento) {
         evento.emendarSaida("    Bem Vindo ao Jogo \"World of Zuul - O Manicômio de Zulu\".");
@@ -925,11 +952,11 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo imprimirAjuda
+     * Metodo imprimirAjuda.
      *
      * Imprime uma ajuda pro usuario do jogo com todos os comando validos em
      * determinada situacao.
-     *
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void imprimirAjuda(JogoEvent evento) {
         evento.emendarSaida("Você precisa de medicamentos para lidar com a psicose!!");
@@ -964,13 +991,14 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo irParaAmbiente
+     * Metodo irParaAmbiente.
      *
      * responsavel por sair de um ambiente atual e ir para outro ambiente
      * passado atraves do sentido.
      *
      * @param comando do tipo {@link Comando}, rescebe alem do comando ir,
      * tambem qual direcao ir.
+     *@param evento JogoEvent, gera um evento na interface.
      */
     private void irParaAmbiente(Comando comando, JogoEvent evento) {
         if (status.getEstadoAtual() == NAVEGANDO) {
@@ -999,10 +1027,10 @@ public class ManicomioDeZulu {
     }
 
     /**
-     * Metodo exibirAmbienteAtual
+     * Metodo exibirAmbienteAtual.
      *
      * responsavel por dizer onde cesar esta no momento.
-     *
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void exibirAmbienteAtual(JogoEvent evento) {
         evento.emendarSaida("Você está na " + ambienteAtual.getDescricao());
@@ -1022,7 +1050,7 @@ public class ManicomioDeZulu {
      *
      * responsavel por retornar um comando validando a saida do usuario do jogo.
      *
-     * @return boolean
+     * @param evento JogoEvent, gera um evento na interface.
      */
     private void sair(JogoEvent evento) {
         evento.emendarSaida("Obrigado por jogar, até mais!");

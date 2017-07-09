@@ -33,7 +33,7 @@ public class Entrada {
      * Pega um comando do usuario, divide em duas palavras, e cria 
      * um objeto do tipo {@link Comando} e o retorna.
      * 
-     * @return {@link Comando}
+     * @return {@link Comando} o comando que uma pessoa for realizar.
      */
     public Comando pegarComando(String linha) throws FormatoDeComandoException {
         String palavra1 = null;

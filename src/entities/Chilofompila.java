@@ -36,7 +36,7 @@ public class Chilofompila extends NPC {
      * Metodo implementado da Classe {@link Ator}, funciona como dialogo do 
      * ator principal com Chilofompila.
      * 
-     * @return String
+     * @return String com uma mensagem de conversa entre a Chilofompila e César.
      */
     @Override
     public String mensagemConversa() {
@@ -55,7 +55,7 @@ public class Chilofompila extends NPC {
      * 
      * Metodo implementado da Classe {@link NPC}.
      * 
-     * @return {@link Item} 
+     * @return {@link Item} null pois não há nenhum item a ser dado a Cesar.
      */
     @Override
     public Item entregarItemDeQuest() {

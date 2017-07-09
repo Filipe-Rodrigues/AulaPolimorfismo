@@ -30,7 +30,7 @@ public class Vendedor extends NPC {
          * 
          * Metodo implementado da Classe {@link NPC}.
          * 
-         * @return {@link Item}
+         * @return {@link Item}, uma picareta para César.
          */
 	@Override
 	public Item entregarItemDeQuest() {
@@ -44,7 +44,8 @@ public class Vendedor extends NPC {
         * Metodo implementado da Classe {@link Ator}, funciona como dialogo do 
         * ator principal com vendedor.
         * 
-        * @return String
+        * @return String, uma mensagem de dialogo entre César e o Vendedor, 
+        * se o Vendedor for aliado retorna primeira String, se não, a segunda.
         */
 	@Override
 	public String mensagemConversa() {

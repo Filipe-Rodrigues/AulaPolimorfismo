@@ -40,7 +40,7 @@ public class Cachorro extends NPC {
      * Metodo implementado da Classe {@link Ator}, funciona como dialogo do 
      * ator principal com Cachorro.
      * 
-     * @return String
+     * @return String com uma mensagem de conversa entre Cesar e o Cachorro.
      */
     @Override
     public String mensagemConversa() {
@@ -58,7 +58,7 @@ public class Cachorro extends NPC {
      * 
      * Metodo implementado da Classe {@link NPC}.
      * 
-     * @return {@link Item} 
+     * @return {@link Item} null, pois cachorro não tem nenhum item para dar a Cesar.
      */
     @Override
     public Item entregarItemDeQuest() {

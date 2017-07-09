@@ -8,10 +8,12 @@ package io;
  * qualquer, seja no console, seja em uma caixa de texto em uma GUI, etc.
  * 
  * @author Filipe Barros Rodrigues
- * @version 2017.06.07
+ * @version 2017.07.01
  */
 public interface SaidaDeJogoListener {
-    /**
+    
+    /**Metodo imprimir.
+     * 
      * Imprime o conteúdo da String passada pelo parâmetro da função e continua
      * na mesma linha.
      *
@@ -19,7 +21,8 @@ public interface SaidaDeJogoListener {
      */
     public void imprimir(String sentenca);
     
-    /**
+    /**Metodo imprimirLinha.
+     * 
      * Imprime o conteúdo da String passada pelo parâmetro da função e continua
      * na linha seguinte.
      *

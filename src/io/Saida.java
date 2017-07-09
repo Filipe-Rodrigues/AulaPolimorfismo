@@ -27,7 +27,7 @@ public class Saida implements SaidaDeJogoListener {
      * 
      * implementacao da classe {@link SaidaDeJogoListener}
      *
-     * @param sentenca 
+     * @param sentenca String com a sentença a ser impressa.
      */
     @Override
     public void imprimir (String sentenca) {
@@ -39,7 +39,7 @@ public class Saida implements SaidaDeJogoListener {
      * 
      * implementacao da classe {@link SaidaDeJogoListener}
      * 
-     * @param sentenca
+     * @param sentenca String com a sentença a ser impressa.
      */
     @Override
     public void imprimirLinha (String sentenca) {

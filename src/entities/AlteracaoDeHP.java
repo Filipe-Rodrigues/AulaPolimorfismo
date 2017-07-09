@@ -38,7 +38,7 @@ public class AlteracaoDeHP extends Efeito {
      *
      * retorna A força de influência no HP do Ator alvo.
      * 
-     * @return int 
+     * @return int com a quantidade a ser tirada no HP de César.
      */
     public int getQuantidade () {
         return quantidade;

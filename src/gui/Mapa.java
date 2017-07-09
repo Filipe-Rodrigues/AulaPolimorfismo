@@ -1,18 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 /**
+ * Classe Mapa.
  *
- * @author filip
+ * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
+ * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.  
+ *
+ * A implementação dessa classe tem como objetivo facilitar ao usuario jogar
+ * o jogo.
+ * 
+ * @author  Filipe Barros Rodrigues
+ * @version 2017.06.07
  */
+
 public class Mapa extends javax.swing.JDialog {
 
     /**
-     * Creates new form Mapa
+     * Creates new form Mapa.
      */
     public Mapa(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -638,7 +642,7 @@ public class Mapa extends javax.swing.JDialog {
         
     }//GEN-LAST:event_jRadioButton60MouseReleased
 
-    /**
+    /**Method Main.
      * @param args the command line arguments
      */
     public static void main(String args[]) {
