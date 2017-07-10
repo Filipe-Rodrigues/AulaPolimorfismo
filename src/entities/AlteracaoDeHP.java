@@ -17,8 +17,6 @@ import static entities.Atributo.HP;
  * @version 2017.06.07
  */
 public class AlteracaoDeHP extends Efeito {
-
-    private final int quantidade;
    
     /**
      * Construtor da classe AlteracaoDeHP
@@ -29,19 +27,7 @@ public class AlteracaoDeHP extends Efeito {
      * Números positivos adicionam pontos de vida, números negativos retiram.
      */
     public AlteracaoDeHP (String nome, String descricao, int quantidade) {
-        super(nome, descricao);
-        this.quantidade = quantidade;
-    }
-
-    /**
-     * Método getter para o campo "quantidade".
-     *
-     * retorna A força de influência no HP do Ator alvo.
-     * 
-     * @return int com a quantidade a ser tirada no HP de César.
-     */
-    public int getQuantidade () {
-        return quantidade;
+        super(nome, descricao, quantidade);
     }
 
     /**
@@ -58,7 +44,7 @@ public class AlteracaoDeHP extends Efeito {
      */
     @Override
     public Resultado aplicar (Ator alvo) {
-        return alvo.afetarAtributo(HP, quantidade);
+        return alvo.afetarAtributo(HP, getQuantidade());
     }
 
 }

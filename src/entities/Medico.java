@@ -29,12 +29,12 @@ public class Medico extends NPC {
         Habilidade hab = new Habilidade("Imobilização"
                         , "Imobiliza seu alvo para internação, zerando os pontos de Sanidade."
                         , umEfeito);
-        habilidade = hab;
+        super.setHabilidade(hab);
         umEfeito = new ArrayList<>();
         Efeito cura = new AlteracaoDeSanidade("Recuperar Sanidade", "Restaura 15 de Sanidade", 15);
         umEfeito.add(cura);
         Item complementoPsicotropico = new Item("Largactil", "Um medicamento para crises de psicose. Só se consegue com o Médico.", umEfeito, true, true);
-        bagagem.add(complementoPsicotropico);
+        super.coletarItem(complementoPsicotropico);
     }
     
     /**
@@ -48,8 +48,8 @@ public class Medico extends NPC {
     @Override
     public String mensagemConversa() {
         String fraseDeEfeito = "";
-        if (aliado) {
-                fraseDeEfeito = "Olá! Sou o Dr. " + nome + ", deseja algo?";
+        if (super.ehAliado()) {
+                fraseDeEfeito = "Olá! Sou o Dr. " + super.getNome() + ", deseja algo?";
         } else {
                 fraseDeEfeito = "Segurem ele!! Vou aplicar a injeção!!";
         }
@@ -65,7 +65,7 @@ public class Medico extends NPC {
      */
     @Override
     public Item entregarItemDeQuest() {
-    	entregouItemDeQuest = true;
+    	super.setEntregouItemDeQuest(true);
     	return darItem("Largactil");
     }
  

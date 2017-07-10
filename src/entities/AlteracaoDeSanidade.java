@@ -17,8 +17,6 @@ import static entities.Atributo.SANIDADE;
  * @version 2017.06.07
  */
 public class AlteracaoDeSanidade extends Efeito {
-
-    private final int quantidade;
    
     /**
      * Construtor da classe AlteracaoDeSanidade
@@ -30,19 +28,7 @@ public class AlteracaoDeSanidade extends Efeito {
      * do surto.
      */
     public AlteracaoDeSanidade (String nome, String descricao, int quantidade) {
-        super(nome, descricao);
-        this.quantidade = quantidade;
-    }
-
-    /**
-     * Método getter para o campo "quantidade".
-     *
-     * retorna A força de influência na sanidade de César. 
-     * 
-     * @return int com a quantidade a ser tirada na sanidade de César.
-     */
-    public int getQuantidade () {
-        return quantidade;
+        super(nome, descricao, quantidade);
     }
 
     /**
@@ -62,7 +48,7 @@ public class AlteracaoDeSanidade extends Efeito {
      */
     @Override
     public Resultado aplicar (Ator alvo) {
-        return alvo.afetarAtributo(SANIDADE, quantidade);
+        return alvo.afetarAtributo(SANIDADE, getQuantidade());
     }
 
 }

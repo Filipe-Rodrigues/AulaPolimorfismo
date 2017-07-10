@@ -17,15 +17,19 @@ public abstract class Efeito {
 
     private String nome;
     private String descricao;
+    private int quantidade;
 
     /**
      * Construtor da classe Efeito
      *
      * @param nome Contém o nome do Efeito
      * @param descricao Contém a descrição do Efeito no Ator
+     * @param quantidade Descreve a quantidade de influência em algum atributo de Ator
      */
-    public Efeito (String nome, String descricao) {
+    public Efeito (String nome, String descricao, int quantidade) {
+        this.nome = nome;
         this.descricao = descricao;
+        this.quantidade = quantidade;
     }
     
     /**
@@ -44,6 +48,17 @@ public abstract class Efeito {
      */
     public String getDescricao () {
         return descricao;
+    }
+    
+    /**
+     * Método getter para o campo "quantidade".
+     *
+     * retorna A força de influência no Ator alvo.
+     * 
+     * @return int com a quantidade de influência em algum atributo de Ator
+     */
+    public int getQuantidade () {
+        return quantidade;
     }
     
     /**

@@ -48,6 +48,13 @@ public class ManicomioDeZulu {
     private Cesar protagonista;
     private EstadoDeJogo status;
     private List<InterfaceDeJogoListener> interfacesDeJogo;
+    private Entrada entrada;
+    
+    private Ambiente casaDoCesar;
+    private Ambiente manicomio;
+    private Ambiente faculdade;
+    private Ambiente loja;
+    private Ambiente farmacia;
 
     /**
      * Construtor da classe ManicomioDeZulu.
@@ -57,8 +64,34 @@ public class ManicomioDeZulu {
         criarAmbientes();
         inicializarIO();
         status = new EstadoDeJogo();
+        initEntradas();
     }
 
+    /**Metodo initEntradas.
+     * 
+     * inicializa as entradas(Comandos) que o jogador pode usar durante o jogo.
+     * 
+     */
+    private void initEntradas() {
+        List<String> palavrasDeComando = new ArrayList<>();
+        palavrasDeComando.add("ir");
+        palavrasDeComando.add("ajuda");
+        palavrasDeComando.add("sair");
+        palavrasDeComando.add("status");
+        palavrasDeComando.add("descrever");
+        palavrasDeComando.add("mostrar");
+        palavrasDeComando.add("conversar");
+        palavrasDeComando.add("atacar");
+        palavrasDeComando.add("coletar");
+        palavrasDeComando.add("usar");
+        palavrasDeComando.add("descartar");
+        palavrasDeComando.add("pedir");
+        palavrasDeComando.add("cancelar");
+        palavrasDeComando.add("fugir");
+        palavrasDeComando.add("checar");
+        entrada = new Entrada(palavrasDeComando);
+    }
+    
     /**
      * Metodo inicializar
      *
@@ -76,7 +109,7 @@ public class ManicomioDeZulu {
      */
     public void adicionarInterfaceDeJogoListener(InterfaceDeJogoListener listener) {
         interfacesDeJogo.add(listener);
-        JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas());
+        JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas(), status);
         imprimirBoasVindas(evento);
     }
 
@@ -125,14 +158,14 @@ public class ManicomioDeZulu {
             String descricao = "Rua Python, " + (i * 4 + 50);
             ruaPython.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
         }
-        Ambiente casaDoCesar = new Ambiente("Rua Python, 118 - Sua casa", "casa2");
+        casaDoCesar = new Ambiente("Rua Python, 118 - Sua casa", "casa2");
 
         List<Ambiente> ruaCobol = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             String descricao = "Rua Cobol, " + (i * 4 + 150);
             ruaCobol.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
         }
-        Ambiente loja = new Ambiente("Loja do Coveiro", "coveiro");
+        loja = new Ambiente("Loja do Coveiro", "coveiro");
         Ambiente cemiterio = new Ambiente("Entrada do Cemitério Parada Final", "cemiterio");
 
         List<Ambiente> ruaLua = new ArrayList<>();
@@ -146,15 +179,15 @@ public class ManicomioDeZulu {
             String descricao = "Rua Snobol, " + (i * 4 + 450);
             ruaSnobol.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
         }
-        Ambiente farmacia = new Ambiente("Drogaria Saradão", "farmacia");
-        Ambiente faculdade = new Ambiente("UFLA 'Universidade Federal de Loucos Autistas' [FECHADA]", "escola");
+        farmacia = new Ambiente("Drogaria Saradão", "farmacia");
+        faculdade = new Ambiente("UFLA 'Universidade Federal de Loucos Autistas' [FECHADA]", "escola");
 
         List<Ambiente> ruaSmalltalk = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             String descricao = "Rua Smalltalk, " + (i * 4 + 550);
             ruaSmalltalk.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
         }
-        Ambiente manicomio = new Ambiente("Recepção do Manicômio Olo & Co", "manicomio");
+        manicomio = new Ambiente("Recepção do Manicômio Olo & Co", "manicomio");
 
         List<Ambiente> ruaHaskell = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -366,6 +399,36 @@ public class ManicomioDeZulu {
 
         ambienteAtual = esquina_Haskell_Python;
 
+        adicionarObjetosCaseiros();
+
+        int contaCachorro;
+        contaCachorro = adicionarCachorrosEPedras(ruaCobol, 1);
+        contaCachorro = adicionarCachorrosEPedras(ruaHaskell, contaCachorro);
+        contaCachorro = adicionarCachorrosEPedras(ruaLua, contaCachorro);
+        contaCachorro = adicionarCachorrosEPedras(ruaProlog, contaCachorro);
+        contaCachorro = adicionarCachorrosEPedras(ruaPython, contaCachorro);
+        contaCachorro = adicionarCachorrosEPedras(ruaSmalltalk, contaCachorro);
+        adicionarCachorrosEPedras(ruaSnobol, contaCachorro);
+
+        adicionarChilofompilas(saidaDaCidade);
+        adicionarAtoresChave();
+
+    }
+    
+    private void adicionarAtoresChave () {
+        faculdade.colocarNPC(new Cachorro("Cachorro"));
+        manicomio.colocarNPC(new Medico("Raydson"));
+        farmacia.colocarNPC(new Farmaceuta("Filipe"));
+        loja.colocarNPC(new Vendedor("Velho"));
+    }
+    
+    private void adicionarChilofompilas (List<Ambiente> lugares) {
+        for (int i = 0; i < 12; i++) {
+            lugares.get(i).colocarNPC(new Chilofompila());
+        }
+    }
+    
+    private void adicionarObjetosCaseiros () {
         Efeito chuveiradaSan = new AlteracaoDeSanidade("Restaurar Sanidade", "Restaura 9 pontos de Sanidade", 9);
         Efeito chuveiradaHP = new AlteracaoDeHP("Restaurar HP", "Restaura 5 pontos de HP", 5);
         List<Efeito> efeitosChuveiro = new ArrayList<>();
@@ -377,24 +440,6 @@ public class ManicomioDeZulu {
         casaDoCesar.colocarItem(chuveiro);
         casaDoCesar.colocarItem(carteira);
         casaDoCesar.colocarItem(mapa);
-
-        int contaCachorro;
-        contaCachorro = adicionarCachorrosEPedras(ruaCobol, 1);
-        contaCachorro = adicionarCachorrosEPedras(ruaHaskell, contaCachorro);
-        contaCachorro = adicionarCachorrosEPedras(ruaLua, contaCachorro);
-        contaCachorro = adicionarCachorrosEPedras(ruaProlog, contaCachorro);
-        contaCachorro = adicionarCachorrosEPedras(ruaPython, contaCachorro);
-        contaCachorro = adicionarCachorrosEPedras(ruaSmalltalk, contaCachorro);
-        adicionarCachorrosEPedras(ruaSnobol, contaCachorro);
-
-        for (int i = 0; i < 12; i++) {
-            saidaDaCidade.get(i).colocarNPC(new Chilofompila());
-        }
-        faculdade.colocarNPC(new Cachorro("Cachorro"));
-        manicomio.colocarNPC(new Medico("Raydson"));
-        farmacia.colocarNPC(new Farmaceuta("Filipe"));
-        loja.colocarNPC(new Vendedor("Velho"));
-
     }
 
     /**
@@ -426,6 +471,11 @@ public class ManicomioDeZulu {
         return contaCachorro;
     }
 
+    public void receberComando(String linha) throws FormatoDeComandoException {
+        Comando comando = entrada.pegarComando(linha);
+        processarComando(comando);
+    }
+    
     /**
      * Metodo processarComando.
      *
@@ -435,8 +485,8 @@ public class ManicomioDeZulu {
      * @param comando do tipo {@link Comando}, passa o comando de entrada do
      * usuario
      */
-    public void processarComando(Comando comando) {
-        JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas());
+    public void processarComando(Comando comando) throws FormatoDeComandoException {
+        JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas(), status);
         if (comando.ehDesconhecido()) {
             evento.emendarSaida("Você está louco? Digite [ajuda] se precisar de algo...");
             atualizarInterfaces(evento);
@@ -449,7 +499,7 @@ public class ManicomioDeZulu {
         } else if (palavraDeComando.equals("ir")) {
             irParaAmbiente(comando, evento);
         } else if (palavraDeComando.equals("sair")) {
-            sair(evento);
+            sair(comando, evento);
         } else if (palavraDeComando.equals("status")) {
             imprimirStatus(comando, evento);
         } else if (palavraDeComando.equals("descrever")) {
@@ -481,11 +531,11 @@ public class ManicomioDeZulu {
         if (!protagonista.taVivo() || protagonista.enlouqueceuDeVez()) {
             evento.emendarSaida("Você perdeu!!! Você deixou que te tua loucura te dominasse por");
             evento.emendarSaida("completo!!!");
-            sair(evento);
+            sairDoJogo(evento);
         } else if (protagonista.taCurado()) {
             evento.emendarSaida("PARABÉNS, VOCÊ FOI CURADO!!!! Agora fique esperto para não deixar");
             evento.emendarSaida("de tomar teus remédios na hora certa!!");
-            sair(evento);
+            sairDoJogo(evento);
         }
         atualizarInterfaces(evento);
     }
@@ -965,6 +1015,7 @@ public class ManicomioDeZulu {
         if (status.getEstadoAtual() == NAVEGANDO) {
             evento.emendarSaida("[ir <direcao>]\tVá para a direção que quiser da lista de saídas de cada ambiente!");
             evento.emendarSaida("[descrever ambiente]\tVeja a descrição completa de onde estás!");
+            evento.emendarSaida("[checar mapa]\tColete o mapa e visualize os pontos mais importantes da cidade!");
             evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
             evento.emendarSaida("[coletar <nome_item>]\tSe seu inventário não estiver cheio, ele é seu!");
             evento.emendarSaida("[usar <nome_item>]\tVocê usará um item, em você mesmo (mesmo um ofensivo)!");
@@ -972,6 +1023,7 @@ public class ManicomioDeZulu {
             evento.emendarSaida("[status eu]\tVeja o seu Status!");
             evento.emendarSaida("[conversar <nome_npc>]\tConverse com eles e veja como podem te ajudar!");
             evento.emendarSaida("[atacar <nome_npc>]\tOu mostre a eles o inferno hahahaha!!");
+            evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
         } else if (status.getEstadoAtual() == CONVERSANDO) {
             evento.emendarSaida("[status eu]\tVeja o seu Status!");
             evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
@@ -979,6 +1031,8 @@ public class ManicomioDeZulu {
             evento.emendarSaida("[descrever npc]\tVocê vê o inventário do NPC!");
             evento.emendarSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
             evento.emendarSaida("[cancelar]\tVolte ao que estava fazendo!");
+            evento.emendarSaida("[sair]\tO mesmo que cancelar!");
+            evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
         } else if (status.getEstadoAtual() == ATACANDO) {
             evento.emendarSaida("[status eu]\tVeja o seu Status!");
             evento.emendarSaida("[status npc]\tVeja o Status do seu inimigo!");
@@ -987,6 +1041,8 @@ public class ManicomioDeZulu {
             evento.emendarSaida("[usar <nome_item>]\tVocê usará um item no seu oponente (mesmo um item positivo)!");
             evento.emendarSaida("[descrever ambiente]\tVeja o que está a sua volta!");
             evento.emendarSaida("[fugir]\tSe tiver azar de enfrentar alguém muito forte, apenas tente!");
+            evento.emendarSaida("[sair]\tO mesmo que fugir!");
+            evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
         }
     }
 
@@ -1052,9 +1108,23 @@ public class ManicomioDeZulu {
      *
      * @param evento JogoEvent, gera um evento na interface.
      */
-    private void sair(JogoEvent evento) {
+    private void sair(Comando comando, JogoEvent evento) {
+        if (!comando.temSegundaPalavra()) {
+            if (status.getEstadoAtual() == CONVERSANDO) {
+                cancelar(evento);
+            } else if (status.getEstadoAtual() == ATACANDO) {
+                fugir(evento);
+            } else {
+                evento.emendarSaida("Sair de onde?");
+            }
+        } else if (comando.getSegundaPalavra().equals("jogo")) {
+            sairDoJogo(evento);
+        }
+    }
+    
+    private void sairDoJogo (JogoEvent evento) {
         evento.emendarSaida("Obrigado por jogar, até mais!");
-        evento.setFinalizado(true);
         status.setFinalizado(true);
     }
+
 }

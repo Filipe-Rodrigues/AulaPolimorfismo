@@ -22,12 +22,12 @@ import static entities.Resultado.*;
  */
 public abstract class Ator {
 
-    protected String nome;
-    protected HashMap<Atributo, Integer> atributos;
-    protected Habilidade habilidade;
-    protected List<Item> bagagem;
-    protected boolean aliado;
-    protected boolean neutralizado;
+    private String nome;
+    private HashMap<Atributo, Integer> atributos;
+    private Habilidade habilidade;
+    private List<Item> bagagem;
+    private boolean aliado;
+    private boolean neutralizado;
 
     /**
      * Construtor padrão da classe Ator.
@@ -288,12 +288,7 @@ public abstract class Ator {
      * @return int com a quantidade de atributos.
      */
     public int getAtributo(Atributo atributo) {
-        if (atributo == HP) {
-            return atributos.get(HP);
-        } else if (atributo == CAPACIDADE) {
-            return atributos.get(CAPACIDADE);
-        }
-        return -10;
+        return atributos.get(atributo);
     }
 
     /**
@@ -382,6 +377,17 @@ public abstract class Ator {
     public boolean taNeutralizado() {
         return neutralizado;
     }
+    
+    /**
+     * Metodo setNeutralizado.
+     *
+     * Modifica o status de neutralização
+     *
+     * @param neutralizado true se sim, false se não.
+     */
+    protected void setNeutralizado(boolean neutralizado) {
+        this.neutralizado = neutralizado;
+    }
 
     /**
      * Metodo ehImortal.
@@ -426,5 +432,27 @@ public abstract class Ator {
      * Metodo Abstrato mensagemConversa.
      */
     public abstract String mensagemConversa();
+
+    /**
+     * Método getHabilidade
+     * 
+     * @return Habilidade do Ator
+     */
+    public Habilidade getHabilidade() {
+        return habilidade;
+    }
+
+    /**
+     * Método setHabilidade
+     * muda a habilidade do Ator
+     * @param habilidade nova habilidade
+     */
+    public void setHabilidade(Habilidade habilidade) {
+        this.habilidade = habilidade;
+    }
+    
+    protected void adicionarAtributo (Atributo atributo, int id) {
+        atributos.put(atributo, id);
+    }
 
 }

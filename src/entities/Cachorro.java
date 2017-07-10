@@ -31,7 +31,7 @@ public class Cachorro extends NPC {
     Habilidade hab = new Habilidade("Mordida Raivosa"
                     , "Cão de rua contaminado com Raiva. Subtrai 1 ponto de HP e de Sanidade."
                     , umEfeito);
-    habilidade = hab;
+        super.setHabilidade(hab);
     }
     
     /**
@@ -45,7 +45,7 @@ public class Cachorro extends NPC {
     @Override
     public String mensagemConversa() {
             String fraseDeEfeito;
-            if (aliado) {
+            if (super.ehAliado()) {
                     fraseDeEfeito = "***Choramingo leve de fome*** AU!";
             } else {
                     fraseDeEfeito = "GRRRRRRRRRR!!!";

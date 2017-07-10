@@ -34,7 +34,6 @@ import javax.swing.text.JTextComponent;
  */
 public class JanelaPrincipal extends javax.swing.JFrame {
 
-    private Entrada entrada;
     private ManicomioDeZulu jogo;
     private BufferedImage notFound;
     private Mapa mapa;
@@ -70,7 +69,6 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         botaoLeste = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(32767, 32767));
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 formFocusGained(evt);
@@ -233,35 +231,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * inicializa a janela.
      */
     private void initAtributos() {
-        initEntradas();
         inicializarMapa();
         initEngine();
         loadImagemNotFound();
-    }
-    
-    /**Metodo initEntradas.
-     * 
-     * inicializa as entradas(Comandos) que o jogador pode usar durante o jogo.
-     * 
-     */
-    private void initEntradas() {
-        List<String> palavrasDeComando = new ArrayList<>();
-        palavrasDeComando.add("ir");
-        palavrasDeComando.add("ajuda");
-        palavrasDeComando.add("sair");
-        palavrasDeComando.add("status");
-        palavrasDeComando.add("descrever");
-        palavrasDeComando.add("mostrar");
-        palavrasDeComando.add("conversar");
-        palavrasDeComando.add("atacar");
-        palavrasDeComando.add("coletar");
-        palavrasDeComando.add("usar");
-        palavrasDeComando.add("descartar");
-        palavrasDeComando.add("pedir");
-        palavrasDeComando.add("cancelar");
-        palavrasDeComando.add("fugir");
-        palavrasDeComando.add("checar");
-        entrada = new Entrada(palavrasDeComando);
     }
 
     /**Metodo initEngine.
@@ -339,8 +311,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * @param evt java.awt.event.ActionEvent.
      */
     private void botaoNorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNorteActionPerformed
-        Comando comando = new Comando("ir", "norte");
-        jogo.processarComando(comando);
+        jogo.receberComando("ir norte");
     }//GEN-LAST:event_botaoNorteActionPerformed
     
     /**Metodo botaoLesteActionPerformed.
@@ -350,8 +321,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * @param evt java.awt.event.ActionEvent
      */
     private void botaoLesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoLesteActionPerformed
-        Comando comando = new Comando("ir", "leste");
-        jogo.processarComando(comando);
+        jogo.receberComando("ir leste");
     }//GEN-LAST:event_botaoLesteActionPerformed
     
     /**Metodo botaoOesteActionPerformed.
@@ -361,8 +331,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * @param evt java.awt.event.ActionEvent 
      */
     private void botaoOesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoOesteActionPerformed
-        Comando comando = new Comando("ir", "oeste");
-        jogo.processarComando(comando);
+        jogo.receberComando("ir oeste");
     }//GEN-LAST:event_botaoOesteActionPerformed
 
     /**Metodo botaoSulActionPerformed.
@@ -372,8 +341,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * @param evt java.awt.event.ActionEvent
      */
     private void botaoSulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSulActionPerformed
-        Comando comando = new Comando("ir", "sul");
-        jogo.processarComando(comando);
+        jogo.receberComando("ir sul");
     }//GEN-LAST:event_botaoSulActionPerformed
 
     /**Metodo envioDeComandoDoManicomio.
@@ -385,7 +353,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private void envioDeComandoDoManicomio(JogoEvent evt) {
         atualizarCampoDeTexto(evt);
         atualizarImagem(evt.getImagem() + ".png");
-        atualizarBotoesDeNavegacao(evt.getSaidasDisponiveis());
+        atualizarBotoesDeNavegacao(evt);
         mostrarMapa(evt.querMapa());
         verificarSeTerminou(evt.taFinalizado());
     }
@@ -410,21 +378,27 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * @param saidas List<String> com as saidas para que seja atualizado os 
      * botões da navegação..
      */
-    private void atualizarBotoesDeNavegacao(List<String> saidas) {
+    private void atualizarBotoesDeNavegacao(JogoEvent evt) {
         botaoLeste.setEnabled(false);
         botaoOeste.setEnabled(false);
         botaoNorte.setEnabled(false);
         botaoSul.setEnabled(false);
-        for (String direcao : saidas) {
-            if (direcao.equals("leste")) {
-                botaoLeste.setEnabled(true);
-            } else if (direcao.equals("oeste")) {
-                botaoOeste.setEnabled(true);
-            } else if (direcao.equals("norte")) {
-                botaoNorte.setEnabled(true);
-            } else if (direcao.equals("sul")) {
-                botaoSul.setEnabled(true);
+        if (!evt.taFinalizado()) {
+            List<String> saidas = evt.getSaidasDisponiveis();
+            for (String direcao : saidas) {
+                if (direcao.equals("leste")) {
+                    botaoLeste.setEnabled(true);
+                } else if (direcao.equals("oeste")) {
+                    botaoOeste.setEnabled(true);
+                } else if (direcao.equals("norte")) {
+                    botaoNorte.setEnabled(true);
+                } else if (direcao.equals("sul")) {
+                    botaoSul.setEnabled(true);
+                }
             }
+        } else {
+            jTextField1.setEnabled(false);
+            jButton1.setEnabled(false);
         }
     }
     
@@ -462,8 +436,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         if (!jTextField1.getText().trim().equals("")) {
             String linha = jTextField1.getText();
             try {
-                Comando comando = entrada.pegarComando(linha);
-                jogo.processarComando(comando);
+                jogo.receberComando(linha);
             } catch (FormatoDeComandoException e) {
                 jTextArea1.append(e.getMessage());
             }

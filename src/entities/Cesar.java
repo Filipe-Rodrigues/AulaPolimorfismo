@@ -28,8 +28,8 @@ public class Cesar extends Ator {
         ArrayList<Efeito> umEfeito = new ArrayList<>();
         umEfeito.add(hp);
         Habilidade hab = new Habilidade("Esmurrar", "Desfere vários murros e mordidas. É muito estranho de se ver.", umEfeito);
-        atributos.put(SANIDADE, 23);
-        habilidade = hab;
+        super.adicionarAtributo(SANIDADE, 23);
+        super.setHabilidade(hab);
     }
 
     /**
@@ -42,7 +42,7 @@ public class Cesar extends Ator {
     @Override
     public String getStatus () {
         String status = super.getStatus();
-        status += "Sanidade:      " + atributos.get(SANIDADE) + getStatusSanidade();
+        status += "Sanidade:      " + getAtributo(SANIDADE) + getStatusSanidade();
         return status;
     }
     
@@ -55,11 +55,11 @@ public class Cesar extends Ator {
      * @return Resultado, com o resultado após afetar a sanidade. 
      */
     private Resultado afetarSanidade (int quantidade) {
-        int sanidade = atributos.get(SANIDADE);
+        int sanidade = getAtributo(SANIDADE);
         if (sanidade > 0) {
             if (-quantidade < sanidade) {
                 sanidade += quantidade;
-                atributos.put(SANIDADE, sanidade);
+                adicionarAtributo(SANIDADE, sanidade);
                 if (quantidade > 0) {
                     return ATOR_SANADO;
                 } else {
@@ -67,7 +67,7 @@ public class Cesar extends Ator {
                 }
             } else {
                 sanidade = 0;
-                atributos.put(SANIDADE, sanidade);
+                adicionarAtributo(SANIDADE, sanidade);
                 return ATOR_ENLOUQUECIDO;
             }
         } else if (sanidade == 0) {
@@ -104,7 +104,7 @@ public class Cesar extends Ator {
      * false, caso contrario.
      */
     public boolean taSuportando () {
-        return (atributos.get(SANIDADE) <= 15 && atributos.get(SANIDADE) >= 10);
+        return (getAtributo(SANIDADE) <= 15 && getAtributo(SANIDADE) >= 10);
     }
     
     /**
@@ -116,7 +116,7 @@ public class Cesar extends Ator {
      * false, caso contrario.
      */
     public boolean taInsano () {
-        return (atributos.get(SANIDADE) <= 15 && atributos.get(SANIDADE) >= 10);
+        return (getAtributo(SANIDADE) <= 15 && getAtributo(SANIDADE) >= 10);
     }
     
     /**
@@ -128,7 +128,7 @@ public class Cesar extends Ator {
      * false, caso contrario.
      */
     public boolean taMuitoInsano () {
-        return (atributos.get(SANIDADE) < 10 && atributos.get(SANIDADE) > 0);
+        return (getAtributo(SANIDADE) < 10 && getAtributo(SANIDADE) > 0);
     }
     
     /**
@@ -140,7 +140,7 @@ public class Cesar extends Ator {
      * contrario.
      */
     public boolean enlouqueceuDeVez () {
-        return (atributos.get(SANIDADE) == 0);
+        return (getAtributo(SANIDADE) == 0);
     }
     
     /**
@@ -151,7 +151,7 @@ public class Cesar extends Ator {
      * @return boolean, true, se Cesar conseguiu se curar, false, caso contrario.
      */
     public boolean taCurado () {
-        return (atributos.get(SANIDADE) >= 30);
+        return (getAtributo(SANIDADE) >= 30);
     }
 
     /**

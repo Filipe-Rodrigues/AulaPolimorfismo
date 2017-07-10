@@ -18,7 +18,7 @@ import static entities.Resultado.*;
  */
 public abstract class NPC extends Ator {
 
-    protected boolean entregouItemDeQuest;
+    private boolean entregouItemDeQuest;
     
     /**
      * Construtor Da Classe NPC.
@@ -50,10 +50,32 @@ public abstract class NPC extends Ator {
     public Resultado afetarAtributo (Atributo atributo, int quantidade) {
         Resultado resultado = super.afetarAtributo(atributo, quantidade);
         if (resultado == ATRIBUTO_NAO_APROPRIADO && atributo == SANIDADE) {
-            neutralizado = true;
+            setNeutralizado(true);
             resultado =  ATOR_NEUTRALIZADO;
         }
         return resultado;
+    }
+    
+    /**
+     * Metodo setEntregouItemDeQuest.
+     *
+     * Modifica o status de entrega do item
+     *
+     * @param entregou true se sim, false se não.
+     */
+    protected void setEntregouItemDeQuest (boolean entregou) {
+        entregouItemDeQuest = entregou;
+    }
+    
+    /**
+     * Metodo entregouOItem.
+     *
+     * retorna um booleano se o item foi entregue ou não.
+     *
+     * @return boolean true se sim, false se não.
+     */
+    protected boolean entregouOItem () {
+        return entregouItemDeQuest;
     }
     
     /**
