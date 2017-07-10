@@ -111,10 +111,10 @@ public class EstadoDeJogo {
      * 
      * recebe um boolean dizendo se o jogo foi finalizado.
      * 
-     * @param apagaTudo do tipo boolean que traz true, se o jogo foi
+     * @param finalizado do tipo boolean que traz true, se o jogo foi
      * finalizado, e false se o jogo não foi finalizado.
      */
-    public void setFinalizado(boolean apagaTudo) {
-        this.finalizado = apagaTudo;
+    public void setFinalizado(boolean finalizado) {
+        this.finalizado = finalizado;
     }
 }

@@ -1,5 +1,6 @@
 package io;
 
+import core.EstadoDeJogo;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,19 +21,19 @@ public class JogoEvent {
     private List<String> saidasDoAmbiente;
     private boolean querMapa;
     private boolean apagaTudo;
-    private boolean finalizado;
+    private EstadoDeJogo estado;
     
     /**Construtor da Classe.
      * 
      * @param saidas List<String> traz a lista de saidas de cada ambiente do jogo.
      */
-    public JogoEvent (List<String> saidas) {
+    public JogoEvent (List<String> saidas, EstadoDeJogo estado) {
         saida = "";
         imagemDoAmbiente = "";
         apagaTudo = false;
-        finalizado = false;
         querMapa = false;
         this.saidasDoAmbiente = saidas;
+        this.estado = estado;
     }
     
     /**Metodo getSaida.
@@ -148,22 +149,24 @@ public class JogoEvent {
     
     /**Metodo taFinalizado.
      * 
-     * metodo que retorna se o programa foi finalizado ou não.
+     * retorna se o jogo foi finalizado.
      * 
-     * @return boolean, se o jogo acabou ou não.
+     * @return boolean, se o jogo foi finalizado, true, se não, false.
      */
     public boolean taFinalizado() {
-        return finalizado;
+        return estado.taFinalizado();
     }
-
-    /**Metodo setFinalizado.
+    
+    /**
+     * Metodo getEstadoAtual.
+     *
+     * Retorna o estado atual de Cesar.
      * 
-     * inicializa a variavel finalizado com uma boolean passada por parametro.
-     * 
-     * @param apagaTudo boolean se o programa finalizou.
+     * @return inteiro com o estado atual do jogo de acordo com a classe
+     * do tipo enum {@link Resultado}.
      */
-    public void setFinalizado(boolean apagaTudo) {
-        this.finalizado = apagaTudo;
+    public int getEstadoAtual () {
+    	return estado.getEstadoAtual();
     }
     
 }

@@ -30,14 +30,14 @@ public class Farmaceuta extends NPC {
         Habilidade hab = new Habilidade("Tiro de 12 (meio mascado)"
         		, "Utiliza uma espingarda calibre 12, mas envelhecida. Reduz 10 de HP."
         		, umEfeito);
-        habilidade = hab;
+        super.setHabilidade(hab);
         umEfeito = new ArrayList<>();
         Efeito curaSan = new AlteracaoDeSanidade("Recuperar Sanidade", "Restaura 15 de Sanidade", 15);
         umEfeito.add(curaSan);
         Efeito curaHP = new AlteracaoDeHP("Recuperar HP", "Restaura 15 de HP", 15);
         umEfeito.add(curaHP);
         Item complementoPsicotropico = new Item("Clonazepam", "Um medicamento para ansiedade.", umEfeito, true, true);
-        bagagem.add(complementoPsicotropico);
+        super.coletarItem(complementoPsicotropico);
         umEfeito = new ArrayList<>();
     }
     
@@ -52,7 +52,7 @@ public class Farmaceuta extends NPC {
     @Override
     public String mensagemConversa() {
         String fraseDeEfeito = "";
-        if (aliado) {
+        if (super.ehAliado()) {
             fraseDeEfeito = "Olá! Precisa de algum medicamento?";
         } else {
             fraseDeEfeito = "Cuidado, ele é um louco!! Deixe-me cuidar disso!!";
@@ -69,7 +69,7 @@ public class Farmaceuta extends NPC {
      */
     @Override
     public Item entregarItemDeQuest() {
-        entregouItemDeQuest = true;
+        setEntregouItemDeQuest(true);
         return darItem("Clonazepam");
     }
 

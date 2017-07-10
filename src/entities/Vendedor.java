@@ -17,12 +17,12 @@ public class Vendedor extends NPC {
         Habilidade hab = new Habilidade("Tiro de 12 (meio mascado)"
         		, "Utiliza uma espingarda calibre 12, mas envelhecida. Reduz 10 de HP."
         		, umEfeito);
-        habilidade = hab;
+        super.setHabilidade(hab);
         umEfeito = new ArrayList<>();
         hp = new AlteracaoDeHP("Subtrair HP", "Retira 15 pontos de HP", -15);
         umEfeito.add(hp);
         Item picareta = new Item("Picareta", "Um belo exemplar de picareta, pode ser usado como arma.", umEfeito, false, true);
-        bagagem.add(picareta);
+        super.coletarItem(picareta);
 	}
         
          /**
@@ -34,7 +34,7 @@ public class Vendedor extends NPC {
          */
 	@Override
 	public Item entregarItemDeQuest() {
-		entregouItemDeQuest = true;
+		super.setEntregouItemDeQuest(true);
 		return darItem("Picareta");
 	}
         
@@ -50,7 +50,7 @@ public class Vendedor extends NPC {
 	@Override
 	public String mensagemConversa() {
 		String fraseDeEfeito = "";
-        if (aliado) {
+        if (super.ehAliado()) {
             fraseDeEfeito = "OLá eSTranHo!... Sua aLMa aToRMentADa proCurA aLGO qUe posSO oFErecEr?";
         } else {
             fraseDeEfeito = "É chEGAda a horA de ENTERRAR-TE!! VenHA e mOStRe suA dISposiÇão paRA moRRER!!";

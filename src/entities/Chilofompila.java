@@ -27,7 +27,7 @@ public class Chilofompila extends NPC {
         Habilidade hab = new Habilidade("Alucinação"
         		, "Meu Deus, mas o que é esse ser?? Não sei, mas ele quer me matar!"
         		, umEfeito);
-        habilidade = hab;
+        super.setHabilidade(hab);
     }
     
     /**
