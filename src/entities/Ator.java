@@ -451,6 +451,13 @@ public abstract class Ator {
         this.habilidade = habilidade;
     }
     
+    /**Metodo adicionarAtributo.
+     * 
+     * adiciona um atributo ao ator.
+     * 
+     * @param atributo atributo a ser adicionado
+     * @param id id do ator
+     */
     protected void adicionarAtributo (Atributo atributo, int id) {
         atributos.put(atributo, id);
     }
