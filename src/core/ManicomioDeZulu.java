@@ -52,9 +52,11 @@ public class ManicomioDeZulu {
     
     private Ambiente casaDoCesar;
     private Ambiente manicomio;
-    private Ambiente faculdade;
+    private Ambiente portaDaFaculdade;
     private Ambiente loja;
     private Ambiente farmacia;
+    
+    private NPC npcAtivo;
 
     /**
      * Construtor da classe ManicomioDeZulu.
@@ -89,6 +91,7 @@ public class ManicomioDeZulu {
         palavrasDeComando.add("cancelar");
         palavrasDeComando.add("fugir");
         palavrasDeComando.add("checar");
+        palavrasDeComando.add("detalhar");
         entrada = new Entrada(palavrasDeComando);
     }
     
@@ -136,70 +139,56 @@ public class ManicomioDeZulu {
                 esquina_Haskell_Python, esquina_Haskell_Cobol, esquina_Haskell_Lua, esquina_Haskell_Snobol,
                 esquina_Prolog_Python, esquina_Prolog_Cobol, esquina_Prolog_Lua, esquina_Prolog_Snobol;
 
-        esquina_Fortran_Python = new Ambiente("Esquina da rua Fortran com a rua Python", "esquina");
-        esquina_Fortran_Cobol = new Ambiente("Esquina da rua Fortran com a rua Cobol", "esquina");
-        esquina_Fortran_Lua = new Ambiente("Esquina da rua Fortran com a rua Lua", "esquina");
-        esquina_Fortran_Snobol = new Ambiente("Esquina da rua Fortran com a rua Snobol", "esquina");
-        esquina_Smalltalk_Python = new Ambiente("Esquina da rua Smalltalk com a rua Python", "esquina");
-        esquina_Smalltalk_Cobol = new Ambiente("Esquina da rua Smalltalk com a rua Cobol", "esquina");
-        esquina_Smalltalk_Lua = new Ambiente("Esquina da rua Smalltalk com a rua Lua", "esquina");
-        esquina_Smalltalk_Snobol = new Ambiente("Esquina da rua Smalltalk com a rua Snobol", "esquina");
-        esquina_Haskell_Python = new Ambiente("Esquina da rua Haskell com a rua Python", "esquina");
-        esquina_Haskell_Cobol = new Ambiente("Esquina da rua Haskell com a rua Cobol", "esquina");
-        esquina_Haskell_Lua = new Ambiente("Esquina da rua Haskell com a rua Lua", "esquina");
-        esquina_Haskell_Snobol = new Ambiente("Esquina da rua Haskell com a rua Snobol", "esquina");
-        esquina_Prolog_Python = new Ambiente("Esquina da rua Prolog com a rua Python", "esquina");
-        esquina_Prolog_Cobol = new Ambiente("Esquina da rua Prolog com a rua Cobol", "esquina");
-        esquina_Prolog_Lua = new Ambiente("Esquina da rua Prolog com a rua Lua", "esquina");
-        esquina_Prolog_Snobol = new Ambiente("Esquina da rua Prolog com a rua Snobol", "esquina");
+        esquina_Fortran_Python = new Ambiente("Esquina da rua Fortran com a rua Python", "esquina5");
+        esquina_Fortran_Cobol = new Ambiente("Esquina da rua Fortran com a rua Cobol", "esquina6");
+        esquina_Fortran_Lua = new Ambiente("Esquina da rua Fortran com a rua Lua", "esquina5");
+        esquina_Fortran_Snobol = new Ambiente("Esquina da rua Fortran com a rua Snobol", "esquina6");
+        esquina_Smalltalk_Python = new Ambiente("Esquina da rua Smalltalk com a rua Python", "esquina1");
+        esquina_Smalltalk_Cobol = new Ambiente("Esquina da rua Smalltalk com a rua Cobol", "esquina3");
+        esquina_Smalltalk_Lua = new Ambiente("Esquina da rua Smalltalk com a rua Lua", "esquina1");
+        esquina_Smalltalk_Snobol = new Ambiente("Esquina da rua Smalltalk com a rua Snobol", "esquina3");
+        esquina_Haskell_Python = new Ambiente("Esquina da rua Haskell com a rua Python", "esquina2");
+        esquina_Haskell_Cobol = new Ambiente("Esquina da rua Haskell com a rua Cobol", "esquina4");
+        esquina_Haskell_Lua = new Ambiente("Esquina da rua Haskell com a rua Lua", "esquina2");
+        esquina_Haskell_Snobol = new Ambiente("Esquina da rua Haskell com a rua Snobol", "esquina4");
+        esquina_Prolog_Python = new Ambiente("Esquina da rua Prolog com a rua Python", "esquina1");
+        esquina_Prolog_Cobol = new Ambiente("Esquina da rua Prolog com a rua Cobol", "esquina3");
+        esquina_Prolog_Lua = new Ambiente("Esquina da rua Prolog com a rua Lua", "esquina1");
+        esquina_Prolog_Snobol = new Ambiente("Esquina da rua Prolog com a rua Snobol", "esquina3");
 
         List<Ambiente> ruaPython = new ArrayList<>();
-        for (int i = 0; i < 17; i++) {
-            String descricao = "Rua Python, " + (i * 4 + 50);
-            ruaPython.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
-        }
-        casaDoCesar = new Ambiente("Rua Python, 118 - Sua casa", "casa2");
+        preencherArrayDeCasas(ruaPython, "Rua Python", 17, 50);
+        
+        casaDoCesar = new Ambiente("Minha Casa", "casaDoCesar");
+        Ambiente portaDaCasaDoCesar = new Ambiente("Rua Python, 118 - Sua casa", "casa2");
 
         List<Ambiente> ruaCobol = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            String descricao = "Rua Cobol, " + (i * 4 + 150);
-            ruaCobol.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
-        }
-        loja = new Ambiente("Loja do Coveiro", "coveiro");
+        preencherArrayDeCasas(ruaCobol, "Rua Cobol", 5, 150);
+        loja = new Ambiente("Interior da Loja do Coveiro", "lojaInterior");
+        Ambiente portaDaLoja = new Ambiente("Loja do Coveiro", "loja");
         Ambiente cemiterio = new Ambiente("Entrada do Cemitério Parada Final", "cemiterio");
 
         List<Ambiente> ruaLua = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            String descricao = "Rua Lua, " + (i * 4 + 350);
-            ruaLua.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
-        }
+        preencherArrayDeCasas(ruaLua, "Rua Lua", 4, 350);
 
         List<Ambiente> ruaSnobol = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            String descricao = "Rua Snobol, " + (i * 4 + 450);
-            ruaSnobol.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
-        }
-        farmacia = new Ambiente("Drogaria Saradão", "farmacia");
-        faculdade = new Ambiente("UFLA 'Universidade Federal de Loucos Autistas' [FECHADA]", "escola");
+        preencherArrayDeCasas(ruaSnobol, "Rua Snobol", 3, 450);
+        
+        farmacia = new Ambiente("Interior da Drogaria Saradão", "farmaciaInterior");
+        Ambiente portaDaFarmacia = new Ambiente("Drogaria Saradão", "farmacia");
+        portaDaFaculdade = new Ambiente("UFLA - Universidade Federal de Loucos Autistas [FECHADA]", "escola");
 
         List<Ambiente> ruaSmalltalk = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            String descricao = "Rua Smalltalk, " + (i * 4 + 550);
-            ruaSmalltalk.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
-        }
-        manicomio = new Ambiente("Recepção do Manicômio Olo & Co", "manicomio");
+        preencherArrayDeCasas(ruaSmalltalk, "Rua Smalltalk", 3, 550);
+
+        Ambiente portaDoManicomio = new Ambiente("Manicômio Olo & Co", "manicomio");
+        manicomio = new Ambiente("Recepção do Manicômio Olo & Co", "manicomioInterior");
 
         List<Ambiente> ruaHaskell = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            String descricao = "Rua Haskell, " + (i * 4 + 650);
-            ruaHaskell.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
-        }
+        preencherArrayDeCasas(ruaHaskell, "Rua Haskell", 3, 650);
 
         List<Ambiente> ruaProlog = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            String descricao = "Rua Prolog, " + (i * 4 + 750);
-            ruaProlog.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
-        }
+        preencherArrayDeCasas(ruaProlog, "Rua Prolog", 3, 750);
 
         List<Ambiente> saidaDaCidade = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
@@ -229,7 +218,7 @@ public class ManicomioDeZulu {
         esquina_Smalltalk_Python.ajustarSaida("oeste", ruaPython.get(4));
 
         esquina_Smalltalk_Cobol.ajustarSaida("norte", ruaSmalltalk.get(2));
-        esquina_Smalltalk_Cobol.ajustarSaida("leste", loja);
+        esquina_Smalltalk_Cobol.ajustarSaida("leste", portaDaLoja);
         esquina_Smalltalk_Cobol.ajustarSaida("sul", esquina_Smalltalk_Lua);
         esquina_Smalltalk_Cobol.ajustarSaida("oeste", ruaCobol.get(1));
 
@@ -240,7 +229,7 @@ public class ManicomioDeZulu {
 
         esquina_Smalltalk_Snobol.ajustarSaida("norte", esquina_Smalltalk_Lua);
         esquina_Smalltalk_Snobol.ajustarSaida("leste", ruaSnobol.get(1));
-        esquina_Smalltalk_Snobol.ajustarSaida("sul", manicomio);
+        esquina_Smalltalk_Snobol.ajustarSaida("sul", portaDoManicomio);
         esquina_Smalltalk_Snobol.ajustarSaida("oeste", ruaSnobol.get(0));
 
         esquina_Haskell_Python.ajustarSaida("norte", ruaHaskell.get(2));
@@ -259,7 +248,7 @@ public class ManicomioDeZulu {
         esquina_Haskell_Lua.ajustarSaida("oeste", esquina_Smalltalk_Lua);
 
         esquina_Haskell_Snobol.ajustarSaida("norte", esquina_Haskell_Lua);
-        esquina_Haskell_Snobol.ajustarSaida("leste", farmacia);
+        esquina_Haskell_Snobol.ajustarSaida("leste", portaDaFarmacia);
         esquina_Haskell_Snobol.ajustarSaida("sul", saidaDaCidade.get(9));
         esquina_Haskell_Snobol.ajustarSaida("oeste", ruaSnobol.get(1));
 
@@ -281,7 +270,7 @@ public class ManicomioDeZulu {
         esquina_Prolog_Snobol.ajustarSaida("norte", esquina_Prolog_Lua);
         esquina_Prolog_Snobol.ajustarSaida("leste", ruaSnobol.get(2));
         esquina_Prolog_Snobol.ajustarSaida("sul", saidaDaCidade.get(8));
-        esquina_Prolog_Snobol.ajustarSaida("oeste", farmacia);
+        esquina_Prolog_Snobol.ajustarSaida("oeste", portaDaFarmacia);
 
         for (int i = 0; i < 17; i++) {
             switch (i) {
@@ -314,7 +303,7 @@ public class ManicomioDeZulu {
                     ruaPython.get(i).ajustarSaida("oeste", esquina_Prolog_Python);
                     break;
                 case 16:
-                    ruaPython.get(i).ajustarSaida("leste", casaDoCesar);
+                    ruaPython.get(i).ajustarSaida("leste", portaDaCasaDoCesar);
                     ruaPython.get(i).ajustarSaida("oeste", ruaPython.get(i - 1));
                     break;
                 default:
@@ -323,21 +312,27 @@ public class ManicomioDeZulu {
                     break;
             }
         }
-        casaDoCesar.ajustarSaida("oeste", ruaPython.get(16));
-        casaDoCesar.ajustarSaida("leste", saidaDaCidade.get(4));
+        
+        casaDoCesar.ajustarSaida("sul", portaDaCasaDoCesar);
+        
+        portaDaCasaDoCesar.ajustarSaida("norte", casaDoCesar);
+        portaDaCasaDoCesar.ajustarSaida("oeste", ruaPython.get(16));
+        portaDaCasaDoCesar.ajustarSaida("leste", saidaDaCidade.get(4));
 
         ruaCobol.get(0).ajustarSaida("leste", ruaCobol.get(1));
         ruaCobol.get(0).ajustarSaida("oeste", esquina_Fortran_Cobol);
         ruaCobol.get(1).ajustarSaida("leste", esquina_Smalltalk_Cobol);
         ruaCobol.get(1).ajustarSaida("oeste", ruaCobol.get(0));
         ruaCobol.get(2).ajustarSaida("leste", esquina_Haskell_Cobol);
-        ruaCobol.get(2).ajustarSaida("oeste", loja);
+        ruaCobol.get(2).ajustarSaida("oeste", portaDaLoja);
         ruaCobol.get(3).ajustarSaida("leste", ruaCobol.get(4));
         ruaCobol.get(3).ajustarSaida("oeste", esquina_Prolog_Cobol);
         ruaCobol.get(4).ajustarSaida("leste", cemiterio);
         ruaCobol.get(4).ajustarSaida("oeste", ruaCobol.get(3));
-        loja.ajustarSaida("leste", ruaCobol.get(2));
-        loja.ajustarSaida("oeste", esquina_Smalltalk_Cobol);
+        portaDaLoja.ajustarSaida("leste", ruaCobol.get(2));
+        portaDaLoja.ajustarSaida("oeste", esquina_Smalltalk_Cobol);
+        portaDaLoja.ajustarSaida("sul", loja);
+        loja.ajustarSaida("norte", portaDaLoja);
         cemiterio.ajustarSaida("leste", saidaDaCidade.get(5));
         cemiterio.ajustarSaida("oeste", ruaCobol.get(4));
 
@@ -354,12 +349,14 @@ public class ManicomioDeZulu {
         ruaSnobol.get(0).ajustarSaida("oeste", esquina_Fortran_Snobol);
         ruaSnobol.get(1).ajustarSaida("leste", esquina_Haskell_Snobol);
         ruaSnobol.get(1).ajustarSaida("oeste", esquina_Smalltalk_Snobol);
-        ruaSnobol.get(2).ajustarSaida("leste", faculdade);
+        ruaSnobol.get(2).ajustarSaida("leste", portaDaFaculdade);
         ruaSnobol.get(2).ajustarSaida("oeste", esquina_Prolog_Snobol);
-        farmacia.ajustarSaida("leste", esquina_Prolog_Snobol);
-        farmacia.ajustarSaida("oeste", esquina_Haskell_Snobol);
-        faculdade.ajustarSaida("leste", saidaDaCidade.get(7));
-        faculdade.ajustarSaida("oeste", ruaSnobol.get(2));
+        portaDaFarmacia.ajustarSaida("leste", esquina_Prolog_Snobol);
+        portaDaFarmacia.ajustarSaida("oeste", esquina_Haskell_Snobol);
+        portaDaFarmacia.ajustarSaida("sul", farmacia);
+        farmacia.ajustarSaida("norte", portaDaFarmacia);
+        portaDaFaculdade.ajustarSaida("leste", saidaDaCidade.get(7));
+        portaDaFaculdade.ajustarSaida("oeste", ruaSnobol.get(2));
 
         ruaSmalltalk.get(0).ajustarSaida("norte", saidaDaCidade.get(1));
         ruaSmalltalk.get(0).ajustarSaida("sul", ruaSmalltalk.get(1));
@@ -367,8 +364,11 @@ public class ManicomioDeZulu {
         ruaSmalltalk.get(1).ajustarSaida("sul", esquina_Smalltalk_Python);
         ruaSmalltalk.get(2).ajustarSaida("norte", esquina_Smalltalk_Python);
         ruaSmalltalk.get(2).ajustarSaida("sul", esquina_Smalltalk_Cobol);
-        manicomio.ajustarSaida("norte", esquina_Smalltalk_Snobol);
-        manicomio.ajustarSaida("sul", saidaDaCidade.get(10));
+        
+        portaDoManicomio.ajustarSaida("norte", esquina_Smalltalk_Snobol);
+        portaDoManicomio.ajustarSaida("sul", saidaDaCidade.get(10));
+        portaDoManicomio.ajustarSaida("oeste", manicomio);
+        manicomio.ajustarSaida("leste", portaDoManicomio);
 
         ruaHaskell.get(0).ajustarSaida("norte", saidaDaCidade.get(2));
         ruaHaskell.get(0).ajustarSaida("sul", ruaHaskell.get(1));
@@ -388,13 +388,13 @@ public class ManicomioDeZulu {
         saidaDaCidade.get(1).ajustarSaida("sul", esquina_Smalltalk_Python);
         saidaDaCidade.get(2).ajustarSaida("sul", esquina_Haskell_Python);
         saidaDaCidade.get(3).ajustarSaida("sul", esquina_Prolog_Python);
-        saidaDaCidade.get(4).ajustarSaida("oeste", casaDoCesar);
+        saidaDaCidade.get(4).ajustarSaida("oeste", portaDaCasaDoCesar);
         saidaDaCidade.get(5).ajustarSaida("oeste", cemiterio);
         saidaDaCidade.get(6).ajustarSaida("oeste", ruaLua.get(3));
-        saidaDaCidade.get(7).ajustarSaida("oeste", faculdade);
+        saidaDaCidade.get(7).ajustarSaida("oeste", portaDaFaculdade);
         saidaDaCidade.get(8).ajustarSaida("norte", esquina_Prolog_Snobol);
         saidaDaCidade.get(9).ajustarSaida("norte", esquina_Haskell_Snobol);
-        saidaDaCidade.get(10).ajustarSaida("norte", manicomio);
+        saidaDaCidade.get(10).ajustarSaida("norte", portaDoManicomio);
         saidaDaCidade.get(11).ajustarSaida("norte", esquina_Fortran_Snobol);
 
         ambienteAtual = esquina_Haskell_Python;
@@ -415,8 +415,17 @@ public class ManicomioDeZulu {
 
     }
     
+    private void preencherArrayDeCasas (List<Ambiente> rua, String nomeDaRua, int numeroDeCasas, int numeroInicial) {
+        for (int i = 0; i < numeroDeCasas; i++) {
+            String descricao = nomeDaRua + ", " + (i * 4 + numeroInicial);
+            rua.add(new Ambiente(descricao, "casa" + ((i % 2) + 1)));
+        }
+    }
+    
     private void adicionarAtoresChave () {
-        faculdade.colocarNPC(new Cachorro("Cachorro"));
+        for (int i = 0; i < 10; i++) {
+            portaDaFaculdade.colocarNPC(new Cachorro("Cachorro" + (i + 1)));
+        }
         manicomio.colocarNPC(new Medico("Raydson"));
         farmacia.colocarNPC(new Farmaceuta("Filipe"));
         loja.colocarNPC(new Vendedor("Velho"));
@@ -537,6 +546,7 @@ public class ManicomioDeZulu {
             evento.emendarSaida("de tomar teus remédios na hora certa!!");
             sairDoJogo(evento);
         }
+        atualizarNavegacao(evento);
         atualizarInterfaces(evento);
     }
 
@@ -563,6 +573,7 @@ public class ManicomioDeZulu {
                 evento.emendarSaida("Você se prepara para emboscar " + alvo.getNome() + "...");
                 evento.emendarSaida("");
                 evento.emendarSaida("O que vai fazer?");
+                evento.setImagem(alvo.getImagem());
             } else {
                 evento.emendarSaida("Você está atacando alguém que não existe! Procure [ajuda] urgente!!");
             }
@@ -595,9 +606,11 @@ public class ManicomioDeZulu {
                 }
                 evento.setLimparTela(true);
                 status.setEstadoAtual(CONVERSANDO, alvo.getNome());
+                npcAtivo = alvo;
                 evento.emendarSaida("Você se aproximou de " + alvo.getNome() + " e o cumprimentou...");
                 evento.emendarSaida("");
                 evento.emendarSaida(alvo.mensagemConversa());
+                evento.setImagem(alvo.getImagem());
             } else {
                 evento.emendarSaida("Você está conversando com alguém que não existe! Procure [ajuda] urgente!!");
             }
@@ -650,6 +663,7 @@ public class ManicomioDeZulu {
     private void cancelar(JogoEvent evento) {
         if (status.getEstadoAtual() == CONVERSANDO) {
             status.setEstadoAtual(NAVEGANDO, "");
+            npcAtivo = null;
             evento.setLimparTela(true);
             evento.emendarSaida("Você foi embora!");
             exibirAmbienteAtual(evento);
@@ -703,7 +717,7 @@ public class ManicomioDeZulu {
                 verificarResultados(protagonista, resultados, evento);
             }
         } else if (status.getEstadoAtual() == ATACANDO) {
-            Ator alvo = ambienteAtual.selecionarNPC(status.getNomeDoNPCAtual());
+            NPC alvo = ambienteAtual.selecionarNPC(status.getNomeDoNPCAtual());
             if (comando.getSegundaPalavra().equalsIgnoreCase("habilidade")) {
                 List<Resultado> resultados = protagonista.usarHabilidade(alvo);
                 verificarResultados(alvo, resultados, evento);
@@ -723,6 +737,7 @@ public class ManicomioDeZulu {
                 evento.emendarSaida("Você pode continuar o jogo, e conseguiu segurar seu surto por mais uma rodada!");
                 status.setEstadoAtual(NAVEGANDO, "");
                 status.matou(true);
+                ambienteAtual.matarNPC(alvo);
                 exibirAmbienteAtual(evento);
             }
         }
@@ -739,21 +754,34 @@ public class ManicomioDeZulu {
             switch (resultado) {
                 case ATOR_ASSASSINADO:
                     evento.emendarSaida(alvo.getNome() + " foi assassinado!");
+                    if (!alvo.getNome().equals("Cesar")) {
+                        afetarPontuacao(evento, 50);
+                    } else {
+                        afetarPontuacao(evento, -100);
+                    }
                     break;
                 case ATOR_CURADO:
                     evento.emendarSaida(alvo.getNome() + " restaurou HP!");
+                    afetarPontuacao(evento, 30);
                     break;
                 case ATOR_ENFURECIDO:
                     evento.emendarSaida(alvo.getNome() + " perdeu sanidade!");
+                    afetarPontuacao(evento, -10);
                     break;
                 case ATOR_ENLOUQUECIDO:
                     evento.emendarSaida(alvo.getNome() + " enloqueceu de vez!");
+                    afetarPontuacao(evento, -50);
                     break;
                 case ATOR_EQUILIBRADO:
                     evento.emendarSaida(alvo.getNome() + " é incorruptível!");
                     break;
                 case ATOR_FERIDO:
                     evento.emendarSaida(alvo.getNome() + " foi atacado e perdeu HP!");
+                    if (!alvo.getNome().equals("Cesar")) {
+                        afetarPontuacao(evento, 10);
+                    } else {
+                        afetarPontuacao(evento, -5);
+                    }
                     break;
                 case ATOR_IMORTAL:
                     evento.emendarSaida(alvo.getNome() + " é imortal!");
@@ -766,6 +794,7 @@ public class ManicomioDeZulu {
                     break;
                 case ATOR_SANADO:
                     evento.emendarSaida(alvo.getNome() + " recuperou um pouco de Sanidade!");
+                    afetarPontuacao(evento, 30);
                     break;
                 case ATRIBUTO_NAO_APROPRIADO:
                     evento.emendarSaida(alvo.getNome() + " não sofreu dano algum!");
@@ -845,8 +874,14 @@ public class ManicomioDeZulu {
             if (ambienteAtual.temItem(comando.getSegundaPalavra())) {
                 Item item = ambienteAtual.recolherItem(comando.getSegundaPalavra());
                 if (item.ehColetavel()) {
-                    protagonista.coletarItem(item);
-                    evento.emendarSaida("Item coletado!");
+                    if (protagonista.temEspacoNoInventario()) {
+                        protagonista.coletarItem(item);
+                        evento.emendarSaida("Item coletado!");
+                        afetarPontuacao(evento, 20);
+                    } else {
+                        ambienteAtual.colocarItem(item);
+                        evento.emendarSaida("Inventário cheio!");
+                    }
                 } else {
                     ambienteAtual.colocarItem(item);
                     evento.emendarSaida("Item não coletável!");
@@ -1012,37 +1047,44 @@ public class ManicomioDeZulu {
         evento.emendarSaida("Você precisa de medicamentos para lidar com a psicose!!");
         evento.emendarSaida("Seus comandos agora são:");
         evento.setLimparTela(true);
-        if (status.getEstadoAtual() == NAVEGANDO) {
-            evento.emendarSaida("[ir <direcao>]\tVá para a direção que quiser da lista de saídas de cada ambiente!");
-            evento.emendarSaida("[descrever ambiente]\tVeja a descrição completa de onde estás!");
-            evento.emendarSaida("[checar mapa]\tColete o mapa e visualize os pontos mais importantes da cidade!");
-            evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
-            evento.emendarSaida("[coletar <nome_item>]\tSe seu inventário não estiver cheio, ele é seu!");
-            evento.emendarSaida("[usar <nome_item>]\tVocê usará um item, em você mesmo (mesmo um ofensivo)!");
-            evento.emendarSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
-            evento.emendarSaida("[status eu]\tVeja o seu Status!");
-            evento.emendarSaida("[conversar <nome_npc>]\tConverse com eles e veja como podem te ajudar!");
-            evento.emendarSaida("[atacar <nome_npc>]\tOu mostre a eles o inferno hahahaha!!");
-            evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
-        } else if (status.getEstadoAtual() == CONVERSANDO) {
-            evento.emendarSaida("[status eu]\tVeja o seu Status!");
-            evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
-            evento.emendarSaida("[pedir <nome_item>]\tSe tiver como pagar, peça, senão, fique aguado!");
-            evento.emendarSaida("[descrever npc]\tVocê vê o inventário do NPC!");
-            evento.emendarSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
-            evento.emendarSaida("[cancelar]\tVolte ao que estava fazendo!");
-            evento.emendarSaida("[sair]\tO mesmo que cancelar!");
-            evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
-        } else if (status.getEstadoAtual() == ATACANDO) {
-            evento.emendarSaida("[status eu]\tVeja o seu Status!");
-            evento.emendarSaida("[status npc]\tVeja o Status do seu inimigo!");
-            evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
-            evento.emendarSaida("[usar habilidade]\tFaça o que faz de melhor e use sua habilidade para massacrar!");
-            evento.emendarSaida("[usar <nome_item>]\tVocê usará um item no seu oponente (mesmo um item positivo)!");
-            evento.emendarSaida("[descrever ambiente]\tVeja o que está a sua volta!");
-            evento.emendarSaida("[fugir]\tSe tiver azar de enfrentar alguém muito forte, apenas tente!");
-            evento.emendarSaida("[sair]\tO mesmo que fugir!");
-            evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
+        switch (status.getEstadoAtual()) {
+            case NAVEGANDO:
+                evento.emendarSaida("[ir <direcao>]\tVá para a direção que quiser da lista de saídas de cada ambiente!");
+                evento.emendarSaida("[descrever ambiente]\tVeja a descrição completa de onde estás!");
+                evento.emendarSaida("[checar mapa]\tColete o mapa e visualize os pontos mais importantes da cidade!");
+                evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
+                evento.emendarSaida("[coletar <nome_item>]\tSe seu inventário não estiver cheio, ele é seu!");
+                evento.emendarSaida("[detalhar <nome_item>]\tObserve de perto seu item, quando a curiosidade for mais forte que a loucura!");
+                evento.emendarSaida("[usar <nome_item>]\tVocê usará um item, em você mesmo (mesmo um ofensivo)!");
+                evento.emendarSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
+                evento.emendarSaida("[status eu]\tVeja o seu Status!");
+                evento.emendarSaida("[conversar <nome_npc>]\tConverse com eles e veja como podem te ajudar!");
+                evento.emendarSaida("[atacar <nome_npc>]\tOu mostre a eles o inferno hahahaha!!");
+                evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
+                break;
+            case CONVERSANDO:
+                evento.emendarSaida("[status eu]\tVeja o seu Status!");
+                evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
+                evento.emendarSaida("[pedir <nome_item>]\tSe tiver como pagar, peça, senão, fique aguado!");
+                evento.emendarSaida("[descrever npc]\tVocê vê o inventário do NPC!");
+                evento.emendarSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
+                evento.emendarSaida("[cancelar]\tVolte ao que estava fazendo!");
+                evento.emendarSaida("[sair]\tO mesmo que cancelar!");
+                evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
+                break;
+            case ATACANDO:
+                evento.emendarSaida("[status eu]\tVeja o seu Status!");
+                evento.emendarSaida("[status npc]\tVeja o Status do seu inimigo!");
+                evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
+                evento.emendarSaida("[usar habilidade]\tFaça o que faz de melhor e use sua habilidade para massacrar!");
+                evento.emendarSaida("[usar <nome_item>]\tVocê usará um item no seu oponente (mesmo um item positivo)!");
+                evento.emendarSaida("[descrever ambiente]\tVeja o que está a sua volta!");
+                evento.emendarSaida("[fugir]\tSe tiver azar de enfrentar alguém muito forte, apenas tente!");
+                evento.emendarSaida("[sair]\tO mesmo que fugir!");
+                evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
+                break;
+            default:
+                break;
         }
     }
 
@@ -1070,6 +1112,7 @@ public class ManicomioDeZulu {
             } else {
                 if (!status.teveMatanca()) {
                     protagonista.afetarAtributo(SANIDADE, -1);
+                    afetarPontuacao(evento, -5);
                 }
                 evento.setLimparTela(true);
                 status.matou(false);
@@ -1080,6 +1123,32 @@ public class ManicomioDeZulu {
         } else {
             evento.emendarSaida("Você está no meio de uma interação! Acabe-a e pode andar!");
         }
+    }
+    
+    private void afetarPontuacao(JogoEvent evento, int pontos) {
+        evento.setPontos(pontos);
+    }
+    
+    private void atualizarNavegacao (JogoEvent evento) {
+        if (npcAtivo == null) {
+            List<NPC> npcs = ambienteAtual.getNPCs();
+            if (!npcs.isEmpty()) {
+                evento.setNPCsAmbiente(npcs);
+            }
+            List<Item> itemsAmbiente = ambienteAtual.getItens();
+            if (!itemsAmbiente.isEmpty()) {
+                evento.setObjetosAmbiente(itemsAmbiente);
+            }
+        } else {
+            List<Item> inventarioNPC = npcAtivo.getItens();
+            if (!inventarioNPC.isEmpty()) {
+                evento.setInventarioNPC(inventarioNPC);
+            }
+        }
+        List<Item> inventario = protagonista.getItens();
+            if (!inventario.isEmpty()) {
+                evento.setInventarioCesar(inventario);
+            }
     }
 
     /**
