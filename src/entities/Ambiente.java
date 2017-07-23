@@ -4,6 +4,7 @@ import static entities.Resultado.ITEM_NAO_ENCONTRADO;
 import static entities.Resultado.SUCESSO;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -137,6 +138,28 @@ public class Ambiente {
         lista += "\n";
         return lista;
     }
+    
+    /**
+     * Metodo getItens.
+     *
+     * retorna uma lista não modificavel dos itens no ambiente.
+     *
+     * @return List<Item> com todos os itens do ambiente.
+     */
+    public List<Item> getItens() {
+        return Collections.unmodifiableList(itens);
+    }
+    
+    /**
+     * Metodo getNPCs.
+     *
+     * retorna uma lista não modificavel dos NPCs no ambiente.
+     *
+     * @return List<NPC> com todos os NPCs do ambiente.
+     */
+    public List<NPC> getNPCs() {
+        return Collections.unmodifiableList(npcs);
+    }
 
     /**
      * Metodo getListaNPCs.
@@ -247,6 +270,10 @@ public class Ambiente {
             return ator;
         }
         return null;
+    }
+    
+    public void matarNPC (NPC alvo) {
+        npcs.remove(alvo);
     }
 
     /**

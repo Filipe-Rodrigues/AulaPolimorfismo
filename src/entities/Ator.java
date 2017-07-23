@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import static entities.Atributo.*;
 import static entities.Resultado.*;
+import java.util.Collections;
 
 /**
  * Classe Abstrata Ator - A generalização de todo personagem do jogo.
@@ -23,6 +24,7 @@ import static entities.Resultado.*;
 public abstract class Ator {
 
     private String nome;
+    private String imagem;
     private HashMap<Atributo, Integer> atributos;
     private Habilidade habilidade;
     private List<Item> bagagem;
@@ -44,6 +46,7 @@ public abstract class Ator {
      */
     public Ator(String nome, int hp, int capacidade, Habilidade habilidade, List<Item> bagagem, boolean aliado) {
         this.nome = nome;
+        this.imagem = nome;
         this.atributos = new HashMap<>();
         this.atributos.put(HP, hp);
         this.atributos.put(CAPACIDADE, capacidade);
@@ -280,6 +283,28 @@ public abstract class Ator {
     }
 
     /**
+     * Metodo setImagem.
+     *
+     * tem funcao de setar um nome pra imagem relacionada ao Ator.
+     *
+     * @param imagem String contendo o nome da imagem (sem extensão).
+     */
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+    
+    /**
+     * Metodo getImagem.
+     *
+     * Tem como funcao pegar o nome da imagem relacionada ao ator e retornar como uma String
+     *
+     * @return String com o nome da imagem (sem extensão).
+     */
+    public String getImagem() {
+        return imagem;
+    }
+    
+    /**
      * Metodo getAtributo.
      *
      * Tem como funcao pegar os atributos do Ator e retornar um inteiro.
@@ -310,6 +335,17 @@ public abstract class Ator {
         }
         lista += "\n";
         return lista;
+    }
+    
+    /**
+     * Metodo getItens.
+     *
+     * retorna uma lista não modificavel dos itens no inventário.
+     *
+     * @return List<Item> com todos os itens do inventário.
+     */
+    public List<Item> getItens() {
+        return Collections.unmodifiableList(bagagem);
     }
 
     /**

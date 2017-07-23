@@ -1,6 +1,9 @@
 package io;
 
 import core.EstadoDeJogo;
+import entities.Item;
+import entities.NPC;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,9 +22,14 @@ public class JogoEvent {
     private String saida;
     private String imagemDoAmbiente;
     private List<String> saidasDoAmbiente;
+    private List<Item> inventarioCesar;
+    private List<Item> inventarioNPC;
+    private List<Item> objetosAmbiente;
+    private List<NPC> npcs;
     private boolean querMapa;
     private boolean apagaTudo;
     private EstadoDeJogo estado;
+    private int pontuacao;
     
     /**Construtor da Classe.
      * 
@@ -34,6 +42,11 @@ public class JogoEvent {
         querMapa = false;
         this.saidasDoAmbiente = saidas;
         this.estado = estado;
+        inventarioCesar = null;
+        inventarioNPC = null;
+        npcs = null;
+        objetosAmbiente = null;
+        pontuacao = 0;
     }
     
     /**Metodo getSaida.
@@ -169,4 +182,43 @@ public class JogoEvent {
     	return estado.getEstadoAtual();
     }
     
+    public List<Item> getInventarioCesar () {
+        return inventarioCesar;
+    }
+    
+    public List<Item> getObjetosAmbiente () {
+        return objetosAmbiente;
+    }
+    
+    public List<Item> getInventarioNPC () {
+        return inventarioNPC;
+    }
+    
+    public List<NPC> getNPCsAmbiente () {
+        return npcs;
+    }
+    
+    public void setInventarioCesar (List<Item> inventario) {
+        this.inventarioCesar = inventario;
+    }
+    
+    public void setObjetosAmbiente (List<Item> objetos) {
+        this.objetosAmbiente = objetos;
+    }
+    
+    public void setInventarioNPC (List<Item> inventario) {
+        this.inventarioNPC = inventario;
+    }
+    
+    public void setNPCsAmbiente (List<NPC> npcs) {
+        this.npcs = npcs;
+    }
+    
+    public void setPontos (int pontos) {
+        this.pontuacao += pontos;
+    }
+    
+    public int getPontos () {
+        return pontuacao;
+    }
 }
