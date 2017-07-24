@@ -197,6 +197,5 @@ public class Cesar extends Ator {
         			+ "me ajude a colocar a cabeça um pouco no lugar...";
         }
         return fraseDeEfeito;
-    }
-    
+    }    
 }

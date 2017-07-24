@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import core.InterfaceDeNavegacaoListenter;
@@ -12,8 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Classe Vendedor.
  *
- * @author filip
+ * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
+ * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.  
+ *
+ * Essa classe é responsavel por guardar objetos do tipo Vendedor, com todos
+ * os seu atributos e funcoes a serem desenvolvidas no jogo.
+ * 
+ * @author  Filipe Barros Rodrigues
+ * @version 2017.21.07
  */
 public class ModeloDeNavegacao extends javax.swing.JPanel {
 
@@ -24,7 +27,15 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
     private TipoDeGUI tipo;
 
     private List<InterfaceDeNavegacaoListenter> interfaces;
-
+    
+    /**
+     * Construtor da classe.
+     * 
+     * @param tipo TipoDeGUI tipo que será carregado
+     * @param nome String com o nome do que será carregado
+     * @param descricao String com a descrição do mesmo
+     * @param icone String com o item a ser carregado
+     */
     public ModeloDeNavegacao (TipoDeGUI tipo, String nome, String descricao, String icone) {
         this.tipo = tipo;
         this.nome = nome;
@@ -33,13 +44,28 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
         empacotarComponentes();
         interfaces = new ArrayList<>();
     }
-
+    
+    /**
+     * Metodo initCompoments.
+     * 
+     * Inicia os botões na tela.
+     */
     private void initCompoments() {
         botao1 = new javax.swing.JButton();
         botao2 = new javax.swing.JButton();
         label = new javax.swing.JLabel();
     }
-
+    
+    /**
+     * Metodo setupComponents.
+     * 
+     * seta os atributos do GUI. 
+     * 
+     * @param tipo TipoDeGUI com o tipo do componente(Gui).
+     * @param nome String com o nome do componente(Gui).
+     * @param descricao String com a descrição do componete(Gui).
+     * @param icone String com o icone do componete(Gui).
+     */
     private void setupComponents(TipoDeGUI tipo, String nome, String descricao, String icone) {
         if (tipo == TipoDeGUI.NPC) {
             botao1.setIcon(new javax.swing.ImageIcon("res/images/icons/conversar.png"));
@@ -75,6 +101,11 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
         });
     }
     
+    /**
+     * Metodo empacotarComponentes.
+     * 
+     * Guarda os componentes coletados durante o jogo.
+     */
     private void empacotarComponentes () {
         if (tipo == TipoDeGUI.ITEM_DO_NPC) {
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -111,7 +142,14 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
             );
         }
     }
-        
+    
+    /**
+     * Metodo botaoActionPerformed.
+     * 
+     * Responsavel por pegar o evento passado ao acionar o botão no jogo.
+     * 
+     * @param e ActionEvent com o evento passado ao clicar algum botão.
+     */
     private void botaoActionPerformed(ActionEvent e) {
         if (e.getSource() == botao1) {
             if (tipo == TipoDeGUI.NPC) {
@@ -137,10 +175,23 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Metodo addInterfaceDeNavegacaoListener.
+     * 
+     * Metodo responsável por adicionar a interface de navegação
+     * 
+     * @param listener 
+     */
     public void addInterfaceDeNavegacaoListener (InterfaceDeNavegacaoListenter listener) {
         interfaces.add(listener);
     }
     
+    /**
+     * Metodo atualizarInterfaces.
+     * 
+     * Atualiza as interfaces graficas ao decorrer do jogo.
+     * @param evento 
+     */
     public void atualizarInterfaces (NavegacaoEvent evento) {
         for (InterfaceDeNavegacaoListenter listener : interfaces) {
             listener.solicitacaoDeNavegacaoPerformed(evento);
