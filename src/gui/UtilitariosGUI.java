@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import java.awt.Font;
@@ -13,9 +8,14 @@ import java.io.IOException;
 import javax.swing.JComponent;
 
 /**
+ * Classe enumerada TipoDeGUI.
  *
- * @author filip
- */
+ * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
+ * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.  
+ * 
+ * @author  Filipe Barros Rodrigues
+ * @version 2017.21.09
+ */ 
 public class UtilitariosGUI {
  
     /**Metodo mudarFonte.

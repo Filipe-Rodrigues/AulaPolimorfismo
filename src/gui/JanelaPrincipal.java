@@ -17,9 +17,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -392,11 +394,17 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     
     private void initSom () {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/sound/background.wav").getAbsoluteFile());
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
+            //AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/sound/background.wav").getAbsoluteFile());
+            //clip = AudioSystem.getClip();
+            //clip.open(audioInputStream);
+            File file = new File("res/sound/background.wav");
+            AudioInputStream ais = AudioSystem.getAudioInputStream(file.getAbsoluteFile());
+            AudioFormat format = ais.getFormat();
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+            clip = (Clip)AudioSystem.getLine(info);
+            clip.open(ais);
+            //FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            //gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } catch(Exception ex) {
             System.out.println("Deu ruim no som auhauahauha");
@@ -542,6 +550,13 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         verificarSeTerminou(evt.taFinalizado());
     }
     
+    /**
+     * Metodo atualizarPontuacao.
+     * 
+     * Atualiza a pontuação no decorrer do jogo.
+     * 
+     * @param pontos Integer com a quantidade de pontos.
+     */
     private void atualizarPontuacao(int pontos) {
         pontuacaoAtual += pontos;
         if (pontuacaoAtual < 0) {
@@ -550,6 +565,14 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         labelPontuacao.setText("Pontuação: " + pontuacaoAtual);
     }
     
+    /**
+     * Metodo atualizarNavegacaoItens.
+     * 
+     * Atualiza o navegador de itens dependendo do ambiente em que o usuário
+     * entrar.
+     * 
+     * @param evt JogoEvent com o evento a ser executado.
+     */
     private void atualizarNavegacaoItens(JogoEvent evt) {
         List<Item> inventarioCesar = evt.getInventarioCesar();
         List<Item> inventarioNPC = evt.getInventarioNPC();
@@ -702,6 +725,13 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jTextField1.requestFocus();
     }
     
+    /**
+     * Metodo enviarComando.
+     * 
+     * Envia um comando para o jogo.
+     * 
+     * @param linha String com o comando a ser executado.
+     */
     private void enviarComando (String linha) {
         try {
             jogo.receberComando(linha);
@@ -710,6 +740,14 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo receberComandosNavegacaoItensENPCS.
+     * 
+     * Metodo responsável por receber comando com itens e NPC's para atualizar
+     * no jogo.
+     * 
+     * @param evt  NavegacaoEvent com a navegação do evento a ser executado.
+     */
     private void receberComandosNavegacaoItensENPCS (NavegacaoEvent evt) {
         enviarComando(evt.getLinhaDeComando());
     }

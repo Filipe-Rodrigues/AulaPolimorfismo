@@ -1,16 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package application;
 
 import gui.JanelaNovoJogo;
 import gui.JanelaPrincipal;
 
 /**
+ * Classe Programa.
  *
- * @author biiirl
+ * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
+ * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.
+ *
+ * Representa os os ambientes do jogo, com todos os itens da classe {@link Item),
+ * e com os NPC derivados da classe {@link NPC}.
+ *
+ * @author  Filipe Barros Rodrigues
+ * @version 2017.21.07
  */
 public class Programa {
     /**Metodo Main.

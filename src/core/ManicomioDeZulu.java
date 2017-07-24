@@ -415,6 +415,16 @@ public class ManicomioDeZulu {
 
     }
     
+    /**Metodo preencherArrayDeCasas.
+     * 
+     * Metodo responsavel por preencher um ArrayList com as casas do programa
+     * em cada rua.
+     * 
+     * @param rua List<Ambiente> com as ruas
+     * @param nomeDaRua String com o nome das ruas
+     * @param numeroDeCasas Integer com o numero de casas no programa
+     * @param numeroInicial Integer com o numero inicial das casas 
+     */
     private void preencherArrayDeCasas (List<Ambiente> rua, String nomeDaRua, int numeroDeCasas, int numeroInicial) {
         for (int i = 0; i < numeroDeCasas; i++) {
             String descricao = nomeDaRua + ", " + (i * 4 + numeroInicial);
@@ -422,6 +432,11 @@ public class ManicomioDeZulu {
         }
     }
     
+    /** Metodo adicionarAtoresChave.
+     * 
+     * Adiciona os atores nem cada ambiente.
+     * 
+     */
     private void adicionarAtoresChave () {
         for (int i = 0; i < 10; i++) {
             portaDaFaculdade.colocarNPC(new Cachorro("Cachorro" + (i + 1)));
@@ -431,12 +446,24 @@ public class ManicomioDeZulu {
         loja.colocarNPC(new Vendedor("Velho"));
     }
     
+    /**Metodo adicionarChilofompilas.
+     * 
+     * Adiciona Chilofompilas nas saidas da cidade.
+     * 
+     * @param lugares List<Ambiente> com os ambientes do jogo.
+     */
     private void adicionarChilofompilas (List<Ambiente> lugares) {
         for (int i = 0; i < 12; i++) {
             lugares.get(i).colocarNPC(new Chilofompila());
         }
     }
     
+    /**Metodo adicionarObjetosCaseiros.
+     * 
+     * adiciona os objetos que ficam dentro das casas, (nessa versão somente na
+     * casa de César)
+     * 
+     */
     private void adicionarObjetosCaseiros () {
         Efeito chuveiradaSan = new AlteracaoDeSanidade("Restaurar Sanidade", "Restaura 9 pontos de Sanidade", 9);
         Efeito chuveiradaHP = new AlteracaoDeHP("Restaurar HP", "Restaura 5 pontos de HP", 5);
@@ -479,7 +506,15 @@ public class ManicomioDeZulu {
         }
         return contaCachorro;
     }
-
+    
+    /**
+     * Metodo receberComando.
+     * 
+     * Responsável por receber o comando do usuario de
+     * 
+     * @param linha String com o comando passado pelo usuario.
+     * @throws FormatoDeComandoException 
+     */
     public void receberComando(String linha) throws FormatoDeComandoException {
         Comando comando = entrada.pegarComando(linha);
         processarComando(comando);
@@ -559,7 +594,6 @@ public class ManicomioDeZulu {
      * tambem indica quem atacar, caso não passe quem atacar nao ha o que fazer.
      * @param evento JogoEvent, gera um evento na interface.
      */
-    
     private void atacar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
             evento.emendarSaida("Atacar quem?");
@@ -1124,11 +1158,25 @@ public class ManicomioDeZulu {
             evento.emendarSaida("Você está no meio de uma interação! Acabe-a e pode andar!");
         }
     }
-    
+    /**
+     * Metodo afetarPontuacao.
+     * 
+     * afeta a pontuação acumulada no decorrer do jogo.
+     * 
+     * @param evento JogoEvent com o evento a ser executado.
+     * @param pontos Integer com a quantidade de pontos.
+     */
     private void afetarPontuacao(JogoEvent evento, int pontos) {
         evento.setPontos(pontos);
     }
     
+    /**
+     * Metodo atualizarNavegacao.
+     * 
+     * Atualiza a navegação do jogo a cada interação do usuario.
+     * 
+     * @param evento JogoEvent com o evento a ser executado.
+     */
     private void atualizarNavegacao (JogoEvent evento) {
         if (npcAtivo == null) {
             List<NPC> npcs = ambienteAtual.getNPCs();
@@ -1191,9 +1239,15 @@ public class ManicomioDeZulu {
         }
     }
     
+    /**
+     * Metodo sairDoJogo.
+     * 
+     * metodo responsável para sair do Jogo.
+     * 
+     * @param evento JogoEvent com o evento a ser executado.
+     */
     private void sairDoJogo (JogoEvent evento) {
         evento.emendarSaida("Obrigado por jogar, até mais!");
         status.setFinalizado(true);
     }
-
 }

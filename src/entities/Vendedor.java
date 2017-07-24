@@ -2,6 +2,18 @@ package entities;
 
 import java.util.ArrayList;
 
+/**
+ * Classe Vendedor.
+ *
+ * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
+ * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.  
+ *
+ * Essa classe é responsavel por guardar objetos do tipo Vendedor, com todos
+ * os seu atributos e funcoes a serem desenvolvidas no jogo.
+ * 
+ * @author  Filipe Barros Rodrigues
+ * @version 2017.06.07
+ */
 public class Vendedor extends NPC {
 
 	/**

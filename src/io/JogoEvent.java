@@ -182,42 +182,91 @@ public class JogoEvent {
     	return estado.getEstadoAtual();
     }
     
+    /**
+     * Metodo getInventarioCesar.
+     * 
+     * @return List<Item> com o inventario que cesar possui de itens 
+     */
     public List<Item> getInventarioCesar () {
         return inventarioCesar;
     }
     
+    /**
+     * Metodo getObjetosAmbiente.
+     * 
+     * @return List<Item> com os itens presentes no ambiente
+     */
     public List<Item> getObjetosAmbiente () {
         return objetosAmbiente;
     }
     
+    /**
+     * Metodo getInventarioNPC.
+     * 
+     * @return List<Item> com os itens do inventário do NPC.
+     */
     public List<Item> getInventarioNPC () {
         return inventarioNPC;
     }
     
+    /**
+     * Metodo getNPCsAmbiente.
+     * 
+     * @return List<NPC> com os NPC's presentes no ambiente.
+     */
     public List<NPC> getNPCsAmbiente () {
         return npcs;
     }
     
+    /**
+     * Metodo setInventarioCesar
+     * 
+     * @param inventario atribui um inventario para Cesar.
+     */
     public void setInventarioCesar (List<Item> inventario) {
         this.inventarioCesar = inventario;
     }
-    
+    /**
+     * Metodo setObjetosAmbiente.
+     * 
+     * @param objetos List<Item> com os itens a serem colocados no ambiente.
+     */
     public void setObjetosAmbiente (List<Item> objetos) {
         this.objetosAmbiente = objetos;
     }
     
+    /**
+     * Metodo setInventarioNPC.
+     * 
+     * @param inventario List<Item> atribui um inventario a um NPC.
+     */
     public void setInventarioNPC (List<Item> inventario) {
         this.inventarioNPC = inventario;
     }
     
+    /**
+     * Metodo setNPCsAmbiente.
+     * 
+     * @param npcs List<NPC> com os NPC's a serem colocados no ambiente.
+     */
     public void setNPCsAmbiente (List<NPC> npcs) {
         this.npcs = npcs;
     }
     
+    /**
+     * Metodo setPontos.
+     * 
+     * @param pontos Integer com os pontos a serem somado ao usuário.
+     */
     public void setPontos (int pontos) {
         this.pontuacao += pontos;
     }
     
+    /**
+     * Metodo getPontos.
+     * 
+     * @return Integer com a quantidade de pontos possuida no momento.
+     */
     public int getPontos () {
         return pontuacao;
     }
