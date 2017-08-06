@@ -1,4 +1,4 @@
-package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core;
+package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.NavegacaoEvent;
 

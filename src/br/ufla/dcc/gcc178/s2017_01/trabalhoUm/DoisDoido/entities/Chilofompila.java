@@ -61,4 +61,9 @@ public class Chilofompila extends NPC {
     public Item entregarItemDeQuest() {
         return null;
     }
+
+    @Override
+    public int getHPMaximo() {
+        return -1;
+    }
 }

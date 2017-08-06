@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Atributo.*;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado.*;
+import java.io.Serializable;
 import java.util.Collections;
 
 /**
@@ -21,8 +22,10 @@ import java.util.Collections;
  * @author Filipe Barros Rodrigues
  * @version 2017.06.07
  */
-public abstract class Ator {
+public abstract class Ator implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     private String nome;
     private String imagem;
     private HashMap<Atributo, Integer> atributos;
@@ -468,6 +471,11 @@ public abstract class Ator {
      * Metodo Abstrato mensagemConversa.
      */
     public abstract String mensagemConversa();
+    
+    /**
+     * Metodo Abstrato getHPMaximo.
+     */
+    public abstract int getHPMaximo();
 
     /**
      * Método getHabilidade

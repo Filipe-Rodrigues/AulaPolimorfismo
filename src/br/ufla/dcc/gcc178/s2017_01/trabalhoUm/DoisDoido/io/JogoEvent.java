@@ -3,7 +3,6 @@ package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.io;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.EstadoDeJogo;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +33,7 @@ public class JogoEvent {
     /**Construtor da Classe.
      * 
      * @param saidas List<String> traz a lista de saidas de cada ambiente do jogo.
+     * @param estado Contém o estado do jogo.
      */
     public JogoEvent (List<String> saidas, EstadoDeJogo estado) {
         saida = "";
@@ -110,13 +110,14 @@ public class JogoEvent {
         this.saidasDoAmbiente = saidas;
     }
     
-    /**Metodo emendarSaida.
+    /**Metodo adicionarLinhaDeSaida.
      * 
-     * emenda uma saida com uma outra saida passada por parametro.
+     * Adiciona uma linha saida com a String de saída registrada até o momento.
+     * Funciona como se fosse um println.
      * 
-     * @param saida String com o nome da saida a ser emendada.
+     * @param saida String com a informação a ser impressa.
      */
-    public void emendarSaida(String saida) {
+    public void adicionarLinhaDeSaida(String saida) {
         this.saida += "\n" + saida;
     }
 
@@ -254,20 +255,40 @@ public class JogoEvent {
     }
     
     /**
-     * Metodo setPontos.
-     * 
-     * @param pontos Integer com os pontos a serem somado ao usuário.
-     */
-    public void setPontos (int pontos) {
-        this.pontuacao += pontos;
-    }
-    
-    /**
-     * Metodo getPontos.
+     * Metodo getPontuacao.
      * 
      * @return Integer com a quantidade de pontos possuida no momento.
      */
     public int getPontos () {
-        return pontuacao;
+        return estado.getPontuacao();
+    }
+    
+    /**
+     * Metodo getInimigoHP.
+     * 
+     * @return Integer com a quantidade de HP do inimigo enfrentado.
+     * Se não houver um inimigo (ou se estiver morto), retorna 0.
+     * Se o inimigo for imortal, retorna -1.
+     */
+    public float getInimigoHP () {
+        return estado.getInimigoHP();
+    }
+    
+    /**
+     * Metodo getMeuHP.
+     * 
+     * @return Float com a quantidade de HP do César.
+     */
+    public float getMeuHP () {
+        return estado.getMeuHP();
+    }
+    
+    /**
+     * Metodo getMinhaSanidade.
+     * 
+     * @return Float com a quantidade de Sanidade do César.
+     */
+    public float getMinhaSanidade () {
+        return estado.getMinhaSanidade();
     }
 }

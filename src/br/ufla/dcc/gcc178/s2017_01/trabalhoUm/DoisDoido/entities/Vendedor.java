@@ -69,5 +69,10 @@ public class Vendedor extends NPC {
         }
         return fraseDeEfeito;
 	}
+
+    @Override
+    public int getHPMaximo() {
+        return 25;
+    }
 	
 }
