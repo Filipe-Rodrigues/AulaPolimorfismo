@@ -66,4 +66,9 @@ public class Cachorro extends NPC {
         return null;
     }
 
+    @Override
+    public int getHPMaximo() {
+        return 10;
+    }
+
 }

@@ -1,4 +1,5 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.io;
+import java.io.Serializable;
 import java.util.Scanner;
 import java.util.List;
 
@@ -14,9 +15,10 @@ import java.util.List;
  * @author  Raydson Ferreira Carlota
  * @version 2017.06.08
  */
-public class Entrada {
+public class Entrada implements Serializable{
+    private static final long serialVersionUID = 1L;
     private PalavrasDeComando palavrasDeComando;
-    private Scanner tokenizer;
+    private transient Scanner tokenizer;
     
     /**
      * Construtor da classe Efeito

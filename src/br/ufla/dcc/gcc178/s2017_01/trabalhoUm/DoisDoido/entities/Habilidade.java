@@ -1,5 +1,6 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,8 +17,9 @@ import java.util.List;
  * @author  Filipe Barros Rodrigues
  * @version 2017.06.07
  */
-public class Habilidade {
+public class Habilidade implements Serializable{
 
+    private static final long serialVersionUID = 1L;
     private final String nome;
     private final String descricao;
     private List<Efeito> efeitos;

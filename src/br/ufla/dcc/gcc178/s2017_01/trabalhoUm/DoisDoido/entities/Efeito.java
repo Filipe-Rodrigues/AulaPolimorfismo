@@ -1,5 +1,7 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities;
 
+import java.io.Serializable;
+
 /**
  * Classe Abstrata Efeito - Modelo padrão de Efeitos em Atributos.
  *
@@ -13,8 +15,10 @@ package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities;
  * @author  Filipe Barros Rodrigues
  * @version 2017.06.07
  */
-public abstract class Efeito {
+public abstract class Efeito implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+    
     private String nome;
     private String descricao;
     private int quantidade;

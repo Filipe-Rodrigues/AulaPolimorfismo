@@ -23,7 +23,7 @@ public class Farmaceuta extends NPC {
      * @param nome uma String com o nome do Farmaceuta a ser criado.
      */
     public Farmaceuta(String nome) {
-	super(nome, 10, 2, null, new ArrayList<>(), true, true);
+	super(nome, 20, 2, null, new ArrayList<>(), true, true);
         Efeito hp = new AlteracaoDeHP("Subtrair HP", "Retira 10 pontos de HP.", -10);
         ArrayList<Efeito> umEfeito = new ArrayList<>();
         umEfeito.add(hp);
@@ -71,6 +71,11 @@ public class Farmaceuta extends NPC {
     public Item entregarItemDeQuest() {
         setEntregouItemDeQuest(true);
         return darItem("Clonazepam");
+    }
+
+    @Override
+    public int getHPMaximo() {
+        return 20;
     }
 
 }

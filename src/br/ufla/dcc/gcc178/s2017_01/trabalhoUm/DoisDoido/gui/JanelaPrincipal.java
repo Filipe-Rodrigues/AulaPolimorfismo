@@ -1,16 +1,11 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.EstadoDeJogo;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.InterfaceDeJogoListener;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.InterfaceDeNavegacaoListenter;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.ManicomioDeZulu;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.io.FormatoDeComandoException;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.io.JogoEvent;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -22,9 +17,11 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.ComandoDeJogoListener;
+import java.awt.Color;
+import java.util.Date;
+import javax.swing.UIManager;
 
 /**
  * Classe JanelaPrincipal - Controla a janela Principal do jogo.
@@ -44,8 +41,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private ManicomioDeZulu jogo;
     private BufferedImage notFound;
     private Mapa mapa;
-    private JanelaNovoJogo pontuacoes;
-    private int pontuacaoAtual;
+    private DialogoInformacoesDoUsuario pontuacoes;
     
     private Clip clip;
 
@@ -54,7 +50,22 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      */
     public JanelaPrincipal() {
         initComponents();
-        initAtributos();
+        initAtributos(null);
+    }
+    
+    /**
+     * Construtor Da Classe JanelaPrincipal, para carregar um jogo salvo.
+     * @param jogoSalvo Pode-se continuar um jogo salvo, bastando passá-lo no parâmetro.
+     * @param requisidora O DialogoInformacoesDoUsuario que invocou essa JanelaPrincipal.
+     * Como o JFrame não força foco modal, isto é, esta janela executa paralelamente
+     *  ao diálogo que a invocou, é necessário especificamente que uma referência
+     * do objeto ancestral seja usada para a notificação da finalização da execução da
+     * janela atual.
+     */
+    public JanelaPrincipal(ManicomioDeZulu jogoSalvo, DialogoInformacoesDoUsuario requisidora) {
+        initComponents();
+        initAtributos(jogoSalvo);
+        registrarRequisidora(requisidora);
     }
 
     /**
@@ -73,31 +84,39 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         painelImagem = new javax.swing.JPanel();
         labelImagem = new javax.swing.JLabel();
         grupoPainelAmbiente = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        painelDeNavegacao = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         botaoNorte = new javax.swing.JButton();
         botaoSul = new javax.swing.JButton();
         botaoOeste = new javax.swing.JButton();
         botaoLeste = new javax.swing.JButton();
+        botaoCancelar = new javax.swing.JButton();
+        botaoHabilidade = new javax.swing.JButton();
         painelObjetosDoAmbiente = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         painelNPCs = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         painelItensDoAmbiente = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        painelLabelsAmbiente = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         grupoPainelItensNPCs = new javax.swing.JPanel();
+        painelLabelsInventario = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         painelObjetosDoCesar = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         painelItensNPC = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         painelItensCesar = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
+        painelPontuacao = new javax.swing.JPanel();
         labelPontuacao = new javax.swing.JLabel();
+        painelStatus = new javax.swing.JPanel();
+        barraHPdoCesar = new javax.swing.JProgressBar();
+        barraSanidadeDoCesar = new javax.swing.JProgressBar();
+        barraHPdoInimigo = new javax.swing.JProgressBar();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addFocusListener(new java.awt.event.FocusAdapter() {
@@ -150,10 +169,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         labelImagem.setText("dasdasd");
         painelImagem.add(labelImagem, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.setMaximumSize(new java.awt.Dimension(235, 150));
-        jPanel1.setMinimumSize(new java.awt.Dimension(235, 120));
-        jPanel1.setLayout(new javax.swing.OverlayLayout(jPanel1));
+        painelDeNavegacao.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        painelDeNavegacao.setMaximumSize(new java.awt.Dimension(235, 150));
+        painelDeNavegacao.setMinimumSize(new java.awt.Dimension(235, 120));
 
         jPanel2.setMaximumSize(new java.awt.Dimension(200, 100));
         jPanel2.setMinimumSize(new java.awt.Dimension(200, 100));
@@ -191,6 +209,22 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        botaoCancelar.setText("Cancelar");
+        botaoCancelar.setFocusable(false);
+        botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarActionPerformed(evt);
+            }
+        });
+
+        botaoHabilidade.setText("Atacar");
+        botaoHabilidade.setFocusable(false);
+        botaoHabilidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoHabilidadeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -198,19 +232,25 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(botaoOeste, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                        .addComponent(botaoLeste, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(60, 60, 60)
-                                .addComponent(botaoNorte, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(64, 64, 64)
+                                .addComponent(botaoNorte, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(59, 59, 59)
-                                .addComponent(botaoSul, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(64, 64, 64)
+                                .addComponent(botaoSul, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(botaoOeste, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                                .addComponent(botaoLeste, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(botaoHabilidade, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -222,12 +262,30 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoOeste)
                     .addComponent(botaoLeste))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botaoSul)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botaoCancelar)
+                    .addComponent(botaoHabilidade))
                 .addContainerGap())
         );
 
-        jPanel1.add(jPanel2);
+        javax.swing.GroupLayout painelDeNavegacaoLayout = new javax.swing.GroupLayout(painelDeNavegacao);
+        painelDeNavegacao.setLayout(painelDeNavegacaoLayout);
+        painelDeNavegacaoLayout.setHorizontalGroup(
+            painelDeNavegacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelDeNavegacaoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        painelDeNavegacaoLayout.setVerticalGroup(
+            painelDeNavegacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelDeNavegacaoLayout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         painelObjetosDoAmbiente.setLayout(new java.awt.GridLayout(1, 2, 5, 0));
 
@@ -245,14 +303,14 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
         painelObjetosDoAmbiente.add(jScrollPane2);
 
-        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
+        painelLabelsAmbiente.setLayout(new java.awt.GridLayout(1, 2));
 
         jLabel1.setText("NPCs:");
-        jPanel3.add(jLabel1);
+        painelLabelsAmbiente.add(jLabel1);
         UtilitariosGUI.mudarFonte(jLabel1, "SpaceMono-Regular.ttf", 12f);
 
         jLabel2.setText("Itens no Ambiente:");
-        jPanel3.add(jLabel2);
+        painelLabelsAmbiente.add(jLabel2);
         UtilitariosGUI.mudarFonte(jLabel2, "SpaceMono-Regular.ttf", 12f);
 
         javax.swing.GroupLayout grupoPainelAmbienteLayout = new javax.swing.GroupLayout(grupoPainelAmbiente);
@@ -260,20 +318,31 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         grupoPainelAmbienteLayout.setHorizontalGroup(
             grupoPainelAmbienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(grupoPainelAmbienteLayout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(painelDeNavegacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(grupoPainelAmbienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(painelObjetosDoAmbiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(painelLabelsAmbiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         grupoPainelAmbienteLayout.setVerticalGroup(
             grupoPainelAmbienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
             .addGroup(grupoPainelAmbienteLayout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(painelLabelsAmbiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelObjetosDoAmbiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(painelDeNavegacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        painelLabelsInventario.setLayout(new java.awt.GridLayout(1, 2));
+
+        jLabel3.setText("Inventário do NPC ativo:");
+        painelLabelsInventario.add(jLabel3);
+        UtilitariosGUI.mudarFonte(jLabel3, "SpaceMono-Regular.ttf", 12f);
+
+        jLabel4.setText("Meu inventário:");
+        painelLabelsInventario.add(jLabel4);
+        UtilitariosGUI.mudarFonte(jLabel4
+            , "SpaceMono-Regular.ttf", 12f);
 
         painelObjetosDoCesar.setLayout(new java.awt.GridLayout(1, 2, 5, 0));
 
@@ -291,49 +360,74 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
         painelObjetosDoCesar.add(jScrollPane4);
 
-        jPanel5.setLayout(new java.awt.GridLayout(1, 2));
-
-        jLabel3.setText("Inventário do NPC ativo:");
-        jPanel5.add(jLabel3);
-        UtilitariosGUI.mudarFonte(jLabel3, "SpaceMono-Regular.ttf", 12f);
-
-        jLabel4.setText("Meu inventário:");
-        jPanel5.add(jLabel4);
-        UtilitariosGUI.mudarFonte(jLabel4
-            , "SpaceMono-Regular.ttf", 12f);
-
         javax.swing.GroupLayout grupoPainelItensNPCsLayout = new javax.swing.GroupLayout(grupoPainelItensNPCs);
         grupoPainelItensNPCs.setLayout(grupoPainelItensNPCsLayout);
         grupoPainelItensNPCsLayout.setHorizontalGroup(
             grupoPainelItensNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(painelObjetosDoCesar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(painelLabelsInventario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+            .addComponent(painelObjetosDoCesar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         grupoPainelItensNPCsLayout.setVerticalGroup(
             grupoPainelItensNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, grupoPainelItensNPCsLayout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(painelLabelsInventario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelObjetosDoCesar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        painelPontuacao.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         labelPontuacao.setText("Pontuação: 100");
         UtilitariosGUI.mudarFonte(labelPontuacao, "SpaceMono-Regular.ttf", 12f);
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout painelPontuacaoLayout = new javax.swing.GroupLayout(painelPontuacao);
+        painelPontuacao.setLayout(painelPontuacaoLayout);
+        painelPontuacaoLayout.setHorizontalGroup(
+            painelPontuacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelPontuacaoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(labelPontuacao)
                 .addContainerGap())
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        painelPontuacaoLayout.setVerticalGroup(
+            painelPontuacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(labelPontuacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+        );
+
+        painelStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        barraHPdoCesar.setString("HP");
+        barraHPdoCesar.setStringPainted(true);
+
+        barraSanidadeDoCesar.setRequestFocusEnabled(false);
+        barraSanidadeDoCesar.setString("Sanidade");
+        barraSanidadeDoCesar.setStringPainted(true);
+
+        barraHPdoInimigo.setString("HP Inimigo");
+        barraHPdoInimigo.setStringPainted(true);
+
+        javax.swing.GroupLayout painelStatusLayout = new javax.swing.GroupLayout(painelStatus);
+        painelStatus.setLayout(painelStatusLayout);
+        painelStatusLayout.setHorizontalGroup(
+            painelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelStatusLayout.createSequentialGroup()
+                .addComponent(barraHPdoCesar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(barraSanidadeDoCesar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(barraHPdoInimigo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        painelStatusLayout.setVerticalGroup(
+            painelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(barraHPdoCesar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(barraSanidadeDoCesar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(barraHPdoInimigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -343,34 +437,36 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1180, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(grupoPainelAmbiente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(painelImagem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(painelImagem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(painelStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(grupoPainelItensNPCs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(painelPontuacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(painelImagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(painelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(painelPontuacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1)
+                    .addComponent(painelImagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(grupoPainelAmbiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(grupoPainelItensNPCs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(grupoPainelItensNPCs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(grupoPainelAmbiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -383,13 +479,31 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * 
      * inicializa a janela.
      */
-    private void initAtributos() {
-        pontuacaoAtual = 100;
+    private void initAtributos(ManicomioDeZulu jogoSalvo) {
         inicializarMapa();
         loadImagemNotFound();
-        initEngine();
+        initEngine(jogoSalvo);
         initSom();
+        colorirBarras();
         setLocationRelativeTo(null);
+        setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+        setVisible(true);
+        comecarJogo(jogoSalvo);
+    }
+
+    private void colorirBarras() {
+        UIManager.put("barraHPdoCesar.background", Color.GRAY);
+        UIManager.put("barraHPdoCesar.foreground", Color.BLACK);
+        UIManager.put("barraHPdoCesar.selectionBackground", Color.RED);
+        UIManager.put("barraHPdoCesar.selectionForeground", Color.BLACK);
+        UIManager.put("barraSanidadeDoCesar.background", Color.GRAY);
+        UIManager.put("barraSanidadeDoCesar.foreground", Color.BLACK);
+        UIManager.put("barraSanidadeDoCesar.selectionBackground", Color.BLUE);
+        UIManager.put("barraSanidadeDoCesar.selectionForeground", Color.BLACK);
+        UIManager.put("barraHPdoInimigo.background", Color.GRAY);
+        UIManager.put("barraHPdoInimigo.foreground", Color.BLACK);
+        UIManager.put("barraHPdoInimigo.selectionBackground", Color.ORANGE);
+        UIManager.put("barraHPdoInimigo.selectionForeground", Color.BLACK);
     }
     
     private void initSom () {
@@ -415,14 +529,26 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     /**Metodo initEngine.
      *  
      */
-    private void initEngine() {
-        jogo = new ManicomioDeZulu();
-        jogo.adicionarInterfaceDeJogoListener(new InterfaceDeJogoListener() {
+    private void initEngine(ManicomioDeZulu jogoSalvo) {
+        if (jogoSalvo == null) {
+            jogo = new ManicomioDeZulu();
+        } else {
+            jogo = jogoSalvo;
+        }
+        jogo.adicionarInterfaceDeJogoListener(new ComandoDeJogoListener() {
             @Override
             public void envioDeComandoPerformed(JogoEvent evt) {
                 envioDeComandoDoManicomio(evt);
             }
         });
+    }
+    
+    private void comecarJogo(ManicomioDeZulu jogoSalvo) {
+        if (jogoSalvo == null) {
+            jogo.mostrarBoasVindas();
+        } else {
+            jogo.carregarCenarioAtualDoJogo();
+        }
     }
     
     /**Metodo loadImagemNotFound.
@@ -452,16 +578,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         iniciarEnvioDoCampoDeComando();
-        //testeCriarItem();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void testeCriarItem() {
-        ModeloDeNavegacao modelo = new ModeloDeNavegacao(TipoDeGUI.ITEM_DO_AMBIENTE, "Teste", "Bora ver se dá certo saporra", "Carteira");
-        //jScrollPane4.getViewport().add(modelo);
-        painelItensCesar.add(modelo);
-        revalidate();
-        repaint();
-   }
     
     /**Metodo jTextField1KeyReleased.
      * 
@@ -530,9 +648,17 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoSulActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        pontuacoes.receberFinalizacaoDeJogo(pontuacaoAtual);
         clip.stop();
+        pontuacoes.receberFinalizacaoDeJogo(new InformacoesDeJogo(jogo.getPontuacao(), new Date(), jogo));
     }//GEN-LAST:event_formWindowClosed
+
+    private void botaoHabilidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoHabilidadeActionPerformed
+        jogo.receberComando("usar habilidade");
+    }//GEN-LAST:event_botaoHabilidadeActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        jogo.receberComando("sair");
+    }//GEN-LAST:event_botaoCancelarActionPerformed
 
     /**Metodo envioDeComandoDoManicomio.
      * 
@@ -546,8 +672,30 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         atualizarBotoesDeNavegacao(evt);
         atualizarNavegacaoItens(evt);
         mostrarMapa(evt.querMapa());
+        atualizarStatus(evt);
         atualizarPontuacao(evt.getPontos());
         verificarSeTerminou(evt.taFinalizado());
+    }
+    
+    /**
+     * Metodo atualizarStatus.
+     * 
+     * Atualiza as barras de status do César e do HP do inimigo.
+     * 
+     * @param evt JogoEvent contendo os pontos dos atributos em questão.
+     */
+    private void atualizarStatus(JogoEvent evt) {
+        float valor = evt.getMeuHP() * 100f;
+        barraHPdoCesar.setValue((int) valor);
+        valor = evt.getMinhaSanidade() * 100f;
+        barraSanidadeDoCesar.setValue((int) valor);
+        if (evt.getInimigoHP() >= 0) {
+            barraHPdoInimigo.setIndeterminate(false);
+            valor = evt.getInimigoHP() * 100;
+            barraHPdoInimigo.setValue((int) valor);
+        } else {
+            barraHPdoInimigo.setIndeterminate(true);
+        }
     }
     
     /**
@@ -558,11 +706,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * @param pontos Integer com a quantidade de pontos.
      */
     private void atualizarPontuacao(int pontos) {
-        pontuacaoAtual += pontos;
-        if (pontuacaoAtual < 0) {
-            pontuacaoAtual = 0;
-        }
-        labelPontuacao.setText("Pontuação: " + pontuacaoAtual);
+        labelPontuacao.setText("Pontuação: " + jogo.getPontuacao());
     }
     
     /**
@@ -663,6 +807,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         botaoOeste.setEnabled(false);
         botaoNorte.setEnabled(false);
         botaoSul.setEnabled(false);
+        botaoCancelar.setEnabled(false);
+        botaoHabilidade.setEnabled(false);
         if (!evt.taFinalizado()) {
             List<String> saidas = evt.getSaidasDisponiveis();
             for (String direcao : saidas) {
@@ -675,6 +821,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 } else if (direcao.equals("sul")) {
                     botaoSul.setEnabled(true);
                 }
+            }
+            if (evt.getEstadoAtual() != EstadoDeJogo.NAVEGANDO) {
+                botaoCancelar.setEnabled(true);
+            }
+            if (evt.getEstadoAtual() == EstadoDeJogo.ATACANDO) {
+                botaoHabilidade.setEnabled(true);
             }
         } else {
             jTextField1.setEnabled(false);
@@ -769,11 +921,16 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }
     
-    void registrarRequisidora(JanelaNovoJogo pontuacoes) {
+    private void registrarRequisidora(DialogoInformacoesDoUsuario pontuacoes) {
         this.pontuacoes = pontuacoes;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar barraHPdoCesar;
+    private javax.swing.JProgressBar barraHPdoInimigo;
+    private javax.swing.JProgressBar barraSanidadeDoCesar;
+    private javax.swing.JButton botaoCancelar;
+    private javax.swing.JButton botaoHabilidade;
     private javax.swing.JButton botaoLeste;
     private javax.swing.JButton botaoNorte;
     private javax.swing.JButton botaoOeste;
@@ -785,11 +942,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -799,13 +954,18 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelImagem;
     private javax.swing.JLabel labelPontuacao;
+    private javax.swing.JPanel painelDeNavegacao;
     private javax.swing.JPanel painelImagem;
     private javax.swing.JPanel painelItensCesar;
     private javax.swing.JPanel painelItensDoAmbiente;
     private javax.swing.JPanel painelItensNPC;
+    private javax.swing.JPanel painelLabelsAmbiente;
+    private javax.swing.JPanel painelLabelsInventario;
     private javax.swing.JPanel painelNPCs;
     private javax.swing.JPanel painelObjetosDoAmbiente;
     private javax.swing.JPanel painelObjetosDoCesar;
+    private javax.swing.JPanel painelPontuacao;
+    private javax.swing.JPanel painelStatus;
     // End of variables declaration//GEN-END:variables
 
 }

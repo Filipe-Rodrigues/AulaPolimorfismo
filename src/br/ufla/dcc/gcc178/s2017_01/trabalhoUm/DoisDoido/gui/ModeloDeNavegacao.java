@@ -1,6 +1,5 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.InterfaceDeNavegacaoListenter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;

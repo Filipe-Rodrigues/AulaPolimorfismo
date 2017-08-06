@@ -2,6 +2,7 @@ package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities;
 
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado.ITEM_NAO_ENCONTRADO;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado.SUCESSO;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,8 +21,10 @@ import java.util.List;
  * @author  Filipe Barros Rodrigues
  * @version 2017.06.07
  */
-public class Ambiente {
+public class Ambiente implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+    
     public static final String SEM_SAIDA = "SEM_SAIDA";
     private String descricao;
     private String nomeDaImagem;

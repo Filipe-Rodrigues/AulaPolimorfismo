@@ -68,5 +68,10 @@ public class Medico extends NPC {
     	super.setEntregouItemDeQuest(true);
     	return darItem("Largactil");
     }
+
+    @Override
+    public int getHPMaximo() {
+        return 50;
+    }
  
 }

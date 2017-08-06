@@ -21,11 +21,11 @@ import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.EstadoDeJogo.*;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ambiente.SEM_SAIDA;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado.*;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Atributo.*;
+import java.io.Serializable;
 
 /**
  * Classe ManicomioDeZulu - responsável por criar os ambientes colocar os
@@ -41,16 +41,18 @@ import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Atributo
  * @author Raydson Ferreira Carlota
  * @version 2017.06.09
  */
-public class ManicomioDeZulu {
+public class ManicomioDeZulu implements Serializable{
 
     /**
      * Attributes
      */
 
+    private static final long serialVersionUID = 1L;
+    
     private Ambiente ambienteAtual;
     private Cesar protagonista;
     private EstadoDeJogo status;
-    private List<InterfaceDeJogoListener> interfacesDeJogo;
+    private transient List<ComandoDeJogoListener> interfacesDeJogo;
     private Entrada entrada;
     
     private Ambiente casaDoCesar;
@@ -58,6 +60,8 @@ public class ManicomioDeZulu {
     private Ambiente portaDaFaculdade;
     private Ambiente loja;
     private Ambiente farmacia;
+    
+    private boolean finalizado;
     
     private NPC npcAtivo;
 
@@ -69,6 +73,7 @@ public class ManicomioDeZulu {
         criarAmbientes();
         inicializarIO();
         status = new EstadoDeJogo();
+        finalizado = false;
         initEntradas();
     }
 
@@ -95,6 +100,8 @@ public class ManicomioDeZulu {
         palavrasDeComando.add("fugir");
         palavrasDeComando.add("checar");
         palavrasDeComando.add("detalhar");
+        palavrasDeComando.add("recarregar");
+        palavrasDeComando.add("welcome");
         entrada = new Entrada(palavrasDeComando);
     }
     
@@ -111,12 +118,13 @@ public class ManicomioDeZulu {
     /**Metodo adicionarInterfaceDeJogoListener.
      * 
      * 
-     * @param listener InterfaceDeJogoListener com as interfaces do jogo.
+     * @param listener ComandoDeJogoListener com as interfaces do jogo.
      */
-    public void adicionarInterfaceDeJogoListener(InterfaceDeJogoListener listener) {
+    public void adicionarInterfaceDeJogoListener(ComandoDeJogoListener listener) {
+        if (interfacesDeJogo == null) {
+            interfacesDeJogo = new ArrayList<>();
+        }
         interfacesDeJogo.add(listener);
-        JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas(), status);
-        imprimirBoasVindas(evento);
     }
 
     /**Metodo atualizarInterfaces.
@@ -124,7 +132,7 @@ public class ManicomioDeZulu {
      * @param evt JogoEvent com os eventos das interfaces.
      */
     public void atualizarInterfaces(JogoEvent evt) {
-        for (InterfaceDeJogoListener interfaceDeJogo : interfacesDeJogo) {
+        for (ComandoDeJogoListener interfaceDeJogo : interfacesDeJogo) {
             interfaceDeJogo.envioDeComandoPerformed(evt);
         }
     }
@@ -535,57 +543,88 @@ public class ManicomioDeZulu {
     public void processarComando(Comando comando) throws FormatoDeComandoException {
         JogoEvent evento = new JogoEvent(ambienteAtual.getListaSaidas(), status);
         if (comando.ehDesconhecido()) {
-            evento.emendarSaida("Você está louco? Digite [ajuda] se precisar de algo...");
-            atualizarInterfaces(evento);
-            return;
+            evento.adicionarLinhaDeSaida("Você está louco? Digite [ajuda] se precisar de algo...");
+        } else {
+            String palavraDeComando = comando.getPalavraDeComando();
+            if (palavraDeComando.equals("ajuda")) {
+                imprimirAjuda(evento);
+            } else if (palavraDeComando.equals("ir")) {
+                irParaAmbiente(comando, evento);
+            } else if (palavraDeComando.equals("sair")) {
+                sair(comando, evento);
+            } else if (palavraDeComando.equals("status")) {
+                imprimirStatus(comando, evento);
+            } else if (palavraDeComando.equals("descrever")) {
+                descrever(comando, evento);
+            } else if (palavraDeComando.equals("detalhar")) {
+                detalhar(comando, evento);
+            } else if (palavraDeComando.equals("mostrar")) {
+                mostrarInventario(comando, evento);
+            } else if (palavraDeComando.equals("conversar")) {
+                conversar(comando, evento);
+            } else if (palavraDeComando.equals("atacar")) {
+                atacar(comando, evento);
+            } else if (palavraDeComando.equals("coletar")) {
+                coletar(comando, evento);
+            } else if (palavraDeComando.equals("usar")) {
+                usar(comando, evento);
+            } else if (palavraDeComando.equals("descartar")) {
+                descartar(comando, evento);
+            } else if (palavraDeComando.equals("pedir")) {
+                pedir(comando, evento);
+            } else if (palavraDeComando.equals("cancelar")) {
+                cancelar(evento);
+            } else if (palavraDeComando.equals("fugir")) {
+                fugir(evento);
+            } else if (palavraDeComando.equals("checar")) {
+                checar(comando, evento);
+            } else if (palavraDeComando.equals("recarregar")) {
+                recarregar(evento);
+            } else if (palavraDeComando.equals("welcome")) {
+                mensagemDeBoasVindas(evento);
+            }
         }
-
-        String palavraDeComando = comando.getPalavraDeComando();
-        if (palavraDeComando.equals("ajuda")) {
-            imprimirAjuda(evento);
-        } else if (palavraDeComando.equals("ir")) {
-            irParaAmbiente(comando, evento);
-        } else if (palavraDeComando.equals("sair")) {
-            sair(comando, evento);
-        } else if (palavraDeComando.equals("status")) {
-            imprimirStatus(comando, evento);
-        } else if (palavraDeComando.equals("descrever")) {
-            descrever(comando, evento);
-        } else if (palavraDeComando.equals("detalhar")) {
-            detalhar(comando, evento);
-        } else if (palavraDeComando.equals("mostrar")) {
-            mostrarInventario(comando, evento);
-        } else if (palavraDeComando.equals("conversar")) {
-            conversar(comando, evento);
-        } else if (palavraDeComando.equals("atacar")) {
-            atacar(comando, evento);
-        } else if (palavraDeComando.equals("coletar")) {
-            coletar(comando, evento);
-        } else if (palavraDeComando.equals("usar")) {
-            usar(comando, evento);
-        } else if (palavraDeComando.equals("descartar")) {
-            descartar(comando, evento);
-        } else if (palavraDeComando.equals("pedir")) {
-            pedir(comando, evento);
-        } else if (palavraDeComando.equals("cancelar")) {
-            cancelar(evento);
-        } else if (palavraDeComando.equals("fugir")) {
-            fugir(evento);
-        } else if (palavraDeComando.equals("checar")) {
-            checar(comando, evento);
-        }
-
-        if (!protagonista.taVivo() || protagonista.enlouqueceuDeVez()) {
-            evento.emendarSaida("Você perdeu!!! Você deixou que te tua loucura te dominasse por");
-            evento.emendarSaida("completo!!!");
-            sairDoJogo(evento);
-        } else if (protagonista.taCurado()) {
-            evento.emendarSaida("PARABÉNS, VOCÊ FOI CURADO!!!! Agora fique esperto para não deixar");
-            evento.emendarSaida("de tomar teus remédios na hora certa!!");
-            sairDoJogo(evento);
-        }
+        checarCondicoesDeFinalizacao(evento);
         atualizarNavegacao(evento);
         atualizarInterfaces(evento);
+    }
+    
+    public void carregarCenarioAtualDoJogo() {
+        receberComando("recarregar");
+    }
+    
+    private void recarregar(JogoEvent evento) {
+        evento.adicionarLinhaDeSaida("Você carregou um jogo salvo!\n");
+        descrever(new Comando("descrever", "ambiente"), evento);
+    }
+    
+    private void checarCondicoesDeFinalizacao(JogoEvent evento) {
+        if (!protagonista.taVivo()) {
+            evento.adicionarLinhaDeSaida("Você perdeu!!! Você foi mutilado como um pedaço de pernil na cozinha,");
+            evento.adicionarLinhaDeSaida("agressivamente fateado por uma dona de casa ciumenta absolutely EMPUTECIDA");
+            evento.adicionarLinhaDeSaida("depois de flagrar o histórico de seu marido procurando na internet");
+            evento.adicionarLinhaDeSaida("fotos da Feiticeira e da Tiazinha em suas épocas de glória. Trágico!");
+            status.setEstadoDoProtagonista(ATOR_ASSASSINADO);
+            sairDoJogo(evento);
+            finalizado = true;
+        } else if (protagonista.enlouqueceuDeVez()) {
+            evento.adicionarLinhaDeSaida("Você perdeu!!! Você, como um bom maluco, resolveu abraçar a causa de vez");
+            evento.adicionarLinhaDeSaida("e saiu apedrejando as pessoas na rua enquanto gritava \"VOU PRA CASA FAZER SABÃO!\",");
+            evento.adicionarLinhaDeSaida("até que chamaram o SAPU (Serviço de Atendimento Psiquiátrico de Urgência) pra te");
+            evento.adicionarLinhaDeSaida("pegar, te imobiliar e te internar compulsoriamente! Que deprimente!!!");
+            status.setEstadoDoProtagonista(ATOR_ENLOUQUECIDO);
+            finalizado = true;
+            sairDoJogo(evento);
+        } else if (protagonista.taCurado()) {
+            evento.adicionarLinhaDeSaida("PARABÉNS, VOCÊ FOI CURADO!!!! Agora fique esperto para não deixar");
+            evento.adicionarLinhaDeSaida("de tomar teus remédios na hora certa!!");
+            status.setEstadoDoProtagonista(SUCESSO);
+            if (!finalizado) {
+                afetarPontuacao(100);
+            }
+            sairDoJogo(evento);
+            finalizado = true;
+        }
     }
 
     /**
@@ -599,23 +638,24 @@ public class ManicomioDeZulu {
      */
     private void atacar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Atacar quem?");
+            evento.adicionarLinhaDeSaida("Atacar quem?");
             return;
         }
         if (status.getEstadoAtual() == NAVEGANDO) {
             NPC alvo = ambienteAtual.selecionarNPC(comando.getSegundaPalavra());
             if (alvo != null) {
+                npcAtivo = alvo;
                 status.setEstadoAtual(ATACANDO, alvo.getNome());
                 evento.setLimparTela(true);
-                evento.emendarSaida("Você se prepara para emboscar " + alvo.getNome() + "...");
-                evento.emendarSaida("");
-                evento.emendarSaida("O que vai fazer?");
+                evento.adicionarLinhaDeSaida("Você se prepara para emboscar " + alvo.getNome() + "...");
+                evento.adicionarLinhaDeSaida("");
+                evento.adicionarLinhaDeSaida("O que vai fazer?");
                 evento.setImagem(alvo.getImagem());
             } else {
-                evento.emendarSaida("Você está atacando alguém que não existe! Procure [ajuda] urgente!!");
+                evento.adicionarLinhaDeSaida("Você está atacando alguém que não existe! Procure [ajuda] urgente!!");
             }
         } else {
-            evento.emendarSaida("Você não pode fazer isso agora!");
+            evento.adicionarLinhaDeSaida("Você não pode fazer isso agora!");
         }
     }
 
@@ -630,7 +670,7 @@ public class ManicomioDeZulu {
      */
     private void conversar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Conversar com quem?");
+            evento.adicionarLinhaDeSaida("Conversar com quem?");
             return;
         }
         if (status.getEstadoAtual() == NAVEGANDO) {
@@ -644,15 +684,15 @@ public class ManicomioDeZulu {
                 evento.setLimparTela(true);
                 status.setEstadoAtual(CONVERSANDO, alvo.getNome());
                 npcAtivo = alvo;
-                evento.emendarSaida("Você se aproximou de " + alvo.getNome() + " e o cumprimentou...");
-                evento.emendarSaida("");
-                evento.emendarSaida(alvo.mensagemConversa());
+                evento.adicionarLinhaDeSaida("Você se aproximou de " + alvo.getNome() + " e o cumprimentou...");
+                evento.adicionarLinhaDeSaida("");
+                evento.adicionarLinhaDeSaida(alvo.mensagemConversa());
                 evento.setImagem(alvo.getImagem());
             } else {
-                evento.emendarSaida("Você está conversando com alguém que não existe! Procure [ajuda] urgente!!");
+                evento.adicionarLinhaDeSaida("Você está conversando com alguém que não existe! Procure [ajuda] urgente!!");
             }
         } else {
-            evento.emendarSaida("Você não pode fazer isso agora!");
+            evento.adicionarLinhaDeSaida("Você não pode fazer isso agora!");
         }
     }
 
@@ -667,7 +707,7 @@ public class ManicomioDeZulu {
      */
     private void pedir(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Pedir o quê?");
+            evento.adicionarLinhaDeSaida("Pedir o quê?");
             return;
         }
         if (status.getEstadoAtual() == CONVERSANDO) {
@@ -676,18 +716,18 @@ public class ManicomioDeZulu {
                 if (protagonista.temItem("Carteira")) {
                     if (protagonista.temEspacoNoInventario()) {
                         protagonista.coletarItem(alvo.entregarItemDeQuest());
-                        evento.emendarSaida("Item recebido!");
+                        evento.adicionarLinhaDeSaida("Item recebido!");
                     } else {
-                        evento.emendarSaida("Inventário lotado!");
+                        evento.adicionarLinhaDeSaida("Inventário lotado!");
                     }
                 } else {
-                    evento.emendarSaida("Você não tem carteira agora!");
+                    evento.adicionarLinhaDeSaida("Você não tem carteira agora!");
                 }
             } else {
-                evento.emendarSaida("Ele não tem esse item!");
+                evento.adicionarLinhaDeSaida("Ele não tem esse item!");
             }
         } else {
-            evento.emendarSaida("Como assim pedir, tá doido? Peça [ajuda] urgente...");
+            evento.adicionarLinhaDeSaida("Como assim pedir, tá doido? Peça [ajuda] urgente...");
         }
     }
 
@@ -702,10 +742,10 @@ public class ManicomioDeZulu {
             status.setEstadoAtual(NAVEGANDO, "");
             npcAtivo = null;
             evento.setLimparTela(true);
-            evento.emendarSaida("Você foi embora!");
+            evento.adicionarLinhaDeSaida("Você foi embora!");
             exibirAmbienteAtual(evento);
         } else {
-            evento.emendarSaida("Cancelar o quê?");
+            evento.adicionarLinhaDeSaida("Cancelar o quê?");
         }
     }
 
@@ -720,14 +760,15 @@ public class ManicomioDeZulu {
         if (status.getEstadoAtual() == ATACANDO) {
             if (ambienteAtual.selecionarNPC(status.getNomeDoNPCAtual()).ehImortal()) {
                 status.setEstadoAtual(NAVEGANDO, "");
+                npcAtivo = null;
                 evento.setLimparTela(true);
-                evento.emendarSaida("Você fugiu!");
+                evento.adicionarLinhaDeSaida("Você fugiu!");
                 exibirAmbienteAtual(evento);
             } else {
-                evento.emendarSaida("Você não pode fugir dessa luta!");
+                evento.adicionarLinhaDeSaida("Você não pode fugir dessa luta!");
             }
         } else {
-            evento.emendarSaida("Fugir de onde?");
+            evento.adicionarLinhaDeSaida("Fugir de onde?");
         }
     }
 
@@ -742,11 +783,13 @@ public class ManicomioDeZulu {
      */
     private void usar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Usar o quê?");
+            evento.adicionarLinhaDeSaida("Usar o quê?");
             return;
         }
         if (status.getEstadoAtual() == NAVEGANDO) {
-            if (protagonista.temItem(comando.getSegundaPalavra())) {
+            if (comando.getSegundaPalavra().equalsIgnoreCase("mapa")) {
+                checar(comando, evento);
+            } else if (protagonista.temItem(comando.getSegundaPalavra())) {
                 List<Resultado> resultados = protagonista.usarItem(comando.getSegundaPalavra(), protagonista);
                 verificarResultados(protagonista, resultados, evento);
             } else {
@@ -771,12 +814,18 @@ public class ManicomioDeZulu {
                 List<Resultado> resultados = alvo.usarHabilidade(protagonista);
                 verificarResultados(protagonista, resultados, evento);
             } else {
-                evento.emendarSaida("Você pode continuar o jogo, e conseguiu segurar seu surto por mais uma rodada!");
+                evento.adicionarLinhaDeSaida("Você pode continuar o jogo, e conseguiu segurar seu surto por mais uma rodada!");
                 status.setEstadoAtual(NAVEGANDO, "");
-                status.matou(true);
+                npcAtivo = null;
+                if (status.teveMatanca()) {
+                    protagonista.afetarAtributo(SANIDADE, 1);
+                } else {
+                    status.matou(true);
+                }
                 ambienteAtual.matarNPC(alvo);
                 exibirAmbienteAtual(evento);
             }
+            
         }
     }
     
@@ -790,57 +839,57 @@ public class ManicomioDeZulu {
         for (Resultado resultado : resultados) {
             switch (resultado) {
                 case ATOR_ASSASSINADO:
-                    evento.emendarSaida(alvo.getNome() + " foi assassinado!");
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " foi assassinado!");
                     if (!alvo.getNome().equals("Cesar")) {
-                        afetarPontuacao(evento, 50);
+                        afetarPontuacao(50);
                     } else {
-                        afetarPontuacao(evento, -100);
+                        afetarPontuacao(-100);
                     }
                     break;
                 case ATOR_CURADO:
-                    evento.emendarSaida(alvo.getNome() + " restaurou HP!");
-                    afetarPontuacao(evento, 30);
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " restaurou HP!");
+                    afetarPontuacao(50);
                     break;
                 case ATOR_ENFURECIDO:
-                    evento.emendarSaida(alvo.getNome() + " perdeu sanidade!");
-                    afetarPontuacao(evento, -10);
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " perdeu sanidade!");
+                    afetarPontuacao(-10);
                     break;
                 case ATOR_ENLOUQUECIDO:
-                    evento.emendarSaida(alvo.getNome() + " enloqueceu de vez!");
-                    afetarPontuacao(evento, -50);
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " enloqueceu de vez!");
+                    afetarPontuacao(-50);
                     break;
                 case ATOR_EQUILIBRADO:
-                    evento.emendarSaida(alvo.getNome() + " é incorruptível!");
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " é incorruptível!");
                     break;
                 case ATOR_FERIDO:
-                    evento.emendarSaida(alvo.getNome() + " foi atacado e perdeu HP!");
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " foi atacado e perdeu HP!");
                     if (!alvo.getNome().equals("Cesar")) {
-                        afetarPontuacao(evento, 10);
+                        afetarPontuacao(10);
                     } else {
-                        afetarPontuacao(evento, -5);
+                        afetarPontuacao(-5);
                     }
                     break;
                 case ATOR_IMORTAL:
-                    evento.emendarSaida(alvo.getNome() + " é imortal!");
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " é imortal!");
                     break;
                 case ATOR_MORTO:
-                    evento.emendarSaida(alvo.getNome() + " está morto, deixe-o!");
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " está morto, deixe-o!");
                     break;
                 case ATOR_NEUTRALIZADO:
-                    evento.emendarSaida(alvo.getNome() + " está sem condição de lutar, deixe-o!");
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " está sem condição de lutar, deixe-o!");
                     break;
                 case ATOR_SANADO:
-                    evento.emendarSaida(alvo.getNome() + " recuperou um pouco de Sanidade!");
-                    afetarPontuacao(evento, 30);
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " recuperou um pouco de Sanidade!");
+                    afetarPontuacao(30);
                     break;
                 case ATRIBUTO_NAO_APROPRIADO:
-                    evento.emendarSaida(alvo.getNome() + " não sofreu dano algum!");
+                    evento.adicionarLinhaDeSaida(alvo.getNome() + " não sofreu dano algum!");
                     break;
                 case BAGAGEM_LOTADA:
-                    evento.emendarSaida("A bagagem de " + alvo.getNome() + " está lotada!");
+                    evento.adicionarLinhaDeSaida("A bagagem de " + alvo.getNome() + " está lotada!");
                     break;
                 case ITEM_NAO_ENCONTRADO:
-                    evento.emendarSaida("Quê? Isso que você quer usar não existe, procure [ajuda] para sua loucura!");
+                    evento.adicionarLinhaDeSaida("Quê? Isso que você quer usar não existe, procure [ajuda] para sua loucura!");
             }
         }
     }
@@ -856,7 +905,7 @@ public class ManicomioDeZulu {
      */
     private void checar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Checar o quê?");
+            evento.adicionarLinhaDeSaida("Checar o quê?");
             return;
         }
         if (comando.getSegundaPalavra().equalsIgnoreCase("mapa")) {
@@ -864,10 +913,13 @@ public class ManicomioDeZulu {
                 if (protagonista.temItem("Mapa")) {
                     evento.setQuerMapa(true);
                 } else {
-                    evento.emendarSaida("Não estou com meu mapa! Mas sei que minha casa fica");
-                    evento.emendarSaida("na Rua Python, 118 (Leste da esquina Prolog com Python)");
+                    evento.adicionarLinhaDeSaida("Não estou com meu mapa! Mas sei que minha casa fica");
+                    evento.adicionarLinhaDeSaida("na Rua Python, 118 (Leste da esquina Prolog com Python)");
                 }
             }
+        } else {
+            evento.adicionarLinhaDeSaida("Cara, agora você quer checar um négocio bem nada a ver... Eu tô falando,");
+            evento.adicionarLinhaDeSaida("você precisa muito de [ajuda]!!!");
         }
     }
 
@@ -882,14 +934,14 @@ public class ManicomioDeZulu {
      */
     private void descartar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Descartar o quê?");
+            evento.adicionarLinhaDeSaida("Descartar o quê?");
             return;
         }
         if (protagonista.temItem(comando.getSegundaPalavra())) {
             ambienteAtual.colocarItem(protagonista.darItem(comando.getSegundaPalavra()));
-            evento.emendarSaida("Item descartado!");
+            evento.adicionarLinhaDeSaida("Item descartado!");
         } else {
-            evento.emendarSaida("Você não tem esse item!");
+            evento.adicionarLinhaDeSaida("Você não tem esse item!");
         }
     }
 
@@ -904,7 +956,7 @@ public class ManicomioDeZulu {
      */
     private void coletar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Coletar o quê?");
+            evento.adicionarLinhaDeSaida("Coletar o quê?");
             return;
         }
         if (status.getEstadoAtual() != CONVERSANDO) {
@@ -913,21 +965,21 @@ public class ManicomioDeZulu {
                 if (item.ehColetavel()) {
                     if (protagonista.temEspacoNoInventario()) {
                         protagonista.coletarItem(item);
-                        evento.emendarSaida("Item coletado!");
-                        afetarPontuacao(evento, 20);
+                        evento.adicionarLinhaDeSaida("Item coletado!");
+                        afetarPontuacao(20);
                     } else {
                         ambienteAtual.colocarItem(item);
-                        evento.emendarSaida("Inventário cheio!");
+                        evento.adicionarLinhaDeSaida("Inventário cheio!");
                     }
                 } else {
                     ambienteAtual.colocarItem(item);
-                    evento.emendarSaida("Item não coletável!");
+                    evento.adicionarLinhaDeSaida("Item não coletável!");
                 }
             } else {
-                evento.emendarSaida("Não tem item neste ambiente com esse nome!");
+                evento.adicionarLinhaDeSaida("Não tem item neste ambiente com esse nome!");
             }
         } else {
-            evento.emendarSaida("Agora não dá!");
+            evento.adicionarLinhaDeSaida("Agora não dá!");
         }
     }
 
@@ -942,11 +994,11 @@ public class ManicomioDeZulu {
      */
     private void mostrarInventario(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Mostrar o quê?");
+            evento.adicionarLinhaDeSaida("Mostrar o quê?");
             return;
         }
         if (comando.getSegundaPalavra().equalsIgnoreCase("inventario")) {
-            evento.emendarSaida(protagonista.getListaItens());
+            evento.adicionarLinhaDeSaida(protagonista.getListaItens());
         }
     }
 
@@ -961,15 +1013,15 @@ public class ManicomioDeZulu {
      */
     private void detalhar(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Detalhar o quê?");
+            evento.adicionarLinhaDeSaida("Detalhar o quê?");
             return;
         }
         if (protagonista.temItem(comando.getSegundaPalavra())) {
-            evento.emendarSaida(protagonista.getDescricaoItem(comando.getSegundaPalavra()));
+            evento.adicionarLinhaDeSaida(protagonista.getDescricaoItem(comando.getSegundaPalavra()));
         } else if (ambienteAtual.temItem(comando.getSegundaPalavra())) {
-            evento.emendarSaida(ambienteAtual.getDescricaoItem(comando.getSegundaPalavra()));
+            evento.adicionarLinhaDeSaida(ambienteAtual.getDescricaoItem(comando.getSegundaPalavra()));
         } else {
-            evento.emendarSaida("Item inexistente!");
+            evento.adicionarLinhaDeSaida("Item inexistente!");
         }
     }
 
@@ -984,7 +1036,7 @@ public class ManicomioDeZulu {
      */
     private void descrever(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Descrever o quê?");
+            evento.adicionarLinhaDeSaida("Descrever o quê?");
             return;
         }
         if (comando.getSegundaPalavra().equalsIgnoreCase("ambiente")) {
@@ -992,21 +1044,21 @@ public class ManicomioDeZulu {
                 exibirAmbienteAtual(evento);
             }
             if (status.getEstadoAtual() != CONVERSANDO) {
-                evento.emendarSaida("NPCs agora no ambiente:");
-                evento.emendarSaida(ambienteAtual.getListaNPCs());
-                evento.emendarSaida("Objetos no ambiente:");
-                evento.emendarSaida(ambienteAtual.getListaItens());
+                evento.adicionarLinhaDeSaida("NPCs agora no ambiente:");
+                evento.adicionarLinhaDeSaida(ambienteAtual.getListaNPCs());
+                evento.adicionarLinhaDeSaida("Objetos no ambiente:");
+                evento.adicionarLinhaDeSaida(ambienteAtual.getListaItens());
             } else {
-                evento.emendarSaida("Agora não!");
+                evento.adicionarLinhaDeSaida("Agora não!");
             }
         } else if (comando.getSegundaPalavra().equalsIgnoreCase("npc")) {
             if (status.getEstadoAtual() == CONVERSANDO) {
-                evento.emendarSaida(ambienteAtual.selecionarNPC(status.getNomeDoNPCAtual()).getListaItens());
+                evento.adicionarLinhaDeSaida(ambienteAtual.selecionarNPC(status.getNomeDoNPCAtual()).getListaItens());
             } else {
-                evento.emendarSaida("Você não pode usar esse comando agora!");
+                evento.adicionarLinhaDeSaida("Você não pode usar esse comando agora!");
             }
         } else {
-            evento.emendarSaida("Forma incorreta de descrever algo! Digite [ajuda] e confira...");
+            evento.adicionarLinhaDeSaida("Forma incorreta de descrever algo! Digite [ajuda] e confira...");
         }
     }
 
@@ -1021,55 +1073,63 @@ public class ManicomioDeZulu {
      */
     private void imprimirStatus(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            evento.emendarSaida("Status de quem?");
+            evento.adicionarLinhaDeSaida("Status de quem?");
             return;
         }
         if (comando.getSegundaPalavra().equalsIgnoreCase("npc")) {
             if (status.getEstadoAtual() == ATACANDO) {
                 NPC alvo = ambienteAtual.selecionarNPC(status.getNomeDoNPCAtual());
-                evento.emendarSaida(alvo.getStatus());
+                evento.adicionarLinhaDeSaida(alvo.getStatus());
             } else {
-                evento.emendarSaida("Nesse estado você só pode ver o seu status! Tente [status eu]...");
+                evento.adicionarLinhaDeSaida("Nesse estado você só pode ver o seu status! Tente [status eu]...");
             }
         } else if (comando.getSegundaPalavra().equalsIgnoreCase("eu")) {
-            evento.emendarSaida(protagonista.getStatus());
+            evento.adicionarLinhaDeSaida(protagonista.getStatus());
         } else {
-            evento.emendarSaida("Forma incorreta de solicitar o status! Digite [ajuda] e confira...");
+            evento.adicionarLinhaDeSaida("Forma incorreta de solicitar o status! Digite [ajuda] e confira...");
         }
     }
 
     /**
-     * Metodo imprimirBoasVindas.
+     *  
+     */
+    public void mostrarBoasVindas() {
+        receberComando("welcome");
+    }
+    
+    /**
+     * Metodo mensagemDeBoasVindas.
      *
      * Responsavel por imprimir as boas vindas do jogo (cabecalho).
      *
      * Chama o metodo exibir ambiente depois das boas vindas.
      * @param evento JogoEvent, gera um evento na interface.
      */
-    private void imprimirBoasVindas(JogoEvent evento) {
-        evento.emendarSaida("    Bem Vindo ao Jogo \"World of Zuul - O Manicômio de Zulu\".");
-        evento.emendarSaida("    Este é um jogo no estilo Adventure em modo texto.");
-        evento.emendarSaida("\n    Boa Sorte e não enlouqueça!!!");
-        evento.emendarSaida("\n    Você é César, o professor de PPOO ");
-        evento.emendarSaida("(Planejamento de Planos de Organizações Organizacionais).");
-        evento.emendarSaida("Você saiu da faculdade e está terrivelmente estressado, e de repente você se");
-        evento.emendarSaida("lembra de que não tomou seus remédios controlados e está prestes a");
-        evento.emendarSaida("enlouquecer!!!");
-        evento.emendarSaida("\n    Você está no meio da cidade de Zulu, uma pequena cidade castigada pelo");
-        evento.emendarSaida("descuido da prefeitura, lotada de cães raivosos de rua, num ponto próximo à");
-        evento.emendarSaida("sua casa. Lá você esqueceu sua carteira, e precisa dela para comprar");
-        evento.emendarSaida("seu medicamento na farmácia.");
-        evento.emendarSaida("\n    Seu objetivo aqui é conseguir alcançar 30 pontos de Sanidade ou mais,");
-        evento.emendarSaida("tendo em mente que como você está em uma delicada situação psicológica,");
-        evento.emendarSaida("perderá 1 ponto de Sanidade a cada ambiente que você avançar, tornando");
-        evento.emendarSaida("cada vez mais desafiadora a sua experiência! Descubra maneiras de explorar");
-        evento.emendarSaida("o jogo com mais tempo, maneiras de controlar sua loucura e muito mais!!!");
-        evento.emendarSaida("\n    E cuidado pra não zerar nenhum dos seus atributos mais importantes,");
-        evento.emendarSaida("porque senão você pode acabar num caixão... Ou pior ainda... Internado");
-        evento.emendarSaida("compulsoriamente no MANICÔMIO DE ZULU!\n\n");
+    private void mensagemDeBoasVindas(JogoEvent evento) {
+        evento.adicionarLinhaDeSaida("    Bem Vindo ao Jogo \"World of Zuul - O Manicômio de Zulu\".");
+        evento.adicionarLinhaDeSaida("    Este é um jogo no estilo Adventure em modo texto.");
+        evento.adicionarLinhaDeSaida("\n    Boa Sorte e não enlouqueça!!!");
+        evento.adicionarLinhaDeSaida("\n    Você é César, o professor de PPOO ");
+        evento.adicionarLinhaDeSaida("(Planejamento de Planos de Organizações Organizacionais).");
+        evento.adicionarLinhaDeSaida("Você saiu da faculdade e está terrivelmente estressado, e de repente você se");
+        evento.adicionarLinhaDeSaida("lembra de que não tomou seus remédios controlados e está prestes a");
+        evento.adicionarLinhaDeSaida("enlouquecer!!!");
+        evento.adicionarLinhaDeSaida("\n    Você está no meio da cidade de Zulu, uma pequena cidade castigada pelo");
+        evento.adicionarLinhaDeSaida("descuido da prefeitura, lotada de cães raivosos de rua, num ponto próximo à");
+        evento.adicionarLinhaDeSaida("sua casa. Lá você esqueceu sua carteira, e precisa dela para comprar");
+        evento.adicionarLinhaDeSaida("seu medicamento na farmácia.");
+        evento.adicionarLinhaDeSaida("\n    Seu objetivo aqui é conseguir alcançar 30 pontos de Sanidade ou mais,");
+        evento.adicionarLinhaDeSaida("tendo em mente que como você está em uma delicada situação psicológica,");
+        evento.adicionarLinhaDeSaida("perderá 1 ponto de Sanidade a cada ambiente que você avançar, tornando");
+        evento.adicionarLinhaDeSaida("cada vez mais desafiadora a sua experiência! Descubra maneiras de explorar");
+        evento.adicionarLinhaDeSaida("o jogo com mais tempo, maneiras de controlar sua loucura e muito mais!!!");
+        evento.adicionarLinhaDeSaida("\n    E cuidado pra não zerar nenhum dos seus atributos mais importantes,");
+        evento.adicionarLinhaDeSaida("porque senão você pode acabar num caixão... Ou pior ainda... Internado");
+        evento.adicionarLinhaDeSaida("compulsoriamente no MANICÔMIO DE ZULU!\n\n");
 
         exibirAmbienteAtual(evento);
 
+        atualizarNavegacao(evento);
         atualizarInterfaces(evento);
     }
 
@@ -1081,44 +1141,44 @@ public class ManicomioDeZulu {
      * @param evento JogoEvent, gera um evento na interface.
      */
     private void imprimirAjuda(JogoEvent evento) {
-        evento.emendarSaida("Você precisa de medicamentos para lidar com a psicose!!");
-        evento.emendarSaida("Seus comandos agora são:");
+        evento.adicionarLinhaDeSaida("Você precisa de medicamentos para lidar com a psicose!!");
+        evento.adicionarLinhaDeSaida("Seus comandos agora são:");
         evento.setLimparTela(true);
         switch (status.getEstadoAtual()) {
             case NAVEGANDO:
-                evento.emendarSaida("[ir <direcao>]\tVá para a direção que quiser da lista de saídas de cada ambiente!");
-                evento.emendarSaida("[descrever ambiente]\tVeja a descrição completa de onde estás!");
-                evento.emendarSaida("[checar mapa]\tColete o mapa e visualize os pontos mais importantes da cidade!");
-                evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
-                evento.emendarSaida("[coletar <nome_item>]\tSe seu inventário não estiver cheio, ele é seu!");
-                evento.emendarSaida("[detalhar <nome_item>]\tObserve de perto seu item, quando a curiosidade for mais forte que a loucura!");
-                evento.emendarSaida("[usar <nome_item>]\tVocê usará um item, em você mesmo (mesmo um ofensivo)!");
-                evento.emendarSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
-                evento.emendarSaida("[status eu]\tVeja o seu Status!");
-                evento.emendarSaida("[conversar <nome_npc>]\tConverse com eles e veja como podem te ajudar!");
-                evento.emendarSaida("[atacar <nome_npc>]\tOu mostre a eles o inferno hahahaha!!");
-                evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
+                evento.adicionarLinhaDeSaida("[ir <direcao>]\tVá para a direção que quiser da lista de saídas de cada ambiente!");
+                evento.adicionarLinhaDeSaida("[descrever ambiente]\tVeja a descrição completa de onde estás!");
+                evento.adicionarLinhaDeSaida("[checar mapa]\tColete o mapa e visualize os pontos mais importantes da cidade!");
+                evento.adicionarLinhaDeSaida("[mostrar inventario]\tVeja o que estás carregando!");
+                evento.adicionarLinhaDeSaida("[coletar <nome_item>]\tSe seu inventário não estiver cheio, ele é seu!");
+                evento.adicionarLinhaDeSaida("[detalhar <nome_item>]\tObserve de perto seu item, quando a curiosidade for mais forte que a loucura!");
+                evento.adicionarLinhaDeSaida("[usar <nome_item>]\tVocê usará um item, em você mesmo (mesmo um ofensivo)!");
+                evento.adicionarLinhaDeSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
+                evento.adicionarLinhaDeSaida("[status eu]\tVeja o seu Status!");
+                evento.adicionarLinhaDeSaida("[conversar <nome_npc>]\tConverse com eles e veja como podem te ajudar!");
+                evento.adicionarLinhaDeSaida("[atacar <nome_npc>]\tOu mostre a eles o inferno hahahaha!!");
+                evento.adicionarLinhaDeSaida("[sair jogo]\tO nome já diz tudo...");
                 break;
             case CONVERSANDO:
-                evento.emendarSaida("[status eu]\tVeja o seu Status!");
-                evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
-                evento.emendarSaida("[pedir <nome_item>]\tSe tiver como pagar, peça, senão, fique aguado!");
-                evento.emendarSaida("[descrever npc]\tVocê vê o inventário do NPC!");
-                evento.emendarSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
-                evento.emendarSaida("[cancelar]\tVolte ao que estava fazendo!");
-                evento.emendarSaida("[sair]\tO mesmo que cancelar!");
-                evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
+                evento.adicionarLinhaDeSaida("[status eu]\tVeja o seu Status!");
+                evento.adicionarLinhaDeSaida("[mostrar inventario]\tVeja o que estás carregando!");
+                evento.adicionarLinhaDeSaida("[pedir <nome_item>]\tSe tiver como pagar, peça, senão, fique aguado!");
+                evento.adicionarLinhaDeSaida("[descrever npc]\tVocê vê o inventário do NPC!");
+                evento.adicionarLinhaDeSaida("[descartar <nome_item>]\tQuando já não lhe servir, deixe que alguém o pegue!");
+                evento.adicionarLinhaDeSaida("[cancelar]\tVolte ao que estava fazendo!");
+                evento.adicionarLinhaDeSaida("[sair]\tO mesmo que cancelar!");
+                evento.adicionarLinhaDeSaida("[sair jogo]\tO nome já diz tudo...");
                 break;
             case ATACANDO:
-                evento.emendarSaida("[status eu]\tVeja o seu Status!");
-                evento.emendarSaida("[status npc]\tVeja o Status do seu inimigo!");
-                evento.emendarSaida("[mostrar inventario]\tVeja o que estás carregando!");
-                evento.emendarSaida("[usar habilidade]\tFaça o que faz de melhor e use sua habilidade para massacrar!");
-                evento.emendarSaida("[usar <nome_item>]\tVocê usará um item no seu oponente (mesmo um item positivo)!");
-                evento.emendarSaida("[descrever ambiente]\tVeja o que está a sua volta!");
-                evento.emendarSaida("[fugir]\tSe tiver azar de enfrentar alguém muito forte, apenas tente!");
-                evento.emendarSaida("[sair]\tO mesmo que fugir!");
-                evento.emendarSaida("[sair jogo]\tO nome já diz tudo...");
+                evento.adicionarLinhaDeSaida("[status eu]\tVeja o seu Status!");
+                evento.adicionarLinhaDeSaida("[status npc]\tVeja o Status do seu inimigo!");
+                evento.adicionarLinhaDeSaida("[mostrar inventario]\tVeja o que estás carregando!");
+                evento.adicionarLinhaDeSaida("[usar habilidade]\tFaça o que faz de melhor e use sua habilidade para massacrar!");
+                evento.adicionarLinhaDeSaida("[usar <nome_item>]\tVocê usará um item no seu oponente (mesmo um item positivo)!");
+                evento.adicionarLinhaDeSaida("[descrever ambiente]\tVeja o que está a sua volta!");
+                evento.adicionarLinhaDeSaida("[fugir]\tSe tiver azar de enfrentar alguém muito forte, apenas tente!");
+                evento.adicionarLinhaDeSaida("[sair]\tO mesmo que fugir!");
+                evento.adicionarLinhaDeSaida("[sair jogo]\tO nome já diz tudo...");
                 break;
             default:
                 break;
@@ -1139,17 +1199,17 @@ public class ManicomioDeZulu {
         if (status.getEstadoAtual() == NAVEGANDO) {
             if (!comando.temSegundaPalavra()) {
                 // caso o comando não tiver segunda palavra.
-                evento.emendarSaida("Você é doido? Quer ir aonde?");
+                evento.adicionarLinhaDeSaida("Você é doido? Quer ir aonde?");
                 return;
             }
             String direcao = comando.getSegundaPalavra();
             Ambiente proximoAmbiente = ambienteAtual.getAmbiente(direcao);
             if (proximoAmbiente == null) {
-                evento.emendarSaida("Você não vai a lugar algum, procure outra saída!");
+                evento.adicionarLinhaDeSaida("Você não vai a lugar algum, procure outra saída!");
             } else {
                 if (!status.teveMatanca()) {
                     protagonista.afetarAtributo(SANIDADE, -1);
-                    afetarPontuacao(evento, -5);
+                    afetarPontuacao(-5);
                 }
                 evento.setLimparTela(true);
                 status.matou(false);
@@ -1158,7 +1218,7 @@ public class ManicomioDeZulu {
                 exibirAmbienteAtual(evento);
             }
         } else {
-            evento.emendarSaida("Você está no meio de uma interação! Acabe-a e pode andar!");
+            evento.adicionarLinhaDeSaida("Você está no meio de uma interação! Acabe-a e pode andar!");
         }
     }
     /**
@@ -1169,8 +1229,8 @@ public class ManicomioDeZulu {
      * @param evento JogoEvent com o evento a ser executado.
      * @param pontos Integer com a quantidade de pontos.
      */
-    private void afetarPontuacao(JogoEvent evento, int pontos) {
-        evento.setPontos(pontos);
+    private void afetarPontuacao(int pontos) {
+        status.atualizarPontuacao(pontos);
     }
     
     /**
@@ -1181,7 +1241,7 @@ public class ManicomioDeZulu {
      * @param evento JogoEvent com o evento a ser executado.
      */
     private void atualizarNavegacao (JogoEvent evento) {
-        if (npcAtivo == null) {
+        if (status.getEstadoAtual() == NAVEGANDO) {
             List<NPC> npcs = ambienteAtual.getNPCs();
             if (!npcs.isEmpty()) {
                 evento.setNPCsAmbiente(npcs);
@@ -1190,7 +1250,7 @@ public class ManicomioDeZulu {
             if (!itemsAmbiente.isEmpty()) {
                 evento.setObjetosAmbiente(itemsAmbiente);
             }
-        } else {
+        } else if (status.getEstadoAtual() == CONVERSANDO){
             List<Item> inventarioNPC = npcAtivo.getItens();
             if (!inventarioNPC.isEmpty()) {
                 evento.setInventarioNPC(inventarioNPC);
@@ -1200,6 +1260,13 @@ public class ManicomioDeZulu {
             if (!inventario.isEmpty()) {
                 evento.setInventarioCesar(inventario);
             }
+        status.setMeuHP((protagonista.getAtributo(HP) + 0f)/(protagonista.getHPMaximo() + 0f));
+        status.setMinhaSanidade((protagonista.getAtributo(SANIDADE) + 0f)/30f);
+        if (status.getEstadoAtual() == ATACANDO) {
+            status.setInimigoHP((npcAtivo.getAtributo(HP) + 0f)/(npcAtivo.getHPMaximo() + 0f));
+        } else {
+            status.setInimigoHP(0f);
+        }
     }
 
     /**
@@ -1209,15 +1276,14 @@ public class ManicomioDeZulu {
      * @param evento JogoEvent, gera um evento na interface.
      */
     private void exibirAmbienteAtual(JogoEvent evento) {
-        evento.emendarSaida("Você está na " + ambienteAtual.getDescricao());
-        evento.emendarSaida("Saidas:");
+        evento.adicionarLinhaDeSaida("Você está na " + ambienteAtual.getDescricao());
+        evento.adicionarLinhaDeSaida("Saidas:");
         String saidasDisponiveis = ambienteAtual.listarSaidasDisponiveis();
         if (saidasDisponiveis.equals(SEM_SAIDA)) {
-            evento.emendarSaida("[ATENÇÃO!! O AMBIENTE ATUAL NÃO POSSUI SAÍDAS! CUIDE DISSO!]");
+            evento.adicionarLinhaDeSaida("[ATENÇÃO!! O AMBIENTE ATUAL NÃO POSSUI SAÍDAS! CUIDE DISSO!]");
         } else {
-            evento.emendarSaida(saidasDisponiveis);
+            evento.adicionarLinhaDeSaida(saidasDisponiveis);
         }
-        System.out.println(ambienteAtual.getImagem());
         evento.setImagem(ambienteAtual.getImagem());
     }
 
@@ -1230,12 +1296,16 @@ public class ManicomioDeZulu {
      */
     private void sair(Comando comando, JogoEvent evento) {
         if (!comando.temSegundaPalavra()) {
-            if (status.getEstadoAtual() == CONVERSANDO) {
-                cancelar(evento);
-            } else if (status.getEstadoAtual() == ATACANDO) {
-                fugir(evento);
-            } else {
-                evento.emendarSaida("Sair de onde?");
+            switch (status.getEstadoAtual()) {
+                case CONVERSANDO:
+                    cancelar(evento);
+                    break;
+                case ATACANDO:
+                    fugir(evento);
+                    break;
+                default:
+                    evento.adicionarLinhaDeSaida("Sair de onde?");
+                    break;
             }
         } else if (comando.getSegundaPalavra().equals("jogo")) {
             sairDoJogo(evento);
@@ -1250,7 +1320,19 @@ public class ManicomioDeZulu {
      * @param evento JogoEvent com o evento a ser executado.
      */
     private void sairDoJogo (JogoEvent evento) {
-        evento.emendarSaida("Obrigado por jogar, até mais!");
+        evento.adicionarLinhaDeSaida("Obrigado por jogar, até mais!");
         status.setFinalizado(true);
+    }
+    
+    public boolean foiFinalizado() {
+        return status.taFinalizado();
+    }
+    
+    public Resultado getEstadoDoProtagonista() {
+        return status.getEstadoDoProtagonista();
+    }
+    
+    public int getPontuacao() {
+        return status.getPontuacao();
     }
 }

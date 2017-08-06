@@ -1,4 +1,5 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.io;
+import java.io.Serializable;
 import java.util.List;
 /**
  * Classe PalavrasDeComando - Controla as palavras válidas dos comandos.
@@ -12,7 +13,8 @@ import java.util.List;
  * @version 2017.06.08
  */
 
-public class PalavrasDeComando {
+public class PalavrasDeComando implements Serializable {
+    private static final long serialVersionUID = 1L;
     // um vetor constante que guarda todas as palavras de comandos validas
     private String[] comandosValidos;
 

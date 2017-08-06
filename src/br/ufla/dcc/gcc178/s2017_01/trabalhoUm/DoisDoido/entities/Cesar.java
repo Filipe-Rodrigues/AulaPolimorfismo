@@ -18,12 +18,15 @@ import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultad
  */
 public class Cesar extends Ator {
     
+    private int HPMaximo;
+    
     /**
      * Construtor da Classe Cesar.
      * Aqui ja foi inicializado com atributos pre estabelecidos.
      */
     public Cesar () {
         super ("César", 25, 5, null, new ArrayList<>(), true);
+        HPMaximo = 55;
         AlteracaoDeHP hp = new AlteracaoDeHP("Subtrair HP", "Retira 4 pontos de HP", -4);
         ArrayList<Efeito> umEfeito = new ArrayList<>();
         umEfeito.add(hp);
@@ -198,4 +201,9 @@ public class Cesar extends Ator {
         }
         return fraseDeEfeito;
     }    
+
+    @Override
+    public int getHPMaximo() {
+        return HPMaximo;
+    }
 }
