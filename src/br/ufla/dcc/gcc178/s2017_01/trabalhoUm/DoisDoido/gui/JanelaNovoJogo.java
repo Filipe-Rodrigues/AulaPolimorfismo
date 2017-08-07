@@ -51,6 +51,19 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         carregarDadosSalvos();
     }
     
+    /**
+     * Função carregarDadosSalvos
+     * 
+     * Executada no início da execução do programa, ela é responsável por carregar
+     * os objetos salvos em arquivo contendo os dados dos jogos de todos os usuários
+     * registrados.
+     * 
+     * A anotação <code>@SupressWarnings("unchecked")</code> teve de ser utilizada aqui para
+     * instruir o compilador a ignorar a checagem do cast da leitura de um <code>List<Usuario></code>
+     * do arquivo, porque a função <code>readObject()</code> retorna <code>Object</code>, e o cast não
+     * consegue garantir a checagem do tipo genérico.
+     */
+    @SuppressWarnings("unchecked")
     private void carregarDadosSalvos() {
         ObjectInputStream ooi = null;
         try {
@@ -368,41 +381,6 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
                 }
             }
         }
-    }
-    
-    /**
-     * @param args os argumentos da linha de comando
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus\n".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JanelaNovoJogo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JanelaNovoJogo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JanelaNovoJogo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JanelaNovoJogo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JanelaNovoJogo().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
