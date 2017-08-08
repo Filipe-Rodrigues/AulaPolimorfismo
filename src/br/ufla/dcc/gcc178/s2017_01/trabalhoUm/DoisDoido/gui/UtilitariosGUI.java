@@ -18,6 +18,14 @@ import javax.swing.JComponent;
  */ 
 public class UtilitariosGUI {
  
+    public static final String DIR_APLICACAO = System.getProperty("user.dir");
+    public static final String CAMINHO_DOS_BACKGROUNDS = DIR_APLICACAO + "/res/images/bg/";
+    public static final String CAMINHO_DOS_ICONES = DIR_APLICACAO + "/res/images/icon/";
+    public static final String CAMINHO_DAS_FONTES = DIR_APLICACAO + "/res/fonts/";
+    public static final String CAMINHO_DOS_AUDIOS = DIR_APLICACAO + "/res/sound/";
+    public static final String CAMINHO_DOS_JOGOS_SALVOS = DIR_APLICACAO + "/res/saved/gameData/";
+    public static final String CAMINHO_DOS_MAPAS = DIR_APLICACAO + "/res/saved/maps/";
+    
     /**Metodo mudarFonte.
      * 
      * muda da fonte padrão para uma outra fonte passada.

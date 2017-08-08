@@ -1,7 +1,6 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.application;
 
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.JanelaNovoJogo;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.JanelaPrincipal;
 
 /**
  * Classe Programa.
