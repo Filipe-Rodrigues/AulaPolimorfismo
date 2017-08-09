@@ -41,6 +41,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         barraDeStatus = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
         barraDeMenus = new javax.swing.JMenuBar();
         menuArquivo = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -175,20 +178,47 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
 
         getContentPane().add(painelEditor, java.awt.BorderLayout.CENTER);
 
-        barraDeStatus.setPreferredSize(new java.awt.Dimension(1233, 25));
+        barraDeStatus.setPreferredSize(new java.awt.Dimension(1233, 150));
 
         javax.swing.GroupLayout barraDeStatusLayout = new javax.swing.GroupLayout(barraDeStatus);
         barraDeStatus.setLayout(barraDeStatusLayout);
         barraDeStatusLayout.setHorizontalGroup(
             barraDeStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1237, Short.MAX_VALUE)
+            .addGap(0, 1385, Short.MAX_VALUE)
         );
         barraDeStatusLayout.setVerticalGroup(
             barraDeStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 25, Short.MAX_VALUE)
+            .addGap(0, 150, Short.MAX_VALUE)
         );
 
         getContentPane().add(barraDeStatus, java.awt.BorderLayout.SOUTH);
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(300, 595));
+
+        jLabel1.setText("Itens no ambiente");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(312, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.WEST);
 
         menuArquivo.setText("Arquivo");
 
@@ -256,11 +286,14 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     private javax.swing.JButton botaoNorte;
     private javax.swing.JButton botaoOeste;
     private javax.swing.JButton botaoSul;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelImagem;
     private javax.swing.JMenu menuAjuda;
     private javax.swing.JMenu menuArquivo;

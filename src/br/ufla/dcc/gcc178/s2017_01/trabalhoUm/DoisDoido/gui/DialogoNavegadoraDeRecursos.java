@@ -6,8 +6,8 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ICONES;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -23,11 +23,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -46,6 +48,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     
     /**
      * Creates new form DialogoNavegadoraDeImagens
+     * @param parent O componente que invocou esse diálogo
+     * @param modal Se o diálogo força o foco, <code>true</code>. Senão, <code>false</code>.
+     * @param modo O tipo de requisição desse diálogo.
      */
     public DialogoNavegadoraDeRecursos(java.awt.Frame parent, boolean modal, int modo) {
         super(parent, modal);
@@ -56,7 +61,8 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private void initAtributos(int modo) {
         ultimaLabelSelecionada = null;
         arquivoSelecionado = null;
-        preencherGaleriaDeBackgrounds();
+        this.modo = modo;
+        preencherGaleria();
         setLocationRelativeTo(this.getParent());
         habilitarAbas(modo);
     }
@@ -91,20 +97,20 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         botaoArquivoBackground = new javax.swing.JButton();
         campoImagemBackgorund = new javax.swing.JTextField();
         botaoAdicionar = new javax.swing.JButton();
-        painelIcones = new javax.swing.JPanel();
+        painelOpcoesDeIcones = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         botaoArquivoIcone = new javax.swing.JButton();
         campoImagemIcone = new javax.swing.JTextField();
         botaoAdicionarIcone = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        painelBackgorunds1 = new javax.swing.JPanel();
+        painelIcones = new javax.swing.JPanel();
         painelItens = new javax.swing.JPanel();
         painelNPCs = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         botaoOk = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
 
-        seletorDeArquivo.setAccessory(campoImagemBackgorund);
+        seletorDeArquivo.setAcceptAllFileFilterUsed(false);
         seletorDeArquivo.setApproveButtonText("Abrir");
         seletorDeArquivo.setApproveButtonToolTipText("Copiar o arquivo para o diretório do jogo");
         seletorDeArquivo.setDialogTitle("Abrir imagem de Background");
@@ -165,9 +171,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addComponent(campoImagemBackgorund)
                 .addContainerGap())
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(142, 142, 142)
-                .addComponent(botaoAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addGap(127, 127, 127)
+                .addComponent(botaoAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,7 +210,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
 
         painelDeAbas.addTab("Planos de fundo", painelPlanosDeFundo);
 
-        painelIcones.setEnabled(false);
+        painelOpcoesDeIcones.setEnabled(false);
 
         botaoArquivoIcone.setText("Selecionar arquivo");
         botaoArquivoIcone.setFocusable(false);
@@ -238,12 +244,12 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(botaoArquivoIcone)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(campoImagemIcone)
+                .addComponent(campoImagemIcone, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(142, 142, 142)
-                .addComponent(botaoAdicionarIcone, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addGap(126, 126, 126)
+                .addComponent(botaoAdicionarIcone, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,38 +258,38 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoArquivoIcone)
                     .addComponent(campoImagemIcone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(botaoAdicionarIcone)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("Galeria"));
         jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        painelBackgorunds1.setBackground(new java.awt.Color(255, 255, 255));
-        painelBackgorunds1.addMouseListener(new java.awt.event.MouseAdapter() {
+        painelIcones.setBackground(new java.awt.Color(255, 255, 255));
+        painelIcones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                painelBackgorunds1MouseClicked(evt);
+                painelIconesMouseClicked(evt);
             }
         });
-        painelBackgorunds1.setLayout(new java.awt.GridLayout(1, 4, 5, 5));
-        jScrollPane3.setViewportView(painelBackgorunds1);
+        painelIcones.setLayout(new java.awt.GridLayout(1, 6, 2, 2));
+        jScrollPane3.setViewportView(painelIcones);
 
-        javax.swing.GroupLayout painelIconesLayout = new javax.swing.GroupLayout(painelIcones);
-        painelIcones.setLayout(painelIconesLayout);
-        painelIconesLayout.setHorizontalGroup(
-            painelIconesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelIconesLayout.createSequentialGroup()
+        javax.swing.GroupLayout painelOpcoesDeIconesLayout = new javax.swing.GroupLayout(painelOpcoesDeIcones);
+        painelOpcoesDeIcones.setLayout(painelOpcoesDeIconesLayout);
+        painelOpcoesDeIconesLayout.setHorizontalGroup(
+            painelOpcoesDeIconesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelOpcoesDeIconesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(painelIconesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(painelOpcoesDeIconesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane3))
                 .addContainerGap())
         );
-        painelIconesLayout.setVerticalGroup(
-            painelIconesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelIconesLayout.createSequentialGroup()
+        painelOpcoesDeIconesLayout.setVerticalGroup(
+            painelOpcoesDeIconesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelOpcoesDeIconesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -291,7 +297,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        painelDeAbas.addTab("Ícones", painelIcones);
+        painelDeAbas.addTab("Ícones", painelOpcoesDeIcones);
 
         javax.swing.GroupLayout painelItensLayout = new javax.swing.GroupLayout(painelItens);
         painelItens.setLayout(painelItensLayout);
@@ -383,22 +389,34 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void preencherGaleriaDeBackgrounds() {
-        File folder = new File(CAMINHO_DOS_BACKGROUNDS);
-        File[] listOfFiles = folder.listFiles();
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                inserirMiniatura(listOfFiles[i].getAbsolutePath());
-            } else if (listOfFiles[i].isDirectory()) {
-                System.out.println("Directory " + listOfFiles[i].getName());
+    private void preencherGaleria() {
+        if (modo != GERENCIADOR_DE_ITENS_E_NPCS) {
+            File folder;
+            if (modo == GERENCIADOR_DE_BACKGROUNDS) {
+                folder = new File(CAMINHO_DOS_BACKGROUNDS);
+            } else {
+                folder = new File(CAMINHO_DOS_ICONES);
+            }
+            File[] listOfFiles = folder.listFiles();
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    inserirMiniatura(listOfFiles[i].getAbsolutePath(), 
+                            (modo == GERENCIADOR_DE_BACKGROUNDS) 
+                            ? (painelBackgorunds) : (painelIcones));
+                }
             }
         }
     }
     
-    private void inserirMiniatura(String caminhoDoArquivo) {
-        ImageIcon icon = new ImageIcon(new ImageIcon(caminhoDoArquivo)
+    private void inserirMiniatura(String caminhoDoArquivo, JPanel painel) {
+        ImageIcon icon;
+        if (modo == GERENCIADOR_DE_BACKGROUNDS) {
+            icon = new ImageIcon(new ImageIcon(caminhoDoArquivo)
                 .getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH));
+        } else {
+            icon = new ImageIcon(new ImageIcon(caminhoDoArquivo)
+                .getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH));
+        }
         JLabel label = new JLabel(icon) {
             @Override
             public String toString() {
@@ -416,20 +434,13 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
             }
         });
         
-        int quant = painelBackgorunds.getComponentCount();
-        GridLayout gl = (GridLayout) painelBackgorunds.getLayout();
-        if (quant % 2 == 0) {
+        int quant = painel.getComponentCount();
+        GridLayout gl = (GridLayout) painel.getLayout();
+        int mod = (modo == GERENCIADOR_DE_BACKGROUNDS) ? (2) : (8);
+        if (quant % mod == 0) {
             gl.setRows(gl.getRows() + 1);
         }
-        painelBackgorunds.add(label);
-//        int quant = painel1.getComponentCount() + painel2.getComponentCount();
-//        if (quant % 4 == 0) {
-//            painel1.add(label);
-//            painel1.add(Box.createRigidArea(new Dimension(5, 5)));
-//        } else {
-//            painel2.add(label);
-//            painel2.add(Box.createRigidArea(new Dimension(5, 5)));
-//        }
+        painel.add(label);
         revalidate();
         repaint();
     }
@@ -462,21 +473,28 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         
     }
     
+    private void desmarcarUltimaLabel() {
+        if (ultimaLabelSelecionada != null) {
+            ultimaLabelSelecionada.setBorder(null);
+            ultimaLabelSelecionada = null;
+        }
+    }
+    
     private void botaoAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarActionPerformed
         copiarArquivoParaDiretorio(campoImagemBackgorund.getText(), CAMINHO_DOS_BACKGROUNDS);
-        inserirMiniatura(new File(campoImagemBackgorund.getText()).getAbsolutePath());
+        inserirMiniatura(new File(campoImagemBackgorund.getText()).getAbsolutePath(), painelBackgorunds);
         campoImagemBackgorund.setText("");
         botaoAdicionar.setEnabled(false);
     }//GEN-LAST:event_botaoAdicionarActionPerformed
 
-    private void procurarArquivoNoComputador() {
+    private void procurarArquivoNoComputador(JButton botao, JTextField campo) {
         int returnVal = seletorDeArquivo.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            campoImagemBackgorund.setText(seletorDeArquivo.getSelectedFile().getAbsolutePath());
-            botaoAdicionar.setEnabled(true);
+            campo.setText(seletorDeArquivo.getSelectedFile().getAbsolutePath());
+            botao.setEnabled(true);
         } else {
-            campoImagemBackgorund.setText("");
-            botaoAdicionar.setEnabled(false);
+            campo.setText("");
+            botao.setEnabled(false);
         }
     }
     
@@ -489,11 +507,11 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     }
     
     private void botaoArquivoBackgroundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoArquivoBackgroundActionPerformed
-        procurarArquivoNoComputador();
+        procurarArquivoNoComputador(botaoAdicionar, campoImagemBackgorund);
     }//GEN-LAST:event_botaoArquivoBackgroundActionPerformed
 
     private void campoImagemBackgorundMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoImagemBackgorundMouseClicked
-        procurarArquivoNoComputador();
+        procurarArquivoNoComputador(botaoAdicionar, campoImagemBackgorund);
     }//GEN-LAST:event_campoImagemBackgorundMouseClicked
 
     private void botaoOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoOkActionPerformed
@@ -510,30 +528,36 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     }//GEN-LAST:event_botaoCancelarActionPerformed
 
     private void painelBackgorundsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelBackgorundsMouseClicked
-        if (ultimaLabelSelecionada != null) {
-            ultimaLabelSelecionada.setBorder(null);
-            ultimaLabelSelecionada = null;
-        }
+        desmarcarUltimaLabel();
     }//GEN-LAST:event_painelBackgorundsMouseClicked
 
     private void botaoArquivoIconeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoArquivoIconeActionPerformed
-        // TODO add your handling code here:
+        procurarArquivoNoComputador(botaoAdicionarIcone, campoImagemIcone);
     }//GEN-LAST:event_botaoArquivoIconeActionPerformed
 
     private void campoImagemIconeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoImagemIconeMouseClicked
-        // TODO add your handling code here:
+        procurarArquivoNoComputador(botaoAdicionarIcone, campoImagemIcone);
     }//GEN-LAST:event_campoImagemIconeMouseClicked
 
     private void botaoAdicionarIconeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarIconeActionPerformed
-        // TODO add your handling code here:
+        copiarArquivoParaDiretorio(campoImagemIcone.getText(), CAMINHO_DOS_ICONES);
+        inserirMiniatura(new File(campoImagemIcone.getText()).getAbsolutePath(), painelIcones);
+        campoImagemIcone.setText("");
+        botaoAdicionarIcone.setEnabled(false);
     }//GEN-LAST:event_botaoAdicionarIconeActionPerformed
 
-    private void painelBackgorunds1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelBackgorunds1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_painelBackgorunds1MouseClicked
+    private void painelIconesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelIconesMouseClicked
+        desmarcarUltimaLabel();
+    }//GEN-LAST:event_painelIconesMouseClicked
 
     public static String getImagemDeFundo(Frame componentePai) {
         DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, GERENCIADOR_DE_BACKGROUNDS);
+        navegadora.setVisible(true);
+        return navegadora.arquivoSelecionado;
+    }
+    
+    public static String getIcone(Frame componentePai) {
+        DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, GERENCIADOR_DE_ICONES);
         navegadora.setVisible(true);
         return navegadora.arquivoSelecionado;
     }
@@ -579,9 +603,15 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
 //                dialog.setVisible(true);
 //            }
 //        });
-        String imagem = getImagemDeFundo(null);
+        String imagem = getIcone(null);
         if (imagem != null) {
             System.err.println(imagem);
+        } else {
+            System.err.println("Cancelado!");
+        }
+        String imagem2 = getImagemDeFundo(null);
+        if (imagem2 != null) {
+            System.err.println(imagem2);
         } else {
             System.err.println("Cancelado!");
         }
@@ -603,11 +633,11 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel painelBackgorunds;
-    private javax.swing.JPanel painelBackgorunds1;
     private javax.swing.JTabbedPane painelDeAbas;
     private javax.swing.JPanel painelIcones;
     private javax.swing.JPanel painelItens;
     private javax.swing.JPanel painelNPCs;
+    private javax.swing.JPanel painelOpcoesDeIcones;
     private javax.swing.JPanel painelPlanosDeFundo;
     private javax.swing.JFileChooser seletorDeArquivo;
     // End of variables declaration//GEN-END:variables
