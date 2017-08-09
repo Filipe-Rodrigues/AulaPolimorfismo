@@ -4,9 +4,7 @@
   <NonVisualComponents>
     <Component class="javax.swing.JFileChooser" name="seletorDeArquivo">
       <Properties>
-        <Property name="accessory" type="javax.swing.JComponent" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="campoImagemBackgorund"/>
-        </Property>
+        <Property name="acceptAllFileFilterUsed" type="boolean" value="false"/>
         <Property name="approveButtonText" type="java.lang.String" value="Abrir"/>
         <Property name="approveButtonToolTipText" type="java.lang.String" value="Copiar o arquivo para o diret&#xf3;rio do jogo"/>
         <Property name="dialogTitle" type="java.lang.String" value="Abrir imagem de Background"/>
@@ -160,9 +158,9 @@
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="142" max="-2" attributes="0"/>
-                          <Component id="botaoAdicionar" min="-2" pref="173" max="-2" attributes="0"/>
-                          <EmptySpace pref="139" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="127" max="-2" attributes="0"/>
+                          <Component id="botaoAdicionar" min="-2" pref="200" max="-2" attributes="0"/>
+                          <EmptySpace pref="127" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -213,7 +211,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="painelIcones">
+        <Container class="javax.swing.JPanel" name="painelOpcoesDeIcones">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
@@ -260,13 +258,13 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="botaoArquivoIcone" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="campoImagemIcone" max="32767" attributes="0"/>
+                          <Component id="campoImagemIcone" pref="285" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="142" max="-2" attributes="0"/>
-                          <Component id="botaoAdicionarIcone" min="-2" pref="173" max="-2" attributes="0"/>
-                          <EmptySpace pref="139" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="126" max="-2" attributes="0"/>
+                          <Component id="botaoAdicionarIcone" min="-2" pref="200" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -278,9 +276,9 @@
                               <Component id="botaoArquivoIcone" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="campoImagemIcone" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace pref="18" max="32767" attributes="0"/>
                           <Component id="botaoAdicionarIcone" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -328,21 +326,21 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Container class="javax.swing.JPanel" name="painelBackgorunds1">
+                <Container class="javax.swing.JPanel" name="painelIcones">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="painelBackgorunds1MouseClicked"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="painelIconesMouseClicked"/>
                   </Events>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                    <Property name="columns" type="int" value="4"/>
-                    <Property name="horizontalGap" type="int" value="5"/>
+                    <Property name="columns" type="int" value="6"/>
+                    <Property name="horizontalGap" type="int" value="2"/>
                     <Property name="rows" type="int" value="1"/>
-                    <Property name="verticalGap" type="int" value="5"/>
+                    <Property name="verticalGap" type="int" value="2"/>
                   </Layout>
                 </Container>
               </SubComponents>
