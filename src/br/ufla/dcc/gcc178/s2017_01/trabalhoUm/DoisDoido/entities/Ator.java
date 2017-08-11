@@ -247,6 +247,21 @@ public abstract class Ator implements Serializable {
         }
         return ATRIBUTO_NAO_APROPRIADO;
     }
+    
+    /**
+     * Metodo afetarAtributo.
+     *
+     * Tem como funcao alterar os atributos do Ator reduzindo também seu HP.
+     *
+     * @param atributo um {@link Atributo} que ira sofrer danos
+     * @param quantidade um inteiro que diz a quantidade que um atributo ira
+     * perder.
+     * @return Resultado resultado após sofrer ataque em um atributo.
+     */
+    public Resultado limparInventario() {
+        this.bagagem.removeAll(this.bagagem);
+        return SUCESSO;
+    }
 
     /**
      * Metodo getStatus.

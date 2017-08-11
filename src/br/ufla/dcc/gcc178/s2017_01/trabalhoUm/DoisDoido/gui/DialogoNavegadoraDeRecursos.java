@@ -5,11 +5,17 @@
  */
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.AlteracaoDeHP;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.AlteracaoDeSanidade;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Efeito;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.EsvaziamentoDeInventario;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TipoDeRecurso.BACKGROUND;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TipoDeRecurso.ITEM;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ICONES;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ITENS;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -21,7 +27,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -33,7 +43,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -43,7 +57,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
 
     private JLabel ultimaLabelSelecionada;
     private String arquivoSelecionado;
+    private List<Efeito> efeitosAtual;
+    private List<Item> itens;
     private Item itemSelecionado;
+    private NPC npcSelecionado;
     private int modo;
     
     /**
@@ -61,6 +78,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private void initAtributos(TipoDeRecurso modo) {
         ultimaLabelSelecionada = null;
         arquivoSelecionado = null;
+        itemSelecionado = null;
+        npcSelecionado = null;
+        efeitosAtual = new ArrayList<>();
+        carregarItens();
         switch (modo) {
             case BACKGROUND:
                 this.modo = 0;
@@ -76,17 +97,19 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 break;
         }
         preencherGaleria();
+        preencherItens();
         setLocationRelativeTo(this.getParent());
         habilitarAbas();
     }
     
     private void habilitarAbas() {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             painelDeAbas.setEnabledAt(i, false);
         }
         painelDeAbas.setEnabledAt(modo, true);
         if (modo == 2) {
             painelDeAbas.setEnabledAt(1, true);
+            painelDeAbas.setEnabledAt(3, true);
         }
         painelDeAbas.setSelectedIndex(modo);
     }
@@ -117,7 +140,45 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         botaoAdicionarIcone = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         painelIcones = new javax.swing.JPanel();
+        botaoSelecionarIcone = new javax.swing.JButton();
         painelItens = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        campoNomeItem = new javax.swing.JTextField();
+        campoDescricaoItem = new javax.swing.JTextField();
+        checkConsumivel = new javax.swing.JCheckBox();
+        checkColetavel = new javax.swing.JCheckBox();
+        labelIconeItem = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        campoNomeEfeito = new javax.swing.JTextField();
+        campoDescricaoEfeito = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        comboTipoDeEfeito = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        campoQuantidadeEfeito = new javax.swing.JTextField();
+        labelQuantidade = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaEfeitos = new javax.swing.JTable();
+        adicionarOuAlterarEfeito = new javax.swing.JButton();
+        botaoRegistrarItem = new javax.swing.JButton();
+        painelExibirItens = new javax.swing.JPanel();
+        painelInserirItem = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        painelItensRegistrados = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        labelNomeItem = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        labelDescricaoItem = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        labelEfeitosItem = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        labelColetavel = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        labelConsumivel = new javax.swing.JLabel();
         painelNPCs = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         botaoOk = new javax.swing.JButton();
@@ -133,7 +194,6 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         setMaximumSize(new java.awt.Dimension(510, 614));
         setMinimumSize(new java.awt.Dimension(510, 614));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(510, 614));
         setResizable(false);
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Galeria"));
@@ -146,7 +206,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 painelBackgorundsMouseClicked(evt);
             }
         });
-        painelBackgorunds.setLayout(new java.awt.GridLayout(1, 2, 5, 5));
+        painelBackgorunds.setLayout(new java.awt.GridLayout(0, 2, 5, 5));
         jScrollPane2.setViewportView(painelBackgorunds);
 
         botaoArquivoBackground.setText("Selecionar arquivo");
@@ -186,7 +246,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(127, 127, 127)
                 .addComponent(botaoAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,12 +317,12 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(botaoArquivoIcone)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(campoImagemIcone, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addComponent(campoImagemIcone, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(126, 126, 126)
                 .addComponent(botaoAdicionarIcone, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,8 +346,16 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 painelIconesMouseClicked(evt);
             }
         });
-        painelIcones.setLayout(new java.awt.GridLayout(1, 6, 2, 2));
+        painelIcones.setLayout(new java.awt.GridLayout(0, 8, 2, 2));
         jScrollPane3.setViewportView(painelIcones);
+
+        botaoSelecionarIcone.setText("Selecionar ícone >>");
+        botaoSelecionarIcone.setEnabled(false);
+        botaoSelecionarIcone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoSelecionarIconeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout painelOpcoesDeIconesLayout = new javax.swing.GroupLayout(painelOpcoesDeIcones);
         painelOpcoesDeIcones.setLayout(painelOpcoesDeIconesLayout);
@@ -297,7 +365,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(painelOpcoesDeIconesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3))
+                    .addComponent(jScrollPane3)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelOpcoesDeIconesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(botaoSelecionarIcone)))
                 .addContainerGap())
         );
         painelOpcoesDeIconesLayout.setVerticalGroup(
@@ -306,34 +377,398 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoSelecionarIcone)
                 .addContainerGap())
         );
 
         painelDeAbas.addTab("Ícones", painelOpcoesDeIcones);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações do item"));
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel1.setText("Nome do item:");
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Descrição do item:");
+
+        checkConsumivel.setText("Consumível");
+
+        checkColetavel.setText("Coletável");
+
+        labelIconeItem.setToolTipText("Clique aqui para selecionar um ícone");
+        labelIconeItem.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        labelIconeItem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelIconeItemMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                labelIconeItemMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                labelIconeItemMouseExited(evt);
+            }
+        });
+
+        jLabel4.setText("Ícone:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(checkColetavel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(checkConsumivel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelIconeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoDescricaoItem, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(campoNomeItem))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoNomeItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoDescricaoItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(labelIconeItem, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkColetavel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkConsumivel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Efeitos"));
+        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel2MousePressed(evt);
+            }
+        });
+
+        campoNomeEfeito.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoNomeEfeitoKeyPressed(evt);
+            }
+        });
+
+        campoDescricaoEfeito.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoDescricaoEfeitoKeyPressed(evt);
+            }
+        });
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Nome do efeito:");
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("Descrição do efeito:");
+
+        comboTipoDeEfeito.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alteração de HP", "Alteração de Sanidade", "Esvaziamento de Inventário" }));
+        comboTipoDeEfeito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTipoDeEfeitoActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("Tipo de efeito:");
+
+        campoQuantidadeEfeito.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoQuantidadeEfeitoKeyPressed(evt);
+            }
+        });
+
+        labelQuantidade.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelQuantidade.setText("Quantidade:");
+
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(100, 100));
+
+        tabelaEfeitos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nome", "Descrição", "Tipo", "Quantidade"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaEfeitos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabelaEfeitos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                tabelaEfeitosLinhaSelecionada(event);
+            }
+        });
+        jScrollPane1.setViewportView(tabelaEfeitos);
+
+        adicionarOuAlterarEfeito.setText("Adicionar efeito");
+        adicionarOuAlterarEfeito.setEnabled(false);
+        adicionarOuAlterarEfeito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarOuAlterarEfeitoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(labelQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addComponent(campoNomeEfeito, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(comboTipoDeEfeito, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(campoDescricaoEfeito, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(campoQuantidadeEfeito, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(adicionarOuAlterarEfeito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoNomeEfeito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoDescricaoEfeito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboTipoDeEfeito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoQuantidadeEfeito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelQuantidade))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(adicionarOuAlterarEfeito)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        botaoRegistrarItem.setText("Registrar item");
+        botaoRegistrarItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoRegistrarItemActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelItensLayout = new javax.swing.GroupLayout(painelItens);
         painelItens.setLayout(painelItensLayout);
         painelItensLayout.setHorizontalGroup(
             painelItensLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
+            .addGroup(painelItensLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelItensLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addComponent(botaoRegistrarItem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         painelItensLayout.setVerticalGroup(
             painelItensLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 481, Short.MAX_VALUE)
+            .addGroup(painelItensLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoRegistrarItem, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        painelDeAbas.addTab("Itens", painelItens);
+        painelDeAbas.addTab("Editor de itens", painelItens);
+
+        painelInserirItem.setBorder(javax.swing.BorderFactory.createTitledBorder("Itens registrados"));
+
+        painelItensRegistrados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                painelItensRegistradosMouseClicked(evt);
+            }
+        });
+        painelItensRegistrados.setLayout(new java.awt.GridLayout(0, 8, 2, 2));
+        jScrollPane4.setViewportView(painelItensRegistrados);
+
+        javax.swing.GroupLayout painelInserirItemLayout = new javax.swing.GroupLayout(painelInserirItem);
+        painelInserirItem.setLayout(painelInserirItemLayout);
+        painelInserirItemLayout.setHorizontalGroup(
+            painelInserirItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelInserirItemLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4)
+                .addContainerGap())
+        );
+        painelInserirItemLayout.setVerticalGroup(
+            painelInserirItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelInserirItemLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalhes"));
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("Nome do item:");
+
+        labelNomeItem.setText("-");
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel8.setText("Descrição do Item:");
+
+        labelDescricaoItem.setText("-");
+
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel9.setText("Efeitos:");
+
+        labelEfeitosItem.setText("-");
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel11.setText("Coletável:");
+
+        labelColetavel.setText("-");
+
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel12.setText("Consumível:");
+
+        labelConsumivel.setText("-");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(labelNomeItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelDescricaoItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelEfeitosItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelColetavel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelConsumivel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(labelNomeItem))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(labelDescricaoItem))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(labelEfeitosItem))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(labelColetavel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(labelConsumivel))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout painelExibirItensLayout = new javax.swing.GroupLayout(painelExibirItens);
+        painelExibirItens.setLayout(painelExibirItensLayout);
+        painelExibirItensLayout.setHorizontalGroup(
+            painelExibirItensLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelExibirItensLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelExibirItensLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(painelInserirItem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        painelExibirItensLayout.setVerticalGroup(
+            painelExibirItensLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelExibirItensLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(painelInserirItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        painelDeAbas.addTab("Itens", painelExibirItens);
 
         javax.swing.GroupLayout painelNPCsLayout = new javax.swing.GroupLayout(painelNPCs);
         painelNPCs.setLayout(painelNPCsLayout);
         painelNPCsLayout.setHorizontalGroup(
             painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
+            .addGap(0, 496, Short.MAX_VALUE)
         );
         painelNPCsLayout.setVerticalGroup(
             painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 481, Short.MAX_VALUE)
+            .addGap(0, 582, Short.MAX_VALUE)
         );
 
         painelDeAbas.addTab("NPCs", painelNPCs);
@@ -363,47 +798,119 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botaoOk, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botaoOk)
-                    .addComponent(botaoCancelar))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(botaoOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botaoCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(painelDeAbas)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(painelDeAbas, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(painelDeAbas)
+                .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tabelaEfeitosLinhaSelecionada(ListSelectionEvent evt) {
+        int linha = tabelaEfeitos.getSelectedRow();
+        if (linha != -1) {
+            DefaultTableModel model = (DefaultTableModel) tabelaEfeitos.getModel();
+            campoNomeEfeito.setText((String) model.getValueAt(linha, 0));
+            campoDescricaoEfeito.setText((String) model.getValueAt(linha, 1));
+            String tipo = (String) model.getValueAt(linha, 2);
+            int pos = (tipo.equals("AlteracaoDeHP") ? (0) : 
+                     ((tipo.equals("AlteracaoDeSanidade") ? (1) : (2))));
+            comboTipoDeEfeito.setSelectedIndex(pos);
+            String quant = model.getValueAt(linha, 3) + "";
+            campoQuantidadeEfeito.setText((quant.equals("-")? ("") : quant));
+            adicionarOuAlterarEfeito.setText("Alterar efeito");
+            adicionarOuAlterarEfeito.setEnabled(true);
+        } else {
+            campoNomeEfeito.setText("");
+            campoDescricaoEfeito.setText("");
+            campoQuantidadeEfeito.setText("");
+            comboTipoDeEfeito.setSelectedIndex(0);
+            adicionarOuAlterarEfeito.setText("Adicionar efeito");
+            adicionarOuAlterarEfeito.setEnabled(false);
+        }
+    }
+    
+    
+    
+    private void preencherTabela() {
+        DefaultTableModel model = (DefaultTableModel) tabelaEfeitos.getModel();
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+        int i = 1;
+        for (Efeito efeito : efeitosAtual) {
+            String tipo = efeito.getClass().getSimpleName();
+            int quant = efeito.getQuantidade();
+            model.addRow(new Object[] {efeito.getNome(), 
+                efeito.getDescricao(), tipo, (quant == 0) ? ("-") : (quant)});
+        }
+    }
+    
+    private boolean checarInformacoesItem() {
+        return (campoNomeItem.getText() != null) &&
+               (campoNomeItem.getText().split(" ").length == 1)
+               && temPreenchimento(campoDescricaoItem)
+               && (labelIconeItem.getIcon() != null);
+    }
+    
+    private boolean checarEfeitos() {
+        return temPreenchimento(campoNomeEfeito)
+               && temPreenchimento(campoDescricaoEfeito)
+               && (comboTipoDeEfeito.getSelectedIndex() == 2
+                || (temPreenchimento(campoQuantidadeEfeito) 
+                 && ehNumeroInteiro(campoQuantidadeEfeito.getText())));
+    }
+    
+    private boolean temPreenchimento(JTextField campo) {
+        return campo.getText() != null && 
+              !campo.getText().trim().equals("");
+    }
+    
+    public static boolean ehNumeroInteiro(String s) {
+    try { 
+        Integer.parseInt(s); 
+    } catch(NumberFormatException e) { 
+        return false; 
+    } catch(NullPointerException e) {
+        return false;
+    }
+    return true;
+}
+    
     private void preencherGaleria() {
-        if (modo < 2) {
+        if (modo <= 2) {
             File folder;
             if (modo == 0) {
                 folder = new File(CAMINHO_DOS_BACKGROUNDS);
@@ -415,13 +922,24 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 if (listOfFiles[i].isFile()) {
                     inserirMiniatura(listOfFiles[i].getAbsolutePath(), 
                             (modo == 0) 
-                            ? (painelBackgorunds) : (painelIcones));
+                            ? (painelBackgorunds) : (painelIcones),
+                            listOfFiles[i].getName());
                 }
             }
         }
     }
     
-    private void inserirMiniatura(String caminhoDoArquivo, JPanel painel) {
+    private void preencherItens() {
+        painelItensRegistrados.removeAll();
+        if (modo == 2) {
+            for (Item iten : itens) {
+                inserirMiniatura(CAMINHO_DOS_ICONES + iten.getIcone(), 
+                        painelItensRegistrados, iten.getNome());
+            }
+        }
+    }
+    
+    private void inserirMiniatura(String caminhoDoArquivo, JPanel painel, String tipText) {
         ImageIcon icon;
         if (modo == 0) {
             icon = new ImageIcon(new ImageIcon(caminhoDoArquivo)
@@ -438,7 +956,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
             
         };
         
-        label.setToolTipText(new File(caminhoDoArquivo).getName());
+        label.setToolTipText(tipText);
         
         label.addMouseListener(new MouseAdapter() {
             @Override
@@ -490,12 +1008,14 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         if (ultimaLabelSelecionada != null) {
             ultimaLabelSelecionada.setBorder(null);
             ultimaLabelSelecionada = null;
+            botaoSelecionarIcone.setEnabled(false);
         }
     }
     
     private void botaoAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarActionPerformed
         copiarArquivoParaDiretorio(campoImagemBackgorund.getText(), CAMINHO_DOS_BACKGROUNDS);
-        inserirMiniatura(new File(campoImagemBackgorund.getText()).getAbsolutePath(), painelBackgorunds);
+        File arquivo = new File(campoImagemBackgorund.getText());
+        inserirMiniatura(arquivo.getAbsolutePath(), painelBackgorunds, arquivo.getName());
         campoImagemBackgorund.setText("");
         botaoAdicionar.setEnabled(false);
     }//GEN-LAST:event_botaoAdicionarActionPerformed
@@ -517,6 +1037,76 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
         ultimaLabelSelecionada = (JLabel) evt.getSource();
         ultimaLabelSelecionada.setBorder(BorderFactory.createLineBorder(Color.red));
+        botaoSelecionarIcone.setEnabled(true);
+        if (modo == 2) {
+            Item item = getItem(ultimaLabelSelecionada.getToolTipText());
+            if (item != null) {
+                labelNomeItem.setText(item.getNome());
+                labelDescricaoItem.setText(item.getDescricao());
+                List<Efeito> efeitos = item.getEfeitos();
+                String quaisEfeitos = "";
+                for (Efeito efeito : efeitos) {
+                    quaisEfeitos += efeito + " / ";
+                }
+                if (quaisEfeitos.equals("")) {
+                    quaisEfeitos = "-";
+                } else {
+                    quaisEfeitos = quaisEfeitos.substring(0, quaisEfeitos.length() - 3);
+                }
+                labelEfeitosItem.setText(quaisEfeitos);
+                labelColetavel.setText((item.ehColetavel()) ? ("Sim") : ("Não"));
+                labelConsumivel.setText((item.ehConsumivel()) ? ("Sim") : ("Não"));
+            } else {
+                limparLabels();
+            }
+        } 
+    }
+    
+    private void limparLabels() {
+        labelNomeItem.setText("-");
+        labelDescricaoItem.setText("-");
+        labelEfeitosItem.setText("-");
+        labelColetavel.setText("-");
+        labelConsumivel.setText("-");
+    }
+    
+    private boolean conferirNome(String nome) {
+        for (Item iten : itens) {
+            if (iten.getNome().equals(nome)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private void reiniciarCamposDeEfeito() {
+        campoNomeEfeito.setText("");
+        campoDescricaoEfeito.setText("");
+        campoQuantidadeEfeito.setText("");
+        comboTipoDeEfeito.setSelectedIndex(0);
+    }
+    
+    private void reiniciarCampos() {
+        campoNomeItem.setText("");
+        campoDescricaoItem.setText("");
+        reiniciarCamposDeEfeito();
+        checkColetavel.setSelected(false);
+        checkConsumivel.setSelected(false);
+        adicionarOuAlterarEfeito.setText("Adicionar efeito");
+        adicionarOuAlterarEfeito.setEnabled(false);
+        labelIconeItem.setToolTipText("Clique aqui para selecionar um ícone");
+        labelIconeItem.setIcon(null);
+        efeitosAtual = new ArrayList<>();
+        preencherTabela();
+    }
+    
+    private Item getItem(String nome) {
+        for (Item iten : itens) {
+            if (iten.getNome().equals(nome)) {
+                return iten;
+            }
+        }
+        return null;
     }
     
     private void botaoArquivoBackgroundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoArquivoBackgroundActionPerformed
@@ -529,7 +1119,11 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
 
     private void botaoOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoOkActionPerformed
         if (ultimaLabelSelecionada != null) {
-            arquivoSelecionado = ultimaLabelSelecionada.getToolTipText();
+            if (modo == 0 || modo == 1) {
+                arquivoSelecionado = ultimaLabelSelecionada.getToolTipText();
+            } else if (modo == 2) {
+                itemSelecionado = getItem(ultimaLabelSelecionada.getToolTipText());
+            }
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this.getParent(), "Nenhuma imagem foi selecionada!", "Atenção", JOptionPane.WARNING_MESSAGE);
@@ -554,7 +1148,8 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
 
     private void botaoAdicionarIconeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarIconeActionPerformed
         copiarArquivoParaDiretorio(campoImagemIcone.getText(), CAMINHO_DOS_ICONES);
-        inserirMiniatura(new File(campoImagemIcone.getText()).getAbsolutePath(), painelIcones);
+        File arquivo = new File(campoImagemIcone.getText());
+        inserirMiniatura(arquivo.getAbsolutePath(), painelIcones, arquivo.getName());
         campoImagemIcone.setText("");
         botaoAdicionarIcone.setEnabled(false);
     }//GEN-LAST:event_botaoAdicionarIconeActionPerformed
@@ -562,6 +1157,107 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private void painelIconesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelIconesMouseClicked
         desmarcarUltimaLabel();
     }//GEN-LAST:event_painelIconesMouseClicked
+
+    private void labelIconeItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIconeItemMouseClicked
+        painelDeAbas.setSelectedIndex(1);
+    }//GEN-LAST:event_labelIconeItemMouseClicked
+
+    private void botaoSelecionarIconeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSelecionarIconeActionPerformed
+        labelIconeItem.setIcon(new ImageIcon(new ImageIcon(CAMINHO_DOS_ICONES + 
+                ultimaLabelSelecionada.getToolTipText()).getImage()
+                .getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+        labelIconeItem.setToolTipText(ultimaLabelSelecionada.getToolTipText());
+        botaoSelecionarIcone.setEnabled(false);
+        painelDeAbas.setSelectedIndex(2);
+    }//GEN-LAST:event_botaoSelecionarIconeActionPerformed
+
+    private void labelIconeItemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIconeItemMouseEntered
+        labelIconeItem.setBorder(null);
+        labelIconeItem.setBorder(new LineBorder(Color.red));
+    }//GEN-LAST:event_labelIconeItemMouseEntered
+
+    private void labelIconeItemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIconeItemMouseExited
+        labelIconeItem.setBorder(null);
+        labelIconeItem.setBorder(new LineBorder(Color.black));
+    }//GEN-LAST:event_labelIconeItemMouseExited
+
+    private void adicionarOuAlterarEfeitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarOuAlterarEfeitoActionPerformed
+        Efeito efeito;
+        switch (comboTipoDeEfeito.getSelectedIndex()) {
+            case 0:
+                efeito = new AlteracaoDeHP(campoNomeEfeito.getText(),
+                        campoDescricaoEfeito.getText(),
+                        Integer.parseInt(campoQuantidadeEfeito.getText()));
+                break;
+            case 1:
+                efeito = new AlteracaoDeSanidade(campoNomeEfeito.getText(),
+                        campoDescricaoEfeito.getText(),
+                        Integer.parseInt(campoQuantidadeEfeito.getText()));
+                break;
+            default:
+                efeito = new EsvaziamentoDeInventario(campoNomeEfeito.getText(),
+                        campoDescricaoEfeito.getText());
+                break;
+            }
+        if (tabelaEfeitos.getSelectedRow() != -1) {
+            efeitosAtual.set(tabelaEfeitos.getSelectedRow(), efeito);
+        } else {
+            efeitosAtual.add(efeito);
+        }
+        reiniciarCamposDeEfeito();
+        preencherTabela();
+    }//GEN-LAST:event_adicionarOuAlterarEfeitoActionPerformed
+
+    private void comboTipoDeEfeitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoDeEfeitoActionPerformed
+        adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
+        if (comboTipoDeEfeito.getSelectedIndex() == 2) {
+            campoQuantidadeEfeito.setEnabled(false);
+        } else {
+            campoQuantidadeEfeito.setEnabled(true);
+        }
+    }//GEN-LAST:event_comboTipoDeEfeitoActionPerformed
+
+    private void painelItensRegistradosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelItensRegistradosMouseClicked
+        limparLabels();
+        desmarcarUltimaLabel();
+    }//GEN-LAST:event_painelItensRegistradosMouseClicked
+
+    private void botaoRegistrarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoRegistrarItemActionPerformed
+        if (checarInformacoesItem()) {
+            String nome = campoNomeItem.getText();
+            if (conferirNome(nome)) {
+                conferirNome(nome);
+                String descricao = campoDescricaoItem.getText();
+                Item item = new Item(nome, descricao, labelIconeItem.getToolTipText(), efeitosAtual, checkConsumivel.isSelected(), checkColetavel.isSelected());
+                itens.add(item);
+                reiniciarCampos();
+                preencherItens();
+                salvarItens();
+            } else {
+                JOptionPane.showMessageDialog(this, "Não se pode ter 2 itens com mesmo nome!", 
+                        "O Manicômio de Zulu", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Preencha corretamente os campos!", 
+                        "O Manicômio de Zulu", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_botaoRegistrarItemActionPerformed
+
+    private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
+        tabelaEfeitos.clearSelection();
+    }//GEN-LAST:event_jPanel2MousePressed
+
+    private void campoNomeEfeitoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoNomeEfeitoKeyPressed
+        adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
+    }//GEN-LAST:event_campoNomeEfeitoKeyPressed
+
+    private void campoDescricaoEfeitoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoDescricaoEfeitoKeyPressed
+        adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
+    }//GEN-LAST:event_campoDescricaoEfeitoKeyPressed
+
+    private void campoQuantidadeEfeitoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoQuantidadeEfeitoKeyPressed
+        adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
+    }//GEN-LAST:event_campoQuantidadeEfeitoKeyPressed
 
     public String getImagemSelecionada() {
         return arquivoSelecionado;
@@ -582,29 +1278,123 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         navegadora.setVisible(true);
         return navegadora.getItemSelecionado();
     }
+    
+    @SuppressWarnings("unchecked")
+    private void carregarItens() {
+        ObjectInputStream ooi = null;
+        try {
+            FileInputStream fin = new FileInputStream(new File(CAMINHO_DOS_ITENS + "allItems.dat"));
+            ooi = new ObjectInputStream(fin);
+            itens = (List<Item>) ooi.readObject();
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado! Iniciando novos registros!", 
+                    "O Manicômio de Zulu", JOptionPane.INFORMATION_MESSAGE);
+            itens = new ArrayList<>();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Ocorreu algum problema ao ler o arquivo!\n"
+                    + "Ele pode estar corrompido ou não permite leitura...", 
+                    "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+            itens = new ArrayList<>();
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Ocorreu algum erro interno no programa!", 
+                    "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            if (ooi != null) {
+                try {
+                    ooi.close();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Ocorreu algum problema com sua unidade de armazenamento!", 
+                    "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+    
+    private void salvarItens() {
+        ObjectOutputStream oos = null;
+        try {
+            FileOutputStream fout = new FileOutputStream(new File(CAMINHO_DOS_ITENS + "allItems.dat"));
+            oos = new ObjectOutputStream(fout);
+            oos.writeObject(itens);
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado! Iniciando novos registros!", 
+                    "O Manicômio de Zulu", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Ocorreu algum problema com sua unidade de armazenamento!", 
+                    "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            if (oos != null) {
+                try {
+                    oos.close();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Ocorreu algum problema com sua unidade de armazenamento!", 
+                            "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionarOuAlterarEfeito;
     private javax.swing.JButton botaoAdicionar;
     private javax.swing.JButton botaoAdicionarIcone;
     private javax.swing.JButton botaoArquivoBackground;
     private javax.swing.JButton botaoArquivoIcone;
     private javax.swing.JButton botaoCancelar;
     private javax.swing.JButton botaoOk;
+    private javax.swing.JButton botaoRegistrarItem;
+    private javax.swing.JButton botaoSelecionarIcone;
+    private javax.swing.JTextField campoDescricaoEfeito;
+    private javax.swing.JTextField campoDescricaoItem;
     private javax.swing.JTextField campoImagemBackgorund;
     private javax.swing.JTextField campoImagemIcone;
+    private javax.swing.JTextField campoNomeEfeito;
+    private javax.swing.JTextField campoNomeItem;
+    private javax.swing.JTextField campoQuantidadeEfeito;
+    private javax.swing.JCheckBox checkColetavel;
+    private javax.swing.JCheckBox checkConsumivel;
+    private javax.swing.JComboBox<String> comboTipoDeEfeito;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel labelColetavel;
+    private javax.swing.JLabel labelConsumivel;
+    private javax.swing.JLabel labelDescricaoItem;
+    private javax.swing.JLabel labelEfeitosItem;
+    private javax.swing.JLabel labelIconeItem;
+    private javax.swing.JLabel labelNomeItem;
+    private javax.swing.JLabel labelQuantidade;
     private javax.swing.JPanel painelBackgorunds;
     private javax.swing.JTabbedPane painelDeAbas;
+    private javax.swing.JPanel painelExibirItens;
     private javax.swing.JPanel painelIcones;
+    private javax.swing.JPanel painelInserirItem;
     private javax.swing.JPanel painelItens;
+    private javax.swing.JPanel painelItensRegistrados;
     private javax.swing.JPanel painelNPCs;
     private javax.swing.JPanel painelOpcoesDeIcones;
     private javax.swing.JPanel painelPlanosDeFundo;
     private javax.swing.JFileChooser seletorDeArquivo;
+    private javax.swing.JTable tabelaEfeitos;
     // End of variables declaration//GEN-END:variables
 }
