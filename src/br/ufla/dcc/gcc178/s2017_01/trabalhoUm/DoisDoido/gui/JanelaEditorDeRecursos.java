@@ -6,7 +6,6 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ambiente;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ator;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
@@ -58,7 +57,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         ambienteAtual = new Ambiente("Ambiente atual");
         carregarAmbiente();
         nomeDoMundo = null;
-        alterouAlgumaCoisa = true;
+        alterouAlgumaCoisa = false;
         campoDeLog.append("***INICIADO NOVO AMBIENTE VAZIO!\n");
     }
 
@@ -162,19 +161,8 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
 
         jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        painelNPCs.setPreferredSize(new java.awt.Dimension(0, 0));
-
-        javax.swing.GroupLayout painelNPCsLayout = new javax.swing.GroupLayout(painelNPCs);
-        painelNPCs.setLayout(painelNPCsLayout);
-        painelNPCsLayout.setHorizontalGroup(
-            painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 284, Short.MAX_VALUE)
-        );
-        painelNPCsLayout.setVerticalGroup(
-            painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 357, Short.MAX_VALUE)
-        );
-
+        painelNPCs.setMinimumSize(new java.awt.Dimension(100, 100));
+        painelNPCs.setLayout(new javax.swing.BoxLayout(painelNPCs, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane3.setViewportView(painelNPCs);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -199,7 +187,6 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
 
         painelInformacoesDoAmbiente.setLayout(new java.awt.BorderLayout());
 
-        painelEditor.setBorder(null);
         painelEditor.setLayout(new java.awt.GridBagLayout());
 
         painelAmbiente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -413,6 +400,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
 
         menuItemEditorDeItens.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuItemEditorDeItens.setText("Itens");
+        menuItemEditorDeItens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemEditorDeItensActionPerformed(evt);
+            }
+        });
         menuEditar.add(menuItemEditorDeItens);
 
         menuItemAdicionarNPC.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
@@ -461,11 +453,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
 
         if (tipo == ITEM) {
             remover.setToolTipText("Remover item " + nome);
+            painelItens.add(painel);
         } else if (tipo == NPC) {
             remover.setToolTipText("Remover npc " + nome);
+            painelNPCs.add(painel);
         }
-        
-        painelItens.add(painel);
     }
     
     private void botaoRemoverActionPerformed(ActionEvent evt) {
@@ -552,6 +544,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         colocarItens();
         colocarNPCs();
         ajustarSaidas();
+        alterouAlgumaCoisa = true;
     }
     
     private String getDirecaoOposta(String direcao) {
@@ -592,6 +585,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         if (nomeDoBackground != null) {
             ambienteAtual.setImagem(nomeDoBackground);
             mudarImagem(nomeDoBackground);
+            alterouAlgumaCoisa = true;
         }
         campoDeLog.append("Concluído!\n");
     }//GEN-LAST:event_labelImagemMouseClicked
@@ -641,6 +635,19 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         selecionarOuAdicionarAmbiente("oeste");
     }//GEN-LAST:event_botaoOesteActionPerformed
 
+    private void menuItemEditorDeItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemEditorDeItensActionPerformed
+        adicionarItemNoAmbiente();
+    }//GEN-LAST:event_menuItemEditorDeItensActionPerformed
+
+    private void adicionarItemNoAmbiente() {
+        campoDeLog.append("Aguarde, carregando Itens.......");
+        Item itemNovo = DialogoNavegadoraDeRecursos.selecionarItem(this);
+        if (itemNovo != null) {
+            ambienteAtual.colocarItem(itemNovo);
+            carregarAmbiente();
+        }
+    }
+    
     private void sairDoMundo(boolean querFecharJanela) {
         if (querFecharJanela) {
             dispose();
@@ -668,7 +675,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     
     private void obterNomeDoMundo() {
         do {
-            nomeDoMundo = JOptionPane.showInputDialog(this, "Qual o nome desse ambiente?", 
+            nomeDoMundo = JOptionPane.showInputDialog(this, "Qual o nome desse mapa?", 
                     "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
         } while (nomeDoMundo == null);
     }
@@ -677,7 +684,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         obterNomeDoMundo();
         ObjectOutputStream oos = null;
         try {
-            FileOutputStream fout = new FileOutputStream(new File(CAMINHO_DOS_MAPAS) + nomeDoMundo + ".dat");
+            FileOutputStream fout = new FileOutputStream(new File(CAMINHO_DOS_MAPAS + nomeDoMundo + ".dat"));
             oos = new ObjectOutputStream(fout);
             oos.writeObject(ambienteAtual);
             alterouAlgumaCoisa = false;

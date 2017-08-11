@@ -298,26 +298,12 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
         this.usuarioAtual = usuarioAtual;
     }
     
-    private void tornarCheckBoxSomenteLeitura(JCheckBox box){
-        MouseListener[] ml = box.getListeners(MouseListener.class);
-        for (MouseListener mouseListener : ml) {
-            box.removeMouseListener(mouseListener);
-        }
-        InputMap im = box.getInputMap();
-        im.put(KeyStroke.getKeyStroke("SPACE"), "none");
-        im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
-        box.setFocusable(false);
-    }
-    
     private void preencherTabelaScores() {
         DefaultTableModel model = (DefaultTableModel) tabelaDeJogos.getModel();
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
         int i = 1;
         for (InformacoesDeJogo informacoes : usuarioAtual.getInformacoesDeJogos()) {
-            JCheckBox box = new JCheckBox();
-            box.setSelected(informacoes.isZerado());
-            tornarCheckBoxSomenteLeitura(box);
             model.addRow(new Object[] {i++, informacoes.getPontuacao(), informacoes.getData(), informacoes.isZerado()});
         }
     }

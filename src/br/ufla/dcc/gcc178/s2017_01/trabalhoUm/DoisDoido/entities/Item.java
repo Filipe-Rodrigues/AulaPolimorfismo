@@ -33,6 +33,7 @@ public class Item implements Serializable{
      *
      * @param nome String com o nome do Item
      * @param descricao String com a Descricao Do Item
+     * @param icone String com o nome do arquivo de ícone
      * @param efeitos List de Efeitos com os efeitos Causados pelo Item
      * @param consumivel bollean Se é consumivel.
      * @param coletavel bollean Se é coletavel.
@@ -44,6 +45,24 @@ public class Item implements Serializable{
         for (Efeito efeito : efeitos) {
             this.efeitos.add(efeito);
         }
+        this.consumivel = consumivel;
+        this.coletavel = coletavel;
+        this.icone = icone;
+    }
+    
+    /**
+     * Construtor da Classes Item.
+     *
+     * @param nome String com o nome do Item
+     * @param descricao String com a Descricao Do Item
+     * @param icone String com o nome do arquivo de ícone
+     * @param consumivel bollean Se é consumivel.
+     * @param coletavel bollean Se é coletavel.
+     */
+    public Item (String nome, String descricao, String icone, boolean consumivel, boolean coletavel) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.efeitos = new ArrayList<>();
         this.consumivel = consumivel;
         this.coletavel = coletavel;
         this.icone = icone;
@@ -80,6 +99,10 @@ public class Item implements Serializable{
      */
     public List<Efeito> getEfeitos () {
         return Collections.unmodifiableList(efeitos);
+    }
+    
+    public void adicionarEfeito() {
+        
     }
     
     /**

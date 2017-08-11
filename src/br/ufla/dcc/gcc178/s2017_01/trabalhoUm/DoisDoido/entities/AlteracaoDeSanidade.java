@@ -51,4 +51,8 @@ public class AlteracaoDeSanidade extends Efeito {
         return alvo.afetarAtributo(SANIDADE, getQuantidade());
     }
 
+    @Override
+    public String toString() {
+        return "Altera Sanidade: " + getQuantidade() + "pts";
+    }
 }
