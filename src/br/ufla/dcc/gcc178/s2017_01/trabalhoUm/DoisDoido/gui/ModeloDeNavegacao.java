@@ -77,7 +77,7 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
             }
         }
         UtilitariosGUI.mudarFonte (label, "SpaceMono-Regular.ttf", 12f);
-        label.setIcon(new javax.swing.ImageIcon("res/images/icons/" + icone + ".png")); // NOI18N
+        label.setIcon(new javax.swing.ImageIcon("res/images/icons/" + icone)); // NOI18N
         label.setText(nome);
         label.setToolTipText(descricao);
 

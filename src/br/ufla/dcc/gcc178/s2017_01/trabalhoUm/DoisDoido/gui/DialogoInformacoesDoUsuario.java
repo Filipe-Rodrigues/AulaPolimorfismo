@@ -6,6 +6,7 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.ManicomioDeZulu;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ambiente;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.user.Usuario;
 import java.awt.Color;
@@ -232,7 +233,10 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
 
     private void botaoNovoJogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoJogoActionPerformed
         novoComeco = true;
-        iniciarJogo(null);
+        Ambiente ambiente = DialogoSelecionarMapa.getMapa(this);
+        if (ambiente != null) {
+            iniciarJogo(new ManicomioDeZulu(ambiente), true);
+        }
     }//GEN-LAST:event_botaoNovoJogoActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -244,19 +248,19 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
         if (evt.getClickCount() == 2 && !evt.isConsumed()) {
             int pos = (int) tabelaDeJogos.getModel().getValueAt(tabelaDeJogos.getSelectedRow(), 0) - 1;
             novoComeco = false;
-            iniciarJogo(usuarioAtual.getInformacoesDeJogos().get(pos).getJogo());
+            iniciarJogo(usuarioAtual.getInformacoesDeJogos().get(pos).getJogo(), false);
         }
     }//GEN-LAST:event_tabelaDeJogosMouseClicked
 
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
         int pos = (int) tabelaDeJogos.getModel().getValueAt(tabelaDeJogos.getSelectedRow(), 0) - 1;
         novoComeco = false;
-        iniciarJogo(usuarioAtual.getInformacoesDeJogos().get(pos).getJogo());
+        iniciarJogo(usuarioAtual.getInformacoesDeJogos().get(pos).getJogo(), false);
     }//GEN-LAST:event_botaoContinuarActionPerformed
 
-    private void iniciarJogo(ManicomioDeZulu jogo) {
+    private void iniciarJogo(ManicomioDeZulu jogo, boolean novoJogo) {
         this.setVisible(false);
-        interfaceDoGame = new JanelaPrincipal(jogo, this);
+        interfaceDoGame = new JanelaPrincipal(jogo, this, novoJogo);
         
         //this.getParent().setVisible(false);
     }

@@ -49,7 +49,7 @@ public abstract class Ator implements Serializable {
      */
     public Ator(String nome, int hp, int capacidade, Habilidade habilidade, List<Item> bagagem, boolean aliado) {
         this.nome = nome;
-        this.imagem = nome;
+        this.imagem = nome + ".png";
         this.atributos = new HashMap<>();
         this.atributos.put(HP, hp);
         this.atributos.put(CAPACIDADE, capacidade);

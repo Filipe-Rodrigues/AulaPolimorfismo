@@ -32,7 +32,7 @@ public class Cachorro extends NPC {
                     , "Cão de rua contaminado com Raiva. Subtrai 1 ponto de HP e de Sanidade."
                     , umEfeito);
         super.setHabilidade(hab);
-        super.setImagem("Cachorro");
+        super.setImagem("Cachorro.png");
     }
     
     /**

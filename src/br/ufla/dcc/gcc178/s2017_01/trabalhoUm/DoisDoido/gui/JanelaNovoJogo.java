@@ -262,22 +262,24 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
 
     private void botaoNovoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoUsuarioActionPerformed
         String novoUsuario = JOptionPane.showInputDialog(this, "Qual é o seu nome?");
-        String novoGamerID = new DialogoNovoGamerID(this, true).getGamerId();
-        boolean jaTem = false;
-        for (Usuario usuario : usuarios) {
-            if (usuario.getNome().equalsIgnoreCase(novoUsuario)) {
-                JOptionPane.showMessageDialog(this, "Esse nome já está registrado! Selecione-o na lista à direita do Ranking!!",
-                        "Atenção", JOptionPane.WARNING_MESSAGE);
-                jaTem = true;
-                novoUsuario = usuario.getNome();
-                break;
+        if (novoUsuario != null) {
+            String novoGamerID = new DialogoNovoGamerID(this, true).getGamerId();
+            boolean jaTem = false;
+            for (Usuario usuario : usuarios) {
+                if (usuario.getNome().equalsIgnoreCase(novoUsuario)) {
+                    JOptionPane.showMessageDialog(this, "Esse nome já está registrado! Selecione-o na lista à direita do Ranking!!",
+                            "Atenção", JOptionPane.WARNING_MESSAGE);
+                    jaTem = true;
+                    novoUsuario = usuario.getNome();
+                    break;
+                }
             }
+            if (!jaTem) {
+                usuarios.add(new Usuario(novoUsuario, novoGamerID));
+                adicionarUsuarioNaLista(novoUsuario);
+            }
+            listaUsuarios.setSelectedValue(novoUsuario, true);
         }
-        if (!jaTem) {
-            usuarios.add(new Usuario(novoUsuario, novoGamerID));
-            adicionarUsuarioNaLista(novoUsuario);
-        }
-        listaUsuarios.setSelectedValue(novoUsuario, true);
     }//GEN-LAST:event_botaoNovoUsuarioActionPerformed
 
     private void procurarUsuario() {

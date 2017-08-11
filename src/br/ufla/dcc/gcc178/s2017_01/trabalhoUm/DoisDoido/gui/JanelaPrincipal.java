@@ -42,16 +42,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private BufferedImage notFound;
     private Mapa mapa;
     private DialogoInformacoesDoUsuario pontuacoes;
+    private boolean novoJogo;
     
     private Clip clip;
-
-    /**
-     * Construtor Da Classe JanelaPrincipal.
-     */
-    public JanelaPrincipal() {
-        initComponents();
-        initAtributos(null);
-    }
     
     /**
      * Construtor Da Classe JanelaPrincipal, para carregar um jogo salvo.
@@ -62,10 +55,11 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * do objeto ancestral seja usada para a notificação da finalização da execução da
      * janela atual.
      */
-    public JanelaPrincipal(ManicomioDeZulu jogoSalvo, DialogoInformacoesDoUsuario requisidora) {
+    public JanelaPrincipal(ManicomioDeZulu jogoSalvo, DialogoInformacoesDoUsuario requisidora, boolean novoJogo) {
         initComponents();
         initAtributos(jogoSalvo);
         registrarRequisidora(requisidora);
+        this.novoJogo = novoJogo;
     }
 
     /**
@@ -488,7 +482,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         setVisible(true);
-        comecarJogo(jogoSalvo);
+        comecarJogo();
     }
 
     private void colorirBarras() {
@@ -530,11 +524,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      *  
      */
     private void initEngine(ManicomioDeZulu jogoSalvo) {
-        if (jogoSalvo == null) {
-            jogo = new ManicomioDeZulu();
-        } else {
-            jogo = jogoSalvo;
-        }
+        jogo = jogoSalvo;
         jogo.adicionarInterfaceDeJogoListener(new ComandoDeJogoListener() {
             @Override
             public void envioDeComandoPerformed(JogoEvent evt) {
@@ -543,8 +533,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         });
     }
     
-    private void comecarJogo(ManicomioDeZulu jogoSalvo) {
-        if (jogoSalvo == null) {
+    private void comecarJogo() {
+        if (novoJogo) {
             jogo.mostrarBoasVindas();
         } else {
             jogo.carregarCenarioAtualDoJogo();
@@ -668,7 +658,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      */
     private void envioDeComandoDoManicomio(JogoEvent evt) {
         atualizarCampoDeTexto(evt);
-        atualizarImagem(evt.getImagem() + ".png");
+        atualizarImagem(evt.getImagem() + "");
         atualizarBotoesDeNavegacao(evt);
         atualizarNavegacaoItens(evt);
         mostrarMapa(evt.querMapa());
@@ -726,7 +716,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         if (inventarioCesar != null) {
             for (Item item : inventarioCesar) {
                 ModeloDeNavegacao modelo = new ModeloDeNavegacao(TipoDeGUI.ITEM_DO_INVENTARIO, item.getNome(), 
-                        item.getDescricao(), item.getNome());
+                        item.getDescricao(), item.getIcone());
                 modelo.addInterfaceDeNavegacaoListener(new InterfaceDeNavegacaoListenter() {
                     @Override
                     public void solicitacaoDeNavegacaoPerformed(NavegacaoEvent evt) {
@@ -740,7 +730,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         if (inventarioNPC != null) {
             for (Item item : inventarioNPC) {
                 ModeloDeNavegacao modelo = new ModeloDeNavegacao(TipoDeGUI.ITEM_DO_NPC, item.getNome(),
-                        item.getDescricao(), item.getNome());
+                        item.getDescricao(), item.getIcone());
                 modelo.addInterfaceDeNavegacaoListener(new InterfaceDeNavegacaoListenter() {
                     @Override
                     public void solicitacaoDeNavegacaoPerformed(NavegacaoEvent evt) {
@@ -754,7 +744,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         if (itensAmbiente != null) {
             for (Item item : itensAmbiente) {
                 ModeloDeNavegacao modelo = new ModeloDeNavegacao(TipoDeGUI.ITEM_DO_AMBIENTE, item.getNome(), 
-                        item.getDescricao(), item.getNome());
+                        item.getDescricao(), item.getIcone());
                 modelo.addInterfaceDeNavegacaoListener(new InterfaceDeNavegacaoListenter() {
                     @Override
                     public void solicitacaoDeNavegacaoPerformed(NavegacaoEvent evt) {
@@ -911,7 +901,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
      * @param nomeDaImagem String com o nome da nova imagem.
      */
     private void atualizarImagem(String nomeDaImagem) {
-        if (!nomeDaImagem.equals(".png")) {
+        if (!nomeDaImagem.equals("")) {
             try {
                 BufferedImage img = ImageIO.read(new File("res/images/bg/" + nomeDaImagem));
                 labelImagem.setIcon(new ImageIcon(img));

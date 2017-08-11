@@ -36,7 +36,7 @@ public class Farmaceuta extends NPC {
         umEfeito.add(curaSan);
         Efeito curaHP = new AlteracaoDeHP("Recuperar HP", "Restaura 15 de HP", 15);
         umEfeito.add(curaHP);
-        Item complementoPsicotropico = new Item("Clonazepam", "Um medicamento para ansiedade.", umEfeito, true, true);
+        Item complementoPsicotropico = new Item("Clonazepam", "Um medicamento para ansiedade.", "Pilula.png", umEfeito, true, true);
         super.coletarItem(complementoPsicotropico);
         umEfeito = new ArrayList<>();
     }
