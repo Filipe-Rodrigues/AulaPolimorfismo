@@ -26,6 +26,7 @@ public class Item implements Serializable{
     private List<Efeito> efeitos;
     private final boolean consumivel;
     private final boolean coletavel;
+    private String icone;
   
     /**
      * Construtor da Classes Item.
@@ -36,7 +37,7 @@ public class Item implements Serializable{
      * @param consumivel bollean Se é consumivel.
      * @param coletavel bollean Se é coletavel.
      */
-    public Item (String nome, String descricao, List<Efeito> efeitos, boolean consumivel, boolean coletavel) {
+    public Item (String nome, String descricao, String icone, List<Efeito> efeitos, boolean consumivel, boolean coletavel) {
         this.nome = nome;
         this.descricao = descricao;
         this.efeitos = new ArrayList<>();
@@ -45,6 +46,7 @@ public class Item implements Serializable{
         }
         this.consumivel = consumivel;
         this.coletavel = coletavel;
+        this.icone = icone;
     }
     
     /**
@@ -96,6 +98,10 @@ public class Item implements Serializable{
      */
     public boolean ehColetavel () {
         return coletavel;
+    }
+
+    public String getIcone() {
+        return icone;
     }
 
 }

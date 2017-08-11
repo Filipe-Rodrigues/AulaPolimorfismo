@@ -5,6 +5,9 @@
  */
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TipoDeRecurso.BACKGROUND;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TipoDeRecurso.ITEM;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ICONES;
 import java.awt.Color;
@@ -38,12 +41,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
 
-    private static final int GERENCIADOR_DE_BACKGROUNDS = 0;
-    private static final int GERENCIADOR_DE_ICONES = 1;
-    private static final int GERENCIADOR_DE_ITENS_E_NPCS = 2;
-    
     private JLabel ultimaLabelSelecionada;
     private String arquivoSelecionado;
+    private Item itemSelecionado;
     private int modo;
     
     /**
@@ -52,28 +52,41 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
      * @param modal Se o diálogo força o foco, <code>true</code>. Senão, <code>false</code>.
      * @param modo O tipo de requisição desse diálogo.
      */
-    public DialogoNavegadoraDeRecursos(java.awt.Frame parent, boolean modal, int modo) {
+    public DialogoNavegadoraDeRecursos(java.awt.Frame parent, boolean modal, TipoDeRecurso modo) {
         super(parent, modal);
         initComponents();
         initAtributos(modo);
     }
     
-    private void initAtributos(int modo) {
+    private void initAtributos(TipoDeRecurso modo) {
         ultimaLabelSelecionada = null;
         arquivoSelecionado = null;
-        this.modo = modo;
+        switch (modo) {
+            case BACKGROUND:
+                this.modo = 0;
+                break;
+            case ICONE:
+                this.modo = 1;
+                break;
+            case ITEM:
+                this.modo = 2;
+                break;
+            default:
+                this.modo = 3;
+                break;
+        }
         preencherGaleria();
         setLocationRelativeTo(this.getParent());
-        habilitarAbas(modo);
+        habilitarAbas();
     }
     
-    private void habilitarAbas(int modo) {
+    private void habilitarAbas() {
         for (int i = 0; i < 4; i++) {
             painelDeAbas.setEnabledAt(i, false);
         }
         painelDeAbas.setEnabledAt(modo, true);
-        if (modo == GERENCIADOR_DE_ITENS_E_NPCS) {
-            painelDeAbas.setEnabledAt(3, true);
+        if (modo == 2) {
+            painelDeAbas.setEnabledAt(1, true);
         }
         painelDeAbas.setSelectedIndex(modo);
     }
@@ -390,9 +403,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void preencherGaleria() {
-        if (modo != GERENCIADOR_DE_ITENS_E_NPCS) {
+        if (modo < 2) {
             File folder;
-            if (modo == GERENCIADOR_DE_BACKGROUNDS) {
+            if (modo == 0) {
                 folder = new File(CAMINHO_DOS_BACKGROUNDS);
             } else {
                 folder = new File(CAMINHO_DOS_ICONES);
@@ -401,7 +414,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
             for (int i = 0; i < listOfFiles.length; i++) {
                 if (listOfFiles[i].isFile()) {
                     inserirMiniatura(listOfFiles[i].getAbsolutePath(), 
-                            (modo == GERENCIADOR_DE_BACKGROUNDS) 
+                            (modo == 0) 
                             ? (painelBackgorunds) : (painelIcones));
                 }
             }
@@ -410,7 +423,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     
     private void inserirMiniatura(String caminhoDoArquivo, JPanel painel) {
         ImageIcon icon;
-        if (modo == GERENCIADOR_DE_BACKGROUNDS) {
+        if (modo == 0) {
             icon = new ImageIcon(new ImageIcon(caminhoDoArquivo)
                 .getImage().getScaledInstance(200, 100, Image.SCALE_SMOOTH));
         } else {
@@ -436,7 +449,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         
         int quant = painel.getComponentCount();
         GridLayout gl = (GridLayout) painel.getLayout();
-        int mod = (modo == GERENCIADOR_DE_BACKGROUNDS) ? (2) : (8);
+        int mod = (modo == 0) ? (2) : (8);
         if (quant % mod == 0) {
             gl.setRows(gl.getRows() + 1);
         }
@@ -550,71 +563,24 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         desmarcarUltimaLabel();
     }//GEN-LAST:event_painelIconesMouseClicked
 
-    public static String getImagemDeFundo(Frame componentePai) {
-        DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, GERENCIADOR_DE_BACKGROUNDS);
-        navegadora.setVisible(true);
-        return navegadora.arquivoSelecionado;
+    public String getImagemSelecionada() {
+        return arquivoSelecionado;
     }
     
-    public static String getIcone(Frame componentePai) {
-        DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, GERENCIADOR_DE_ICONES);
-        navegadora.setVisible(true);
-        return navegadora.arquivoSelecionado;
+    public Item getItemSelecionado() {
+        return itemSelecionado;
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(DialogoNavegadoraDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(DialogoNavegadoraDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(DialogoNavegadoraDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(DialogoNavegadoraDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                DialogoNavegadoraDeRecursos dialog = new DialogoNavegadoraDeRecursos(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-        String imagem = getIcone(null);
-        if (imagem != null) {
-            System.err.println(imagem);
-        } else {
-            System.err.println("Cancelado!");
-        }
-        String imagem2 = getImagemDeFundo(null);
-        if (imagem2 != null) {
-            System.err.println(imagem2);
-        } else {
-            System.err.println("Cancelado!");
-        }
+    public static String selecionarImagem(Frame componentePai) {
+        DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, BACKGROUND);
+        navegadora.setVisible(true);
+        return navegadora.getImagemSelecionada();
+    }
+    
+    public static Item selecionarItem(Frame componentePai) {
+        DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, ITEM);
+        navegadora.setVisible(true);
+        return navegadora.getItemSelecionado();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -5,17 +5,61 @@
  */
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ambiente;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ator;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ICONES;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_MAPAS;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.List;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author filip
  */
 public class JanelaEditorDeRecursos extends javax.swing.JFrame {
-
+    private static int ITEM = 0;
+    private static int NPC = 1;
+    private Ambiente ambienteAtual;
+    private String nomeDoMundo;
+    private boolean alterouAlgumaCoisa;
+    
     /**
      * Creates new form JanelaEditorDeAmbientes
      */
     public JanelaEditorDeRecursos() {
         initComponents();
+        initAtributos();
+    }
+    
+    private void initAtributos() {
+        criarNovoMundo();
+    }
+    
+    private void criarNovoMundo() {
+        ambienteAtual = new Ambiente("Ambiente atual");
+        carregarAmbiente();
+        nomeDoMundo = null;
+        alterouAlgumaCoisa = true;
+        campoDeLog.append("***INICIADO NOVO AMBIENTE VAZIO!\n");
     }
 
     /**
@@ -28,6 +72,16 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        painelItensENPCs = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        painelItens = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        painelNPCs = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        painelInformacoesDoAmbiente = new javax.swing.JPanel();
         painelEditor = new javax.swing.JPanel();
         painelAmbiente = new javax.swing.JPanel();
         painelImagem = new javax.swing.JPanel();
@@ -41,21 +95,111 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         barraDeStatus = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        campoDeLog = new javax.swing.JTextArea();
         barraDeMenus = new javax.swing.JMenuBar();
         menuArquivo = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        menuItemNovo = new javax.swing.JMenuItem();
+        menuItemAbrir = new javax.swing.JMenuItem();
+        menuItemSalvar = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        menuItemSair = new javax.swing.JMenuItem();
         menuEditar = new javax.swing.JMenu();
+        menuItemEditorDeItens = new javax.swing.JMenuItem();
+        menuItemAdicionarNPC = new javax.swing.JMenuItem();
+        menuItemDescricaoAmbiente = new javax.swing.JMenuItem();
         menuAjuda = new javax.swing.JMenu();
+        menuItemAjuda = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("O Manicômio de Zulu - Editor de Ambientes");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        painelEditor.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        painelItensENPCs.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        painelItensENPCs.setPreferredSize(new java.awt.Dimension(300, 595));
+        painelItensENPCs.setLayout(new java.awt.GridLayout(2, 1));
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(300, 595));
+        java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
+        jPanel1Layout.columnWidths = new int[] {0, 5, 0, 5, 0};
+        jPanel1Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        jPanel1.setLayout(jPanel1Layout);
+
+        jLabel6.setText("Itens");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel1.add(jLabel6, gridBagConstraints);
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        painelItens.setMinimumSize(new java.awt.Dimension(100, 100));
+        painelItens.setLayout(new javax.swing.BoxLayout(painelItens, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane2.setViewportView(painelItens);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(jScrollPane2, gridBagConstraints);
+
+        painelItensENPCs.add(jPanel1);
+
+        java.awt.GridBagLayout jPanel3Layout = new java.awt.GridBagLayout();
+        jPanel3Layout.columnWidths = new int[] {0, 5, 0, 5, 0};
+        jPanel3Layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        jPanel3.setLayout(jPanel3Layout);
+
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        painelNPCs.setPreferredSize(new java.awt.Dimension(0, 0));
+
+        javax.swing.GroupLayout painelNPCsLayout = new javax.swing.GroupLayout(painelNPCs);
+        painelNPCs.setLayout(painelNPCsLayout);
+        painelNPCsLayout.setHorizontalGroup(
+            painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 284, Short.MAX_VALUE)
+        );
+        painelNPCsLayout.setVerticalGroup(
+            painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 357, Short.MAX_VALUE)
+        );
+
+        jScrollPane3.setViewportView(painelNPCs);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(jScrollPane3, gridBagConstraints);
+
+        jLabel7.setText("NPCs");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel3.add(jLabel7, gridBagConstraints);
+
+        painelItensENPCs.add(jPanel3);
+
+        getContentPane().add(painelItensENPCs, java.awt.BorderLayout.WEST);
+
+        painelInformacoesDoAmbiente.setLayout(new java.awt.BorderLayout());
+
+        painelEditor.setBorder(null);
         painelEditor.setLayout(new java.awt.GridBagLayout());
 
         painelAmbiente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -72,6 +216,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         labelImagem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelImagem.setIcon(new javax.swing.ImageIcon("res/images/icons/imagem.png"));
         labelImagem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                labelImagemMousePressed(evt);
+            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 labelImagemMouseClicked(evt);
             }
@@ -98,6 +245,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         botaoOeste.setMaximumSize(new java.awt.Dimension(76, 50));
         botaoOeste.setMinimumSize(new java.awt.Dimension(76, 50));
         botaoOeste.setPreferredSize(new java.awt.Dimension(76, 50));
+        botaoOeste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoOesteActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -109,6 +261,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         botaoSul.setMaximumSize(new java.awt.Dimension(76, 50));
         botaoSul.setMinimumSize(new java.awt.Dimension(76, 50));
         botaoSul.setPreferredSize(new java.awt.Dimension(76, 50));
+        botaoSul.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoSulActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -120,6 +277,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         botaoLeste.setMaximumSize(new java.awt.Dimension(76, 50));
         botaoLeste.setMinimumSize(new java.awt.Dimension(76, 50));
         botaoLeste.setPreferredSize(new java.awt.Dimension(76, 50));
+        botaoLeste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoLesteActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
@@ -130,6 +292,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         botaoNorte.setMaximumSize(new java.awt.Dimension(76, 50));
         botaoNorte.setMinimumSize(new java.awt.Dimension(76, 50));
         botaoNorte.setPreferredSize(new java.awt.Dimension(76, 50));
+        botaoNorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoNorteActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -176,62 +343,94 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(75, 121, 60, 107);
         painelEditor.add(painelAmbiente, gridBagConstraints);
 
-        getContentPane().add(painelEditor, java.awt.BorderLayout.CENTER);
+        painelInformacoesDoAmbiente.add(painelEditor, java.awt.BorderLayout.CENTER);
 
+        barraDeStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         barraDeStatus.setPreferredSize(new java.awt.Dimension(1233, 150));
+
+        campoDeLog.setColumns(20);
+        campoDeLog.setRows(5);
+        campoDeLog.setFocusable(false);
+        jScrollPane1.setViewportView(campoDeLog);
 
         javax.swing.GroupLayout barraDeStatusLayout = new javax.swing.GroupLayout(barraDeStatus);
         barraDeStatus.setLayout(barraDeStatusLayout);
         barraDeStatusLayout.setHorizontalGroup(
             barraDeStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1385, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1062, Short.MAX_VALUE)
         );
         barraDeStatusLayout.setVerticalGroup(
             barraDeStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
         );
 
-        getContentPane().add(barraDeStatus, java.awt.BorderLayout.SOUTH);
+        painelInformacoesDoAmbiente.add(barraDeStatus, java.awt.BorderLayout.SOUTH);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(300, 595));
-
-        jLabel1.setText("Itens no ambiente");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(312, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.WEST);
+        getContentPane().add(painelInformacoesDoAmbiente, java.awt.BorderLayout.CENTER);
 
         menuArquivo.setText("Arquivo");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Salvar");
-        menuArquivo.add(jMenuItem1);
+        menuItemNovo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemNovo.setText("Novo mundo");
+        menuItemNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemNovoActionPerformed(evt);
+            }
+        });
+        menuArquivo.add(menuItemNovo);
+
+        menuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemAbrir.setText("Abrir mundo...");
+        menuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemAbrirActionPerformed(evt);
+            }
+        });
+        menuArquivo.add(menuItemAbrir);
+
+        menuItemSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemSalvar.setText("Salvar mundo");
+        menuItemSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSalvarActionPerformed(evt);
+            }
+        });
+        menuArquivo.add(menuItemSalvar);
+        menuArquivo.add(jSeparator1);
+
+        menuItemSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemSair.setText("Sair");
+        menuItemSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSairActionPerformed(evt);
+            }
+        });
+        menuArquivo.add(menuItemSair);
 
         barraDeMenus.add(menuArquivo);
 
         menuEditar.setText("Editar");
+
+        menuItemEditorDeItens.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemEditorDeItens.setText("Itens");
+        menuEditar.add(menuItemEditorDeItens);
+
+        menuItemAdicionarNPC.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemAdicionarNPC.setText("NPCs");
+        menuEditar.add(menuItemAdicionarNPC);
+
+        menuItemDescricaoAmbiente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemDescricaoAmbiente.setText("Editar descrição do ambiente");
+        menuEditar.add(menuItemDescricaoAmbiente);
+
         barraDeMenus.add(menuEditar);
 
         menuAjuda.setText("Ajuda");
+
+        menuItemAjuda.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        menuItemAjuda.setText("Sobre");
+        menuAjuda.add(menuItemAjuda);
+
         barraDeMenus.add(menuAjuda);
 
         setJMenuBar(barraDeMenus);
@@ -239,10 +438,269 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void labelImagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelImagemMouseClicked
+    private void criarNavegacao(int tipo, String nome, String icone) {
+        JLabel label = new JLabel(new ImageIcon(new ImageIcon(CAMINHO_DOS_ICONES + icone)
+                .getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+        JButton remover = new JButton(new ImageIcon(CAMINHO_DOS_ICONES+ "descartar.png")) {
+            @Override
+            public String toString() {
+                return getToolTipText(); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        remover.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                botaoRemoverActionPerformed(e);
+            }
+        });
+        JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.X_AXIS));
+        painel.add(label);
+        painel.add(Box.createRigidArea(new Dimension(150, 5)));
+        painel.add(remover);
+
+        if (tipo == ITEM) {
+            remover.setToolTipText("Remover item " + nome);
+        } else if (tipo == NPC) {
+            remover.setToolTipText("Remover npc " + nome);
+        }
         
+        painelItens.add(painel);
+    }
+    
+    private void botaoRemoverActionPerformed(ActionEvent evt) {
+        String comando = evt.getSource().toString();
+        String[] palavras = comando.split(" ");
+        if (palavras.length == 3) {
+            if (palavras[1].equals("item")) {
+                
+            } else if (palavras[1].equals("npc")) {
+                
+            }
+        }
+    }
+    
+    private void mudarImagem(String nomeDaImagem) {
+        labelImagem.setIcon(new ImageIcon(new ImageIcon(CAMINHO_DOS_BACKGROUNDS + nomeDaImagem)
+                .getImage().getScaledInstance(800, 400, Image.SCALE_SMOOTH)));
+    }
+    
+    private void colocarItens() {
+        painelItens.removeAll();
+        if (ambienteAtual != null) {
+            List<Item> itens = ambienteAtual.getItens();
+            for (Item item : itens) {
+                criarNavegacao(ITEM, item.getNome(), item.getIcone());
+            }
+        }
+        revalidate();
+        repaint();
+    }
+    
+    private void colocarNPCs() {
+        painelNPCs.removeAll();
+        if (ambienteAtual != null) {
+            List<NPC> npcs = ambienteAtual.getNPCs();
+            for (NPC npc : npcs) {
+                criarNavegacao(NPC, npc.getNome(), npc.getImagem());
+            }
+        }
+        revalidate();
+        repaint();
+    }
+    
+    private void ajustarSaidas() {
+        desativarSaidas();
+        if (ambienteAtual != null) {
+            Ambiente ambiente = ambienteAtual.getAmbiente("norte");
+            if (ambiente != null) {
+                botaoNorte.setBackground(Color.green);
+                botaoNorte.setToolTipText(ambiente.getDescricao());
+            }
+            ambiente = ambienteAtual.getAmbiente("sul");
+            if (ambiente != null) {
+                botaoSul.setBackground(Color.green);
+                botaoSul.setToolTipText(ambiente.getDescricao());
+            }
+            ambiente = ambienteAtual.getAmbiente("leste");
+            if (ambiente != null) {
+                botaoLeste.setBackground(Color.green);
+                botaoLeste.setToolTipText(ambiente.getDescricao());
+            }
+            ambiente = ambienteAtual.getAmbiente("oeste");
+            if (ambiente != null) {
+                botaoOeste.setBackground(Color.green);
+                botaoOeste.setToolTipText(ambiente.getDescricao());
+            }
+        }
+    }
+    
+    private void desativarSaidas() {
+        botaoNorte.setBackground(Color.orange);
+        botaoSul.setBackground(Color.orange);
+        botaoLeste.setBackground(Color.orange);
+        botaoOeste.setBackground(Color.orange);
+        String tipText = "Não há saída aqui! Clique aqui para adicionar uma!";
+        botaoNorte.setToolTipText(tipText);
+        botaoSul.setToolTipText(tipText);
+        botaoLeste.setToolTipText(tipText);
+        botaoOeste.setToolTipText(tipText);
+    }
+    
+    private void carregarAmbiente() {
+        mudarImagem(ambienteAtual.getImagem());
+        colocarItens();
+        colocarNPCs();
+        ajustarSaidas();
+    }
+    
+    private String getDirecaoOposta(String direcao) {
+        if (direcao.equals("norte")) {
+            return "sul";
+        }
+        if (direcao.equals("sul")) {
+            return "norte";
+        }
+        if (direcao.equals("leste")) {
+            return "oeste";
+        }
+        if (direcao.equals("oeste")) {
+            return "leste";
+        }
+        return "invalido";
+    }
+    
+    private void selecionarOuAdicionarAmbiente(String direcao) {
+        Ambiente ambiente = ambienteAtual.getAmbiente(direcao);
+        if (ambiente != null) {
+            ambienteAtual = ambiente;
+            carregarAmbiente();
+        } else {
+            String nome = JOptionPane.showInputDialog(this, "Qual o nome desse novo ambiente?", 
+                    "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
+            if (nome != null) {
+                ambienteAtual.ajustarSaida(direcao, new Ambiente(nome));
+                ambienteAtual.getAmbiente(direcao).ajustarSaida(getDirecaoOposta(direcao), ambienteAtual);
+                ambienteAtual = ambienteAtual.getAmbiente(direcao);
+                carregarAmbiente();
+            }
+        }
+    }
+    
+    private void labelImagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelImagemMouseClicked
+        String nomeDoBackground = DialogoNavegadoraDeRecursos.selecionarImagem(this);
+        if (nomeDoBackground != null) {
+            ambienteAtual.setImagem(nomeDoBackground);
+            mudarImagem(nomeDoBackground);
+        }
+        campoDeLog.append("Concluído!\n");
     }//GEN-LAST:event_labelImagemMouseClicked
 
+    private void botaoNorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNorteActionPerformed
+        selecionarOuAdicionarAmbiente("norte");
+    }//GEN-LAST:event_botaoNorteActionPerformed
+
+    private void menuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSairActionPerformed
+        requerirSaida(true);
+    }//GEN-LAST:event_menuItemSairActionPerformed
+
+    private void menuItemNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNovoActionPerformed
+        requerirSaida(false);
+    }//GEN-LAST:event_menuItemNovoActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        requerirSaida(true);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void labelImagemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelImagemMousePressed
+        campoDeLog.append("Aguarde, carregando imagens.......");
+    }//GEN-LAST:event_labelImagemMousePressed
+
+    private void menuItemSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarActionPerformed
+        salvar();
+    }//GEN-LAST:event_menuItemSalvarActionPerformed
+
+    private void menuItemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAbrirActionPerformed
+        requerirSaida(false);
+        Ambiente ambiente = DialogoSelecionarMapa.getMapa(this);
+        if (ambiente != null) {
+            ambienteAtual = ambiente;
+            carregarAmbiente();
+        }
+    }//GEN-LAST:event_menuItemAbrirActionPerformed
+
+    private void botaoSulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSulActionPerformed
+        selecionarOuAdicionarAmbiente("sul");
+    }//GEN-LAST:event_botaoSulActionPerformed
+
+    private void botaoLesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoLesteActionPerformed
+        selecionarOuAdicionarAmbiente("leste");
+    }//GEN-LAST:event_botaoLesteActionPerformed
+
+    private void botaoOesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoOesteActionPerformed
+        selecionarOuAdicionarAmbiente("oeste");
+    }//GEN-LAST:event_botaoOesteActionPerformed
+
+    private void sairDoMundo(boolean querFecharJanela) {
+        if (querFecharJanela) {
+            dispose();
+        } else {
+            criarNovoMundo();
+        }
+    }
+    
+    private void requerirSaida(boolean querFecharJanela) {
+        if (alterouAlgumaCoisa) {
+            int opcao = JOptionPane.showOptionDialog(this, "Você deseja salvar suas alterações?", "O Manicômio de Zulu", 
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[]{"Sim", "Não", "Cancelar"}, null);
+            switch (opcao) {
+                case JOptionPane.CANCEL_OPTION:
+                    break;
+                case JOptionPane.YES_OPTION:
+                    salvar();
+                default:
+                    sairDoMundo(querFecharJanela);
+            }
+        } else {
+            sairDoMundo(querFecharJanela);
+        }
+    }
+    
+    private void obterNomeDoMundo() {
+        do {
+            nomeDoMundo = JOptionPane.showInputDialog(this, "Qual o nome desse ambiente?", 
+                    "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
+        } while (nomeDoMundo == null);
+    }
+    
+    private void salvar() {
+        obterNomeDoMundo();
+        ObjectOutputStream oos = null;
+        try {
+            FileOutputStream fout = new FileOutputStream(new File(CAMINHO_DOS_MAPAS) + nomeDoMundo + ".dat");
+            oos = new ObjectOutputStream(fout);
+            oos.writeObject(ambienteAtual);
+            alterouAlgumaCoisa = false;
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado! Iniciando novos registros!", 
+                    "O Manicômio de Zulu", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Ocorreu algum problema com sua unidade de armazenamento!", 
+                    "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            if (oos != null) {
+                try {
+                    oos.close();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Ocorreu algum problema com sua unidade de armazenamento!", 
+                            "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(this, "Mundo salvo!", "O Manicômio de Zulu", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -286,20 +744,37 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     private javax.swing.JButton botaoNorte;
     private javax.swing.JButton botaoOeste;
     private javax.swing.JButton botaoSul;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextArea campoDeLog;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel labelImagem;
     private javax.swing.JMenu menuAjuda;
     private javax.swing.JMenu menuArquivo;
     private javax.swing.JMenu menuEditar;
+    private javax.swing.JMenuItem menuItemAbrir;
+    private javax.swing.JMenuItem menuItemAdicionarNPC;
+    private javax.swing.JMenuItem menuItemAjuda;
+    private javax.swing.JMenuItem menuItemDescricaoAmbiente;
+    private javax.swing.JMenuItem menuItemEditorDeItens;
+    private javax.swing.JMenuItem menuItemNovo;
+    private javax.swing.JMenuItem menuItemSair;
+    private javax.swing.JMenuItem menuItemSalvar;
     private javax.swing.JPanel painelAmbiente;
     private javax.swing.JPanel painelEditor;
     private javax.swing.JPanel painelImagem;
+    private javax.swing.JPanel painelInformacoesDoAmbiente;
+    private javax.swing.JPanel painelItens;
+    private javax.swing.JPanel painelItensENPCs;
+    private javax.swing.JPanel painelNPCs;
     // End of variables declaration//GEN-END:variables
 }

@@ -36,10 +36,31 @@ public class Ambiente implements Serializable{
      * Construtor da classe Ambiente.
      *
      * @param descricao do tipo String recebe uma descricao do ambiente.
+     * @param nomeDaImagem imagem do ambiente
      */
     public Ambiente(String descricao, String nomeDaImagem) {
+        this();
         this.descricao = descricao;
         this.nomeDaImagem = nomeDaImagem;
+    }
+    
+    /**
+     * Construtor da classe Ambiente.
+     *
+     * @param descricao do tipo String recebe uma descricao do ambiente.
+     */
+    public Ambiente(String descricao) {
+        this();
+        this.descricao = descricao;
+    }
+    
+    /**
+     * Construtor da classe Ambiente.
+     *
+     */
+    public Ambiente() {
+        this.descricao = "";
+        this.nomeDaImagem = "vazio.png";
         saidas = new HashMap<>();
         itens = new ArrayList<>();
         npcs = new ArrayList<>();
@@ -77,6 +98,17 @@ public class Ambiente implements Serializable{
      */
     public String getImagem() {
         return this.nomeDaImagem;
+    }
+    
+    /**
+     * Metodo setImagem.
+     *
+     * configura uma nova imagem para o ambiente
+     *
+     * @param imagem String com o nome da Imagem do ambiente.
+     */
+    public void setImagem(String imagem) {
+        nomeDaImagem = imagem;
     }
 
     /**

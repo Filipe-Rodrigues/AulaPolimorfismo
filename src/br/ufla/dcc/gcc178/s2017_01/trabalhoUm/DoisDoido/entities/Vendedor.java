@@ -33,7 +33,7 @@ public class Vendedor extends NPC {
         umEfeito = new ArrayList<>();
         hp = new AlteracaoDeHP("Subtrair HP", "Retira 15 pontos de HP", -15);
         umEfeito.add(hp);
-        Item picareta = new Item("Picareta", "Um belo exemplar de picareta, pode ser usado como arma.", umEfeito, false, true);
+        Item picareta = new Item("Picareta", "Um belo exemplar de picareta, pode ser usado como arma.", "Picareta.png", umEfeito, false, true);
         super.coletarItem(picareta);
 	}
         

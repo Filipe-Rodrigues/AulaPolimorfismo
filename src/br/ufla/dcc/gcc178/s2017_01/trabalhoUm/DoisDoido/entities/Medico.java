@@ -33,7 +33,7 @@ public class Medico extends NPC {
         umEfeito = new ArrayList<>();
         Efeito cura = new AlteracaoDeSanidade("Recuperar Sanidade", "Restaura 15 de Sanidade", 15);
         umEfeito.add(cura);
-        Item complementoPsicotropico = new Item("Largactil", "Um medicamento para crises de psicose. Só se consegue com o Médico.", umEfeito, true, true);
+        Item complementoPsicotropico = new Item("Largactil", "Um medicamento para crises de psicose. Só se consegue com o Médico.", "Pilula.png", umEfeito, true, true);
         super.coletarItem(complementoPsicotropico);
     }
     
