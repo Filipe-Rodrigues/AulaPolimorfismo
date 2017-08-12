@@ -21,7 +21,7 @@ public class Vendedor extends NPC {
         *
         * @param nome uma String com o nome do medico a ser criado.
         */
-        public Vendedor(String nome) {
+    public Vendedor(String nome) {
 		super(nome, 25, 1, null, new ArrayList<>(), true, false);
 		Efeito hp = new AlteracaoDeHP("Subtrair HP", "Retira 10 pontos de HP", -10);
         ArrayList<Efeito> umEfeito = new ArrayList<>();
@@ -35,7 +35,8 @@ public class Vendedor extends NPC {
         umEfeito.add(hp);
         Item picareta = new Item("Picareta", "Um belo exemplar de picareta, pode ser usado como arma.", "Picareta.png", umEfeito, false, true);
         super.coletarItem(picareta);
-	}
+        setImagem("Vendedor.png");
+    }
         
          /**
          * Metodo entregarItemDeQuest.
