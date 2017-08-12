@@ -7,12 +7,18 @@ package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.AlteracaoDeHP;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.AlteracaoDeSanidade;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Cachorro;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Chilofompila;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Efeito;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.EsvaziamentoDeInventario;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Farmaceuta;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Medico;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
+import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Vendedor;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TipoDeRecurso.BACKGROUND;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TipoDeRecurso.ITEM;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TipoDeRecurso.NPC;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ICONES;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ITENS;
@@ -60,7 +66,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private List<Efeito> efeitosAtual;
     private List<Item> itens;
     private Item itemSelecionado;
-    private NPC npcSelecionado;
+    private NPC npcSelecionado, auxNPC;
     private int modo;
     
     /**
@@ -106,12 +112,26 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         for (int i = 0; i < 5; i++) {
             painelDeAbas.setEnabledAt(i, false);
         }
-        painelDeAbas.setEnabledAt(modo, true);
-        if (modo == 2) {
-            painelDeAbas.setEnabledAt(1, true);
-            painelDeAbas.setEnabledAt(3, true);
+        switch(modo) {
+            case 0:
+                painelDeAbas.setEnabledAt(0, true);
+                painelDeAbas.setSelectedIndex(0);
+                break;
+            case 1:
+                painelDeAbas.setEnabledAt(1, true);
+                painelDeAbas.setSelectedIndex(1);
+                break;
+            case 2:
+                painelDeAbas.setEnabledAt(1, true);
+                painelDeAbas.setEnabledAt(2, true);
+                painelDeAbas.setEnabledAt(3, true);
+                painelDeAbas.setSelectedIndex(3);
+                break;
+            case 3:
+                painelDeAbas.setEnabledAt(4, true);
+                painelDeAbas.setSelectedIndex(4);
+                break;
         }
-        painelDeAbas.setSelectedIndex(modo);
     }
     
     /**
@@ -122,6 +142,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         seletorDeArquivo = new javax.swing.JFileChooser();
         jSeparator1 = new javax.swing.JSeparator();
@@ -180,6 +201,13 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
         labelConsumivel = new javax.swing.JLabel();
         painelNPCs = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        botaoFarmaceuta = new javax.swing.JButton();
+        botaoMedico = new javax.swing.JButton();
+        botaoChilofompila = new javax.swing.JButton();
+        botaoVelho = new javax.swing.JButton();
+        botaoCachorro = new javax.swing.JButton();
+        labelNPCselecionado = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         botaoOk = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
@@ -600,7 +628,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(adicionarOuAlterarEfeito)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         botaoRegistrarItem.setText("Registrar item");
@@ -760,15 +788,113 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
 
         painelDeAbas.addTab("Itens", painelExibirItens);
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Selecionar NPC"));
+        java.awt.GridBagLayout jPanel4Layout = new java.awt.GridBagLayout();
+        jPanel4Layout.columnWidths = new int[] {0, 20, 0, 20, 0};
+        jPanel4Layout.rowHeights = new int[] {0, 80, 0, 80, 0};
+        jPanel4.setLayout(jPanel4Layout);
+
+        botaoFarmaceuta.setFocusable(false);
+        botaoFarmaceuta.setMaximumSize(new java.awt.Dimension(100, 100));
+        botaoFarmaceuta.setMinimumSize(new java.awt.Dimension(100, 100));
+        botaoFarmaceuta.setPreferredSize(new java.awt.Dimension(100, 100));
+        botaoFarmaceuta.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Filipe.png"));
+        botaoFarmaceuta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoFarmaceutaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel4.add(botaoFarmaceuta, gridBagConstraints);
+
+        botaoMedico.setFocusable(false);
+        botaoMedico.setMaximumSize(new java.awt.Dimension(100, 100));
+        botaoMedico.setMinimumSize(new java.awt.Dimension(100, 100));
+        botaoMedico.setPreferredSize(new java.awt.Dimension(100, 100));
+        botaoMedico.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Raydson.png"));
+        botaoMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoMedicoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel4.add(botaoMedico, gridBagConstraints);
+
+        botaoChilofompila.setFocusable(false);
+        botaoChilofompila.setMaximumSize(new java.awt.Dimension(100, 100));
+        botaoChilofompila.setMinimumSize(new java.awt.Dimension(100, 100));
+        botaoChilofompila.setPreferredSize(new java.awt.Dimension(100, 100));
+        botaoChilofompila.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Chilofompila.png"));
+        botaoChilofompila.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoChilofompilaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel4.add(botaoChilofompila, gridBagConstraints);
+
+        botaoVelho.setFocusable(false);
+        botaoVelho.setMaximumSize(new java.awt.Dimension(100, 100));
+        botaoVelho.setMinimumSize(new java.awt.Dimension(100, 100));
+        botaoVelho.setPreferredSize(new java.awt.Dimension(100, 100));
+        botaoCachorro.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Velho.png"));
+        botaoVelho.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoVelhoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel4.add(botaoVelho, gridBagConstraints);
+
+        botaoCachorro.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Cachorro.png"));
+        botaoCachorro.setFocusable(false);
+        botaoCachorro.setMaximumSize(new java.awt.Dimension(100, 100));
+        botaoCachorro.setMinimumSize(new java.awt.Dimension(100, 100));
+        botaoCachorro.setPreferredSize(new java.awt.Dimension(100, 100));
+        botaoCachorro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCachorroActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel4.add(botaoCachorro, gridBagConstraints);
+
+        labelNPCselecionado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
         javax.swing.GroupLayout painelNPCsLayout = new javax.swing.GroupLayout(painelNPCs);
         painelNPCs.setLayout(painelNPCsLayout);
         painelNPCsLayout.setHorizontalGroup(
             painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addGroup(painelNPCsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+                    .addComponent(labelNPCselecionado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         painelNPCsLayout.setVerticalGroup(
             painelNPCsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 582, Short.MAX_VALUE)
+            .addGroup(painelNPCsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelNPCselecionado, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         painelDeAbas.addTab("NPCs", painelNPCs);
@@ -821,7 +947,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(painelDeAbas)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1125,6 +1251,13 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 itemSelecionado = getItem(ultimaLabelSelecionada.getToolTipText());
             }
             this.dispose();
+        } else if (modo == 3) {
+            if (auxNPC != null) {
+                npcSelecionado = auxNPC;
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this.getParent(), "Nenhum NPC foi selecionado!", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this.getParent(), "Nenhuma imagem foi selecionada!", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
@@ -1259,12 +1392,67 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
     }//GEN-LAST:event_campoQuantidadeEfeitoKeyPressed
 
+    private String getNomeDoAtor(String parteDaMensagem) {
+        return JOptionPane.showInputDialog(this, "Qual é o nome " + parteDaMensagem + "?",
+                "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
+    }
+    
+    private void imprimirAtorEscolhido(String tipoDeAtor, String nome) {
+        labelNPCselecionado.setText(tipoDeAtor + " conhecido como " + nome 
+                    + " gerado com sucesso! Clique OK para continuar...");
+    }
+    
+    private void botaoFarmaceutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoFarmaceutaActionPerformed
+        String nome = getNomeDoAtor("do seu Farmaceuta");
+        if (nome != null) {
+            nome = nome.split(" ")[0];
+            auxNPC = new Farmaceuta(nome);
+            imprimirAtorEscolhido("Farmaceuta", nome);
+        }
+    }//GEN-LAST:event_botaoFarmaceutaActionPerformed
+
+    private void botaoMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoMedicoActionPerformed
+        String nome = getNomeDoAtor("do seu Médico");
+        if (nome != null) {
+            nome = nome.split(" ")[0];
+            auxNPC = new Medico(nome);
+            imprimirAtorEscolhido("Médico", nome);
+        }
+    }//GEN-LAST:event_botaoMedicoActionPerformed
+
+    private void botaoCachorroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCachorroActionPerformed
+        String nome = getNomeDoAtor("do seu Cachorro");
+        if (nome != null) {
+            nome = nome.split(" ")[0];
+            auxNPC = new Cachorro(nome);
+            imprimirAtorEscolhido("Cachorro", nome);
+        }
+    }//GEN-LAST:event_botaoCachorroActionPerformed
+
+    private void botaoChilofompilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoChilofompilaActionPerformed
+        auxNPC = new Chilofompila();
+        imprimirAtorEscolhido("Chilofompila", "Chilofompila (óbvio)");
+    }//GEN-LAST:event_botaoChilofompilaActionPerformed
+
+    private void botaoVelhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoVelhoActionPerformed
+        String nome = getNomeDoAtor("do seu Vendedor");
+        if (nome != null) {
+            nome = nome.split(" ")[0];
+            auxNPC = new Vendedor(nome);
+            imprimirAtorEscolhido("Vendedor", nome);
+        }
+    }//GEN-LAST:event_botaoVelhoActionPerformed
+
     public String getImagemSelecionada() {
         return arquivoSelecionado;
     }
     
     public Item getItemSelecionado() {
         return itemSelecionado;
+    }
+    
+    public NPC getNPCselecionado() {
+        return npcSelecionado;
     }
     
     public static String selecionarImagem(Frame componentePai) {
@@ -1277,6 +1465,12 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, ITEM);
         navegadora.setVisible(true);
         return navegadora.getItemSelecionado();
+    }
+    
+    public static NPC selecionarNPC(Frame componentePai) {
+        DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, NPC);
+        navegadora.setVisible(true);
+        return navegadora.getNPCselecionado();
     }
     
     @SuppressWarnings("unchecked")
@@ -1341,10 +1535,15 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private javax.swing.JButton botaoAdicionarIcone;
     private javax.swing.JButton botaoArquivoBackground;
     private javax.swing.JButton botaoArquivoIcone;
+    private javax.swing.JButton botaoCachorro;
     private javax.swing.JButton botaoCancelar;
+    private javax.swing.JButton botaoChilofompila;
+    private javax.swing.JButton botaoFarmaceuta;
+    private javax.swing.JButton botaoMedico;
     private javax.swing.JButton botaoOk;
     private javax.swing.JButton botaoRegistrarItem;
     private javax.swing.JButton botaoSelecionarIcone;
+    private javax.swing.JButton botaoVelho;
     private javax.swing.JTextField campoDescricaoEfeito;
     private javax.swing.JTextField campoDescricaoItem;
     private javax.swing.JTextField campoImagemBackgorund;
@@ -1369,6 +1568,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -1382,6 +1582,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     private javax.swing.JLabel labelDescricaoItem;
     private javax.swing.JLabel labelEfeitosItem;
     private javax.swing.JLabel labelIconeItem;
+    private javax.swing.JLabel labelNPCselecionado;
     private javax.swing.JLabel labelNomeItem;
     private javax.swing.JLabel labelQuantidade;
     private javax.swing.JPanel painelBackgorunds;

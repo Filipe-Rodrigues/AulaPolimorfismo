@@ -310,6 +310,14 @@ public class Ambiente implements Serializable{
     public void matarNPC (NPC alvo) {
         npcs.remove(alvo);
     }
+    
+    public void removerNPC (String alvo) {
+        for (NPC npc : npcs) {
+            if (npc.getNome().equals(alvo)) {
+                npcs.remove(npc);
+            }
+        }
+    }
 
     /**
      * Metodo afetarAtor.

@@ -409,6 +409,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
 
         menuItemAdicionarNPC.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         menuItemAdicionarNPC.setText("NPCs");
+        menuItemAdicionarNPC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemAdicionarNPCActionPerformed(evt);
+            }
+        });
         menuEditar.add(menuItemAdicionarNPC);
 
         menuItemDescricaoAmbiente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
@@ -445,6 +450,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
                 botaoRemoverActionPerformed(e);
             }
         });
+        remover.setFocusable(false);
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.X_AXIS));
         painel.add(label);
@@ -465,9 +471,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         String[] palavras = comando.split(" ");
         if (palavras.length == 3) {
             if (palavras[1].equals("item")) {
-                
+                ambienteAtual.recolherItem(palavras[2]);
             } else if (palavras[1].equals("npc")) {
-                
+                ambienteAtual.removerNPC(palavras[2]);
             }
         }
     }
@@ -639,11 +645,24 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         adicionarItemNoAmbiente();
     }//GEN-LAST:event_menuItemEditorDeItensActionPerformed
 
+    private void menuItemAdicionarNPCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAdicionarNPCActionPerformed
+        adicionarNPCNoAmbiente();
+    }//GEN-LAST:event_menuItemAdicionarNPCActionPerformed
+
     private void adicionarItemNoAmbiente() {
         campoDeLog.append("Aguarde, carregando Itens.......");
         Item itemNovo = DialogoNavegadoraDeRecursos.selecionarItem(this);
         if (itemNovo != null) {
             ambienteAtual.colocarItem(itemNovo);
+            carregarAmbiente();
+        }
+    }
+    
+    private void adicionarNPCNoAmbiente() {
+        campoDeLog.append("Aguarde, carregando NPCs.......");
+        NPC npcNovo = DialogoNavegadoraDeRecursos.selecionarNPC(this);
+        if (npcNovo != null) {
+            ambienteAtual.colocarNPC(npcNovo);
             carregarAmbiente();
         }
     }

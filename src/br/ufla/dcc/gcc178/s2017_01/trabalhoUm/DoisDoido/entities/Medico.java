@@ -35,6 +35,7 @@ public class Medico extends NPC {
         umEfeito.add(cura);
         Item complementoPsicotropico = new Item("Largactil", "Um medicamento para crises de psicose. Só se consegue com o Médico.", "Pilula.png", umEfeito, true, true);
         super.coletarItem(complementoPsicotropico);
+        super.setImagem("Medico.png");
     }
     
     /**

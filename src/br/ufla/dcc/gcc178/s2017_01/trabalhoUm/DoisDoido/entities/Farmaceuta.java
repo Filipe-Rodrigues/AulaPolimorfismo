@@ -39,6 +39,7 @@ public class Farmaceuta extends NPC {
         Item complementoPsicotropico = new Item("Clonazepam", "Um medicamento para ansiedade.", "Pilula.png", umEfeito, true, true);
         super.coletarItem(complementoPsicotropico);
         umEfeito = new ArrayList<>();
+        setImagem("Farma.png");
     }
     
     /**
