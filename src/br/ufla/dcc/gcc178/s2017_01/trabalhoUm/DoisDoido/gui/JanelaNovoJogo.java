@@ -47,6 +47,9 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
     
+    /**
+     * Metodo responsavel pela inicialização dos atributos
+     */
     private void initAtributos() {
         carregarDadosSalvos();
     }
@@ -260,6 +263,10 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo responsavel pelas ações do botão Novo Usuario
+     * @param evt espera um ActionEvent
+     */
     private void botaoNovoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoUsuarioActionPerformed
         String novoUsuario = JOptionPane.showInputDialog(this, "Qual é o seu nome?");
         if (novoUsuario != null) {
@@ -282,6 +289,9 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botaoNovoUsuarioActionPerformed
 
+    /**
+     * Metodo responsavel por procurar um usuario na lista de usuarios
+     */
     private void procurarUsuario() {
         for (Usuario usuario : usuarios) {
             if (listaUsuarios.getSelectedValue().equalsIgnoreCase(usuario.getNome())) {
@@ -290,17 +300,27 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por adicionar usuarios na lista
+     * @param nomeUsuario String contendo o nome do usario que será adicionado
+     */
     private void adicionarUsuarioNaLista(String nomeUsuario) {
         DefaultListModel<String> listModel = (DefaultListModel<String>) listaUsuarios.getModel();
         listModel.addElement(nomeUsuario);
     }
     
+    /**
+     * Metodo responsavel pelo preenchimento da lista
+     */
     private void preencherLista() {
         for (Usuario usuario : usuarios) {
             adicionarUsuarioNaLista(usuario.getNome());
         }
     }
     
+    /**
+     * Metodo responsavel por checar a seleção de lista
+     */
     private void checarSelecaoDaLista() {
         if (listaUsuarios.getSelectedIndex() == -1) {
             botaoEntrar.setEnabled(false);
@@ -309,6 +329,10 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel pelo evento do mouse sobre a lista de usuarios
+     * @param evt epera um MouseEvent
+     */
     private void listaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaUsuariosMouseClicked
         if (evt.getClickCount() == 2 && !evt.isConsumed()) {
             if (listaUsuarios.getSelectedValue() != null) {
@@ -317,10 +341,18 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_listaUsuariosMouseClicked
 
+    /**
+     * Metodo responsavel pelas ações do botão entrar
+     * @param evt espera um ActionEvent
+     */
     private void botaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEntrarActionPerformed
         procurarUsuario();
     }//GEN-LAST:event_botaoEntrarActionPerformed
 
+    /**
+     * Metodo responsavel pelo fechamento da janela
+     * @param evt espera um WindowEvent
+     */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         JOptionPane.showMessageDialog(null, "Seus dados serão salvos!", "O Manicômio de Zulu", JOptionPane.INFORMATION_MESSAGE);
         salvarTudo();
@@ -339,6 +371,9 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         informacoesDoUsuario.setVisible(true);
     }
     
+    /**
+     * Metodo responsavel por desenhar a tabela
+     */
     private void redesenharTabela() {
         DefaultTableModel model = (DefaultTableModel) tabelaRanking.getModel();
         model.getDataVector().removeAllElements();
@@ -349,6 +384,9 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por atualizar o ranking
+     */
     public void atualizarRanking() {
         ranking.clear();
         for (Usuario usuario : usuarios) {
@@ -360,6 +398,9 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         redesenharTabela();
     }
     
+    /**
+     * Metodo responsavel por salvar tudo
+     */
     public void salvarTudo() {
         ObjectOutputStream oos = null;
         try {

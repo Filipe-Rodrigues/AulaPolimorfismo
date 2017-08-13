@@ -137,9 +137,7 @@ public class EstadoDeJogo implements Serializable{
      * Retorna o estado do protagonista.\n
      * Esse método é utilizado para fins de controle na tabela de exibição de jogos.
      * 
-     * @return @link{Resultado.SUCESSO}, se o protagonista teve sorte,\n 
-     * @link{Resultado.ATOR_ENLOUQUECIDO}, se o protagonista resolveu tacar pedra na lua, e\n
-     * @link{Resultado.ATOR_ASSASSINADO}, se o protagonista foi encontrar seu criador.
+     * @return Resultado do estado do protagonista
      */
     public Resultado getEstadoDoProtagonista() {
         return estadoDoProtagonista;

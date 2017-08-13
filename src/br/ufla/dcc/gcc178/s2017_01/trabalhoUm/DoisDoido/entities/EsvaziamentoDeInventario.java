@@ -26,11 +26,20 @@ public class EsvaziamentoDeInventario extends Efeito {
         super(nome, descricao, 0);
     }
 
+    /**
+     * Metodo responsavel por aplicar a limpesa de inventario
+     * @param alvo ator no qual deseja-se aplicar a limpesa
+     * @return Resultado SUCESSO caso inventario seja limpo 
+     */
     @Override
     public Resultado aplicar(Ator alvo) {
         return alvo.limparInventario();
     }
     
+    /**
+     * sobrescrita do metodo toString
+     * @return String contendo a descrição esvaziamento do inventario
+     */
     @Override
     public String toString() {
         return "Esvazia inventário";

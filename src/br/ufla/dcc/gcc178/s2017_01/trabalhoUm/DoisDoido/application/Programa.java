@@ -8,8 +8,8 @@ import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.TelaInicialDoGame;
  * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
  * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.
  *
- * Representa os os ambientes do jogo, com todos os itens da classe {@link Item),
- * e com os NPC derivados da classe {@link NPC}.
+ * Representa os os ambientes do jogo, com todos os itens da classe Item,
+ * e com os NPC derivados da classe NPC.
  *
  * @author  Filipe Barros Rodrigues
  * @version 2017.21.07

@@ -66,6 +66,10 @@ public class Cachorro extends NPC {
         return null;
     }
 
+    /**
+     * Metodo responsavel por retornar o tamanho e/ou quantidade maxima de HP
+     * @return o valor Maximo do HP
+     */
     @Override
     public int getHPMaximo() {
         return 10;

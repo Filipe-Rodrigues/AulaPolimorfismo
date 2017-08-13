@@ -130,7 +130,7 @@ public class DialogoNovoGamerID extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -166,14 +166,14 @@ public class DialogoNovoGamerID extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -182,22 +182,38 @@ public class DialogoNovoGamerID extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo responsavel pela ação do JButton 1
+     * @param evt espera um ActionEvent
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Metodo responsavel por tratar o evento do teclado no box
+     * @param evt espera um KeyEvent
+     */
     private void boxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boxKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             jButton1.requestFocus();
         }
     }//GEN-LAST:event_boxKeyPressed
 
+    /**
+     * Metodo responsavel pelas ações do teclado com relação ao jButton1
+     * @param evt espera um KeyEvent
+     */
     private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             dispose();
         }
     }//GEN-LAST:event_jButton1KeyPressed
 
+    /**
+     * Metodo responsavel por pegar um GamerId
+     * @return String contendo o gamer id
+     */
     public String getGamerId() {
         this.setVisible(true);
         String response = (String) box1.getSelectedItem() + 

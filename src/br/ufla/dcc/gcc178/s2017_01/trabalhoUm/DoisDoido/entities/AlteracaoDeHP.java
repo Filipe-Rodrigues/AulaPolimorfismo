@@ -47,6 +47,10 @@ public class AlteracaoDeHP extends Efeito {
         return alvo.afetarAtributo(HP, getQuantidade());
     }
     
+    /**
+     * Sobrescrita do toString
+     * @return quantidade HP em pts
+     */
     @Override
     public String toString() {
         return "Altera HP: " + getQuantidade() + "pts";

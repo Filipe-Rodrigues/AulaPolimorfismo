@@ -81,6 +81,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         initAtributos(modo);
     }
     
+    /**
+     * Metodo responsavel por inicializar os atributos
+     * @param modo TipoDeRecurso
+     */
     private void initAtributos(TipoDeRecurso modo) {
         ultimaLabelSelecionada = null;
         arquivoSelecionado = null;
@@ -108,6 +112,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         habilitarAbas();
     }
     
+    /**
+     * Metodo responsavel por habilitar as abas
+     */
     private void habilitarAbas() {
         for (int i = 0; i < 5; i++) {
             painelDeAbas.setEnabledAt(i, false);
@@ -965,6 +972,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo responsavel pelos efeitos das linhas selecionadas da tabela 
+     * @param evt espera um ListSelectionEvent
+     */
     private void tabelaEfeitosLinhaSelecionada(ListSelectionEvent evt) {
         int linha = tabelaEfeitos.getSelectedRow();
         if (linha != -1) {
@@ -990,7 +1001,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     }
     
     
-    
+    /**
+     * Metodo responsavel por preencher a tabela
+     */
     private void preencherTabela() {
         DefaultTableModel model = (DefaultTableModel) tabelaEfeitos.getModel();
         model.getDataVector().removeAllElements();
@@ -1004,6 +1017,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel por checar as informações de itens
+     * @return true caso as informações sejam coesas e falso caso ao contrario
+     */
     private boolean checarInformacoesItem() {
         return (campoNomeItem.getText() != null) &&
                (campoNomeItem.getText().split(" ").length == 1)
@@ -1011,6 +1028,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                && (labelIconeItem.getIcon() != null);
     }
     
+    /**
+     * Metodo responsavel por checar os efeitos
+     * @return true caso as informações sejam coesas e false caso ao contrario
+     */
     private boolean checarEfeitos() {
         return temPreenchimento(campoNomeEfeito)
                && temPreenchimento(campoDescricaoEfeito)
@@ -1019,11 +1040,21 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                  && ehNumeroInteiro(campoQuantidadeEfeito.getText())));
     }
     
+    /**
+     * Metodo responsavel por verificar se tem um preenchimento
+     * @param campo espera um JTextField
+     * @return true caso tenha um preenchimento e false caso ao contrio
+     */
     private boolean temPreenchimento(JTextField campo) {
         return campo.getText() != null && 
               !campo.getText().trim().equals("");
     }
     
+    /**
+     * Metodo responsavel por verificar se é um número inteiro
+     * @param s Espera uma String 
+     * @return true caso seja e false caso ao contrario
+     */
     public static boolean ehNumeroInteiro(String s) {
     try { 
         Integer.parseInt(s); 
@@ -1034,7 +1065,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
     }
     return true;
 }
-    
+    /**
+     * Metodo responsavel por preencher a Galeria
+     */
     private void preencherGaleria() {
         if (modo <= 2) {
             File folder;
@@ -1055,6 +1088,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel pelo preenchimento de itens
+     */
     private void preencherItens() {
         painelItensRegistrados.removeAll();
         if (modo == 2) {
@@ -1065,6 +1101,12 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel pela inserção de miniaturas
+     * @param caminhoDoArquivo Espera uma string contendo o caminho do arquivo
+     * @param painel Espera um JPanel para inserção das miniaturas
+     * @param tipText espera uma String com o tipo do texto
+     */
     private void inserirMiniatura(String caminhoDoArquivo, JPanel painel, String tipText) {
         ImageIcon icon;
         if (modo == 0) {
@@ -1102,6 +1144,11 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         repaint();
     }
     
+    /**
+     * Metodo responsavel por copiar os arquivos para o diretorio
+     * @param origem String com a origem do arquivo
+     * @param destino String contendo o destino da imagem
+     */
     private void copiarArquivoParaDiretorio(String origem, String destino) {
         File source = new File(origem);
         File dest = new File(destino + "/" + source.getName());
@@ -1130,6 +1177,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         
     }
     
+    /**
+     * metodo responsavel por desmacar a ultima label
+     */
     private void desmarcarUltimaLabel() {
         if (ultimaLabelSelecionada != null) {
             ultimaLabelSelecionada.setBorder(null);
@@ -1138,6 +1188,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsvel por adicionar um evento ao botão Adicionar
+     * @param evt Espera um ActionEvent
+     */
     private void botaoAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarActionPerformed
         copiarArquivoParaDiretorio(campoImagemBackgorund.getText(), CAMINHO_DOS_BACKGROUNDS);
         File arquivo = new File(campoImagemBackgorund.getText());
@@ -1146,6 +1200,11 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         botaoAdicionar.setEnabled(false);
     }//GEN-LAST:event_botaoAdicionarActionPerformed
 
+    /**
+     * Metodo responsavel por porcurar um arquivo no computador
+     * @param botao espera um JBtton botão a ser criado
+     * @param campo espera um JTextField
+     */
     private void procurarArquivoNoComputador(JButton botao, JTextField campo) {
         int returnVal = seletorDeArquivo.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -1157,6 +1216,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsvel por tratar o evento do mouse na lable imagem
+     * @param evt espera um MouseEvent
+     */
     public void labelImagemMouseClicked(MouseEvent evt) {
         if (ultimaLabelSelecionada != null) {
             ultimaLabelSelecionada.setBorder(null);
@@ -1188,6 +1251,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         } 
     }
     
+    /**
+     * metodo responsavel por limpar as labels
+     */
     private void limparLabels() {
         labelNomeItem.setText("-");
         labelDescricaoItem.setText("-");
@@ -1196,6 +1262,11 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         labelConsumivel.setText("-");
     }
     
+    /**
+     * Metodo responsavel por conferir o Nome
+     * @param nome String contendo o nome
+     * @return true seja compativel e false caso ao contrario
+     */
     private boolean conferirNome(String nome) {
         for (Item iten : itens) {
             if (iten.getNome().equals(nome)) {
@@ -1205,6 +1276,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         return true;
     }
     
+    /**
+     * Metodo responsavel por reiniciar os Campos de efeito
+     */
     private void reiniciarCamposDeEfeito() {
         campoNomeEfeito.setText("");
         campoDescricaoEfeito.setText("");
@@ -1212,6 +1286,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         comboTipoDeEfeito.setSelectedIndex(0);
     }
     
+    /**
+     * Metodo responavel por reiniciar os campos
+     */
     private void reiniciarCampos() {
         campoNomeItem.setText("");
         campoDescricaoItem.setText("");
@@ -1226,6 +1303,11 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         preencherTabela();
     }
     
+    /**
+     * Metodo responsavel por pegar e retornar um item
+     * @param nome String contendo o nome do item
+     * @return Item procurado pelo nome
+     */
     private Item getItem(String nome) {
         for (Item iten : itens) {
             if (iten.getNome().equals(nome)) {
@@ -1235,14 +1317,26 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         return null;
     }
     
+    /**
+     * Metodo responsavel pelas ações do botão Arquivo Background 
+     * @param evt espera um ActionEvent
+     */
     private void botaoArquivoBackgroundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoArquivoBackgroundActionPerformed
         procurarArquivoNoComputador(botaoAdicionar, campoImagemBackgorund);
     }//GEN-LAST:event_botaoArquivoBackgroundActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do campo de imagem do Background com relação ao mouse
+     * @param evt espera um MouseEvent
+     */
     private void campoImagemBackgorundMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoImagemBackgorundMouseClicked
         procurarArquivoNoComputador(botaoAdicionar, campoImagemBackgorund);
     }//GEN-LAST:event_campoImagemBackgorundMouseClicked
 
+    /**
+     * Metodo responsavel pelas ações do botão ok
+     * @param evt espera um ActionEvent
+     */
     private void botaoOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoOkActionPerformed
         if (ultimaLabelSelecionada != null) {
             if (modo == 0 || modo == 1) {
@@ -1263,22 +1357,42 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botaoOkActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão cancelar
+     * @param evt espera um ActionEvent
+     */
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_botaoCancelarActionPerformed
 
+    /**
+     * Metodo responsavel pelo evento do mouse com relação ao painel Backgorunds 
+     * @param evt espera um MouseEvent
+     */
     private void painelBackgorundsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelBackgorundsMouseClicked
         desmarcarUltimaLabel();
     }//GEN-LAST:event_painelBackgorundsMouseClicked
 
+    /**
+     * Metodo responsavel pelas ações do botão Arquivo de Icone
+     * @param evt espera um ActionEvent 
+     */
     private void botaoArquivoIconeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoArquivoIconeActionPerformed
         procurarArquivoNoComputador(botaoAdicionarIcone, campoImagemIcone);
     }//GEN-LAST:event_botaoArquivoIconeActionPerformed
 
+    /**
+     * Metodo responsavel pelo campo Imagem de Icone 
+     * @param evt espera um MouseEvent
+     */
     private void campoImagemIconeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoImagemIconeMouseClicked
         procurarArquivoNoComputador(botaoAdicionarIcone, campoImagemIcone);
     }//GEN-LAST:event_campoImagemIconeMouseClicked
 
+    /**
+     * Metodo responsavel pelas ações do botão Adicionar Icone
+     * @param evt espera um ActionEvent
+     */
     private void botaoAdicionarIconeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarIconeActionPerformed
         copiarArquivoParaDiretorio(campoImagemIcone.getText(), CAMINHO_DOS_ICONES);
         File arquivo = new File(campoImagemIcone.getText());
@@ -1287,14 +1401,26 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         botaoAdicionarIcone.setEnabled(false);
     }//GEN-LAST:event_botaoAdicionarIconeActionPerformed
 
+    /**
+     * Metodo responsavel pelos eventos do mouse no painel Icones
+     * @param evt MouseEvent
+     */
     private void painelIconesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelIconesMouseClicked
         desmarcarUltimaLabel();
     }//GEN-LAST:event_painelIconesMouseClicked
 
+    /**
+     * Metodo responsavel pelas ações do mouse sobre a label Icone Item 
+     * @param evt espera um MouseEvent
+     */
     private void labelIconeItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIconeItemMouseClicked
         painelDeAbas.setSelectedIndex(1);
     }//GEN-LAST:event_labelIconeItemMouseClicked
 
+    /**
+     * Metodo responsavel pelas ações do botão Selecionar Icone
+     * @param evt espera um ActionEvent
+     */
     private void botaoSelecionarIconeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSelecionarIconeActionPerformed
         labelIconeItem.setIcon(new ImageIcon(new ImageIcon(CAMINHO_DOS_ICONES + 
                 ultimaLabelSelecionada.getToolTipText()).getImage()
@@ -1304,16 +1430,28 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         painelDeAbas.setSelectedIndex(2);
     }//GEN-LAST:event_botaoSelecionarIconeActionPerformed
 
+    /**
+     * Metodo responsavel pelos eventos do mouse sobre a label Icon Item
+     * @param evt espera um MouseEvent
+     */
     private void labelIconeItemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIconeItemMouseEntered
         labelIconeItem.setBorder(null);
         labelIconeItem.setBorder(new LineBorder(Color.red));
     }//GEN-LAST:event_labelIconeItemMouseEntered
 
+    /**
+     * Metodo responsavel pelas ações do mouse sobre a label icone item 
+     * @param evt MouseEvent
+     */
     private void labelIconeItemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIconeItemMouseExited
         labelIconeItem.setBorder(null);
         labelIconeItem.setBorder(new LineBorder(Color.black));
     }//GEN-LAST:event_labelIconeItemMouseExited
 
+    /**
+     * Metodo responsavel por adiconar ou alterar um efeito
+     * @param evt espera uma ActionEvent
+     */
     private void adicionarOuAlterarEfeitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarOuAlterarEfeitoActionPerformed
         Efeito efeito;
         switch (comboTipoDeEfeito.getSelectedIndex()) {
@@ -1341,6 +1479,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         preencherTabela();
     }//GEN-LAST:event_adicionarOuAlterarEfeitoActionPerformed
 
+    /**
+     * Metodo responsavel pelo combo do tipo de efeito
+     * @param evt espera um ActionEvent
+     */
     private void comboTipoDeEfeitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoDeEfeitoActionPerformed
         adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
         if (comboTipoDeEfeito.getSelectedIndex() == 2) {
@@ -1350,11 +1492,19 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_comboTipoDeEfeitoActionPerformed
 
+    /**
+     * Metodo responsavel por tratar o evento do mouse sobre o painel de itens Registrados
+     * @param evt espera um MouseEvent
+     */
     private void painelItensRegistradosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_painelItensRegistradosMouseClicked
         limparLabels();
         desmarcarUltimaLabel();
     }//GEN-LAST:event_painelItensRegistradosMouseClicked
 
+    /**
+     * Metodo responsavel pelas ações do botão registrarItem
+     * @param evt espera um ActionEvent
+     */
     private void botaoRegistrarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoRegistrarItemActionPerformed
         if (checarInformacoesItem()) {
             String nome = campoNomeItem.getText();
@@ -1376,31 +1526,60 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botaoRegistrarItemActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do mouse sobre o JPanel2
+     * @param evt epera um MouseEvent
+     */
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
         tabelaEfeitos.clearSelection();
     }//GEN-LAST:event_jPanel2MousePressed
 
+    /**
+     * Metodo responsavel pelos efeitos do teclado sobre o campo Nome
+     * @param evt espera um KeyEvent
+     */
     private void campoNomeEfeitoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoNomeEfeitoKeyPressed
         adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
     }//GEN-LAST:event_campoNomeEfeitoKeyPressed
 
+    /**
+     * Metodo responsvel pelas ações do teclado sobre o campo descrição efeito
+     * @param evt espera um KeyEvent
+     */
     private void campoDescricaoEfeitoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoDescricaoEfeitoKeyPressed
         adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
     }//GEN-LAST:event_campoDescricaoEfeitoKeyPressed
 
+    /**
+     * Metodo responsavel pelas ações do teclado sobre o campo Qtd
+     * @param evt espera um KeyEvent
+     */
     private void campoQuantidadeEfeitoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoQuantidadeEfeitoKeyPressed
         adicionarOuAlterarEfeito.setEnabled(checarEfeitos());
     }//GEN-LAST:event_campoQuantidadeEfeitoKeyPressed
 
+    /**
+     * Metodo responsavel por pegar o nome do ator
+     * @param parteDaMensagem String contendo a mensagem
+     * @return String com o nome do ator
+     */
     private String getNomeDoAtor(String parteDaMensagem) {
         return JOptionPane.showInputDialog(this, "Qual é o nome " + parteDaMensagem + "?",
                 "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
     }
     
+    /**
+     * Metodo responsavel por imprimir o ator escolhido 
+     * @param tipoDeAtor String contendo o tipo de ator
+     */
     private void imprimirAtorEscolhido(String tipoDeAtor) {
         labelNPCselecionado.setText(tipoDeAtor + " gerado com sucesso! Clique OK para continuar...");
     }
     
+    /**
+     * Metodo responsavel pelas ações do botão Farmaceuta
+     * @param evt espera um ActionEvent
+     */
     private void botaoFarmaceutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoFarmaceutaActionPerformed
         String nome = getNomeDoAtor("do seu Farmaceuta");
         if (nome != null) {
@@ -1410,6 +1589,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botaoFarmaceutaActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão Medico
+     * @param evt espera um ActionEvent
+     */
     private void botaoMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoMedicoActionPerformed
         String nome = getNomeDoAtor("do seu Médico");
         if (nome != null) {
@@ -1419,6 +1602,10 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botaoMedicoActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão cachorro 
+     * @param evt espera um Action Event
+     */
     private void botaoCachorroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCachorroActionPerformed
         String nome = getNomeDoAtor("do seu Cachorro");
         if (nome != null) {
@@ -1428,11 +1615,19 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botaoCachorroActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão Chilofompila
+     * @param evt espera um ActionEvent
+     */
     private void botaoChilofompilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoChilofompilaActionPerformed
         auxNPC = new Chilofompila();
         imprimirAtorEscolhido("Chilofompila");
     }//GEN-LAST:event_botaoChilofompilaActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão Velho
+     * @param evt espera um Action Event
+     */
     private void botaoVelhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoVelhoActionPerformed
         String nome = getNomeDoAtor("do seu Vendedor");
         if (nome != null) {
@@ -1442,36 +1637,66 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botaoVelhoActionPerformed
 
+    /**
+     * Metodo responsavel por pegar o caminho da imagem selecionada
+     * @return String contendo o caminho do arquivo
+     */
     public String getImagemSelecionada() {
         return arquivoSelecionado;
     }
     
+    /**
+     * Metodo responsavel por retornar um item selecionado
+     * @return Item selecionado
+     */
     public Item getItemSelecionado() {
         return itemSelecionado;
     }
     
+    /**
+     * Metodo responsavel por pegar o NPC selecionado
+     * @return NPC Selecionad
+     */
     public NPC getNPCselecionado() {
         return npcSelecionado;
     }
     
+    /**
+     * Metodo responsavel por selecionar a imagem
+     * @param componentePai espera o Frame para seleção da imagem
+     * @return String contendo caminho da imagem selecionada
+     */
     public static String selecionarImagem(Frame componentePai) {
         DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, BACKGROUND);
         navegadora.setVisible(true);
         return navegadora.getImagemSelecionada();
     }
     
+    /**
+     * Metodo responsavel por selecionar um item
+     * @param componentePai espera um Frame
+     * @return Item selecionado
+     */
     public static Item selecionarItem(Frame componentePai) {
         DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, ITEM);
         navegadora.setVisible(true);
         return navegadora.getItemSelecionado();
     }
     
+    /**
+     * Metodo responsavel por selecionar um NPC
+     * @param componentePai espera um Frame
+     * @return NPC selecionado
+     */
     public static NPC selecionarNPC(Frame componentePai) {
         DialogoNavegadoraDeRecursos navegadora = new DialogoNavegadoraDeRecursos(componentePai, true, NPC);
         navegadora.setVisible(true);
         return navegadora.getNPCselecionado();
     }
     
+    /**
+     * Metodo responsavel por Suprimir Avisos
+     */
     @SuppressWarnings("unchecked")
     private void carregarItens() {
         ObjectInputStream ooi = null;
@@ -1503,6 +1728,9 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel por salvar os itens
+     */
     private void salvarItens() {
         ObjectOutputStream oos = null;
         try {

@@ -79,14 +79,12 @@ public class Cesar extends Ator {
         return ATOR_EQUILIBRADO;
     }
     
-    
     /**
      * Metodo afetarAtributo
      * 
      * Implementacao a partir da Classe Ator
-     * 
-     * @param atributo, atributo a ser afetado.
-     * @param quantidade, inteiro com a quantidade a afetar.
+     * @param atributo espera um atributo a ser afetado.
+     * @param quantidade espera um inteiro com a quantidade a afetar.
      * @return Resultado retorna o resultado da sanidade afetada pela quantia. 
      */
     @Override
@@ -202,6 +200,10 @@ public class Cesar extends Ator {
         return fraseDeEfeito;
     }    
 
+    /**
+     * Metodo responsavel por retornar a quantidade maxima de HP's
+     * @return interiro contendo o valor do HP Maximo
+     */
     @Override
     public int getHPMaximo() {
         return HPMaximo;

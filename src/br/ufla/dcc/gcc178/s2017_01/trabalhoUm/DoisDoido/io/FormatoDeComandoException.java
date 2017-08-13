@@ -25,7 +25,7 @@ public class FormatoDeComandoException extends RuntimeException {
      * Constructs an instance of <code>ExcessoDeComandosException</code> with
      * the specified detail message.
      *
-     * @param msg the detail message.
+     * @param numeroDeComandos espera como paramentro um inteiro com o numero de comandos
      */
     public FormatoDeComandoException(int numeroDeComandos) {
         super("São esperadas 1 ou 2 palavras de comando, mas foram enviadas " + numeroDeComandos + "!\n");

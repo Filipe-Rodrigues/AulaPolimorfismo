@@ -177,7 +177,7 @@ public class JogoEvent {
      * Retorna o estado atual de Cesar.
      * 
      * @return inteiro com o estado atual do jogo de acordo com a classe
-     * do tipo enum {@link Resultado}.
+     * do tipo enum Resultado.
      */
     public int getEstadoAtual () {
     	return estado.getEstadoAtual();

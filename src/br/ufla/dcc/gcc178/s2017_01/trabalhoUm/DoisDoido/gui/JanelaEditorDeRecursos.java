@@ -40,10 +40,16 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         initAtributos();
     }
     
+    /**
+     * Metodo responsavel por inicializar os atributos
+     */
     private void initAtributos() {
         criarNovoMundo();
     }
     
+    /**
+     * Metodo responsavel por criar um novo mundo
+     */
     private void criarNovoMundo() {
         ambienteAtual = new Ambiente("Ambiente atual");
         carregarAmbiente();
@@ -447,6 +453,10 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo responsavel por receber o nome do ambiente
+     * @param atual espera um Ambiente
+     */
     private void receberNome(Ambiente atual) {
         if (atual != null && !atual.taMarcado()) {
             atual.setMarcado(true);
@@ -461,6 +471,10 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por desmarcar todos os ambientes
+     * @param atual Ambiente
+     */
     private void desmarcarTodos(Ambiente atual) {
         if (atual != null && atual.taMarcado()) {
             atual.setMarcado(false);
@@ -471,12 +485,20 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por receber todos os nomes do ambiente
+     * @param ambiente Ambiente
+     */
     private void receberTodosOsNomes(Ambiente ambiente) {
         nomesDeTodosOsAmbientes = new ArrayList<>();
         receberNome(ambiente);
         desmarcarTodos(ambiente);
     }
     
+    /**
+     * Metodo responsavel pelas ações do botão remover
+     * @param evt espera um evento
+     */
     private void botaoRemoverActionPerformed(NavegacaoEvent evt) {
         String comando = evt.getLinhaDeComando();
         String[] palavras = comando.split(" ");
@@ -490,11 +512,18 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por alterar a imgaem
+     * @param nomeDaImagem String contendo o nome da imagem
+     */
     private void mudarImagem(String nomeDaImagem) {
         labelImagem.setIcon(new ImageIcon(new ImageIcon(CAMINHO_DOS_BACKGROUNDS + nomeDaImagem)
                 .getImage().getScaledInstance(800, 400, Image.SCALE_SMOOTH)));
     }
     
+    /**
+     * Metodo responsavel por colocar os itens
+     */
     private void colocarItens() {
         painelItens.removeAll();
         for (Item item : ambienteAtual.getItens()) {
@@ -512,6 +541,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         repaint();
     }
     
+    /**
+     * Metodo responsavel por colocar os NPC's
+     */
     private void colocarNPCs() {
         painelNPCs.removeAll();
         for (NPC npc : ambienteAtual.getNPCs()) {
@@ -529,6 +561,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         repaint();
     }
     
+    /**
+     * Metodo responsavel por ajustar Saidas
+     */
     private void ajustarSaidas() {
         desativarSaidas();
         if (ambienteAtual != null) {
@@ -555,6 +590,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por desativar as saidas
+     */
     private void desativarSaidas() {
         botaoNorte.setBackground(Color.orange);
         botaoSul.setBackground(Color.orange);
@@ -567,6 +605,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         botaoOeste.setToolTipText(tipText);
     }
     
+    /**
+     * Metodo responsavel por carregar os dados do ambiente
+     */
     private void carregarAmbiente() {
         mudarImagem(ambienteAtual.getImagem());
         colocarItens();
@@ -575,6 +616,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         alterouAlgumaCoisa = true;
     }
     
+    /**
+     * Metodo responsavel por obter a direção o posta
+     * @param direcao String contendo a direção da qual deseja-se saber a direção oposta
+     * @return String contendo a direção o posta
+     */
     private String getDirecaoOposta(String direcao) {
         if (direcao.equals("norte")) {
             return "sul";
@@ -591,6 +637,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         return "invalido";
     }
     
+    /**
+     * Metodo responsavel por verificar se já tem um ambiente
+     * @param nomeNovo String contendo o nome do novo ambiente
+     * @return true caso já tenha e false caso ao contrario
+     */
     public boolean jaTemAmbiente(String nomeNovo) {
         for (String nome : nomesDeTodosOsAmbientes) {
             if (nome.equals(nomeNovo)) {
@@ -600,6 +651,10 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         return false;
     }
     
+    /**
+     * Metodo responsavel por selecionar ou adicionar um ambiente
+     * @param direcao String contendo a direção
+     */
     private void selecionarOuAdicionarAmbiente(String direcao) {
         Ambiente ambiente = ambienteAtual.getAmbiente(direcao);
         if (ambiente != null) {
@@ -625,6 +680,10 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por tratar o evento do mouse com relação a label de imagens
+     * @param evt espera um MouseEvent
+     */
     private void labelImagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelImagemMouseClicked
         String nomeDoBackground = DialogoNavegadoraDeRecursos.selecionarImagem(this);
         if (nomeDoBackground != null) {
@@ -635,30 +694,58 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         campoDeLog.append("Concluído!\n");
     }//GEN-LAST:event_labelImagemMouseClicked
 
+    /**
+     * Metodo responsavel pela ação do botão Norte
+     * @param evt espera um ActionEvent
+     */
     private void botaoNorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNorteActionPerformed
         selecionarOuAdicionarAmbiente("norte");
     }//GEN-LAST:event_botaoNorteActionPerformed
 
+    /**
+     * Metodo responsavel pela ação do menu Item Sair 
+     * @param evt espera um ActionEvent
+     */
     private void menuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSairActionPerformed
         requerirSaida(true);
     }//GEN-LAST:event_menuItemSairActionPerformed
 
+    /**
+     * Metodo responsavel pela ação do menu novo item
+     * @param evt espera um Action Event
+     */
     private void menuItemNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNovoActionPerformed
         requerirSaida(false);
     }//GEN-LAST:event_menuItemNovoActionPerformed
 
+    /**
+     * Metodo responsavel por fechar a janela
+     * @param evt espera um windowEvent
+     */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         requerirSaida(true);
     }//GEN-LAST:event_formWindowClosing
 
+    /**
+     * Metodo responsavel pela evento do mouse com relação a label de imagem
+     * @param evt espera um MouseEvent
+     */
     private void labelImagemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelImagemMousePressed
         campoDeLog.append("Aguarde, carregando imagens.......");
     }//GEN-LAST:event_labelImagemMousePressed
 
+    /**
+     * Metodo responsavel pela ação do menu salvar Item como
+     * @param evt espera um ActionEvent
+     */
     private void menuItemSalvarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarComoActionPerformed
         salvarComo();
     }//GEN-LAST:event_menuItemSalvarComoActionPerformed
 
+    /**
+     * Metodo responsavel pela ação do menu abrir item
+     * @param evt espera um ActionEvent
+     */
     private void menuItemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAbrirActionPerformed
         boolean querSaida = requerirSaida(false);
         if (querSaida) {
@@ -671,26 +758,50 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuItemAbrirActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão sul
+     * @param evt espera um ActionEvent
+     */
     private void botaoSulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSulActionPerformed
         selecionarOuAdicionarAmbiente("sul");
     }//GEN-LAST:event_botaoSulActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão Leste
+     * @param evt espera um ActionEvent
+     */
     private void botaoLesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoLesteActionPerformed
         selecionarOuAdicionarAmbiente("leste");
     }//GEN-LAST:event_botaoLesteActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão Oeste
+     * @param evt espera um ActionEvent
+     */
     private void botaoOesteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoOesteActionPerformed
         selecionarOuAdicionarAmbiente("oeste");
     }//GEN-LAST:event_botaoOesteActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do menu editor de itens
+     * @param evt espera um ActionEvent
+     */
     private void menuItemEditorDeItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemEditorDeItensActionPerformed
         adicionarItemNoAmbiente();
     }//GEN-LAST:event_menuItemEditorDeItensActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do menu adicionar item NPC
+     * @param evt espera um ActionEvent
+     */
     private void menuItemAdicionarNPCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAdicionarNPCActionPerformed
         adicionarNPCNoAmbiente();
     }//GEN-LAST:event_menuItemAdicionarNPCActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do meu salvar item
+     * @param evt espera um ActionEvent
+     */
     private void menuItemSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarActionPerformed
         if (nomeDoMundo == null) {
             salvarComo();
@@ -699,6 +810,10 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuItemSalvarActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do menu descrição de itens 
+     * @param evt ActionEvent
+     */
     private void menuItemDescricaoAmbienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDescricaoAmbienteActionPerformed
         String nome = JOptionPane.showInputDialog(this, "Digite o novo nome do ambiente:", 
                     "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
@@ -717,10 +832,17 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuItemDescricaoAmbienteActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do menu itens ajuda
+     * @param evt espera um ActionEvent
+     */
     private void menuItemAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAjudaActionPerformed
         new DialogoSobre(this, true).setVisible(true);
     }//GEN-LAST:event_menuItemAjudaActionPerformed
 
+    /**
+     * Metodo responsavel por adicionar um item no ambiente
+     */
     private void adicionarItemNoAmbiente() {
         campoDeLog.append("Aguarde, carregando Itens.......");
         Item itemNovo = DialogoNavegadoraDeRecursos.selecionarItem(this);
@@ -733,6 +855,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por adicionar um NPC no ambiente
+     */
     private void adicionarNPCNoAmbiente() {
         campoDeLog.append("Aguarde, carregando NPCs.......");
         NPC npcNovo = DialogoNavegadoraDeRecursos.selecionarNPC(this);
@@ -743,6 +868,10 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel por sair de um mundo
+     * @param querFecharJanela true caso sim e false caso não
+     */
     private void sairDoMundo(boolean querFecharJanela) {
         if (querFecharJanela) {
             dispose();
@@ -751,6 +880,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Metodo responsavel pelo requerimento de saida
+     * @param querFecharJanela true caso sim e false caso ao contrario
+     * @return true para fechar e false para outras casos
+     */
     private boolean requerirSaida(boolean querFecharJanela) {
         if (alterouAlgumaCoisa) {
             int opcao = JOptionPane.showOptionDialog(this, "Você deseja salvar suas alterações?", "O Manicômio de Zulu", 
@@ -769,6 +903,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         return true;
     }
     
+    /**
+     * Metodo responsavel por verificar se um arquivo já existe
+     * @param nome String com o nome do arquivo para verificação
+     * @return true caso exista e false caso ao contrario 
+     */
     private boolean jaExisteArquivo(String nome) {
         File folder = new File(CAMINHO_DOS_MAPAS);
         File[] listOfFiles = folder.listFiles();
@@ -780,6 +919,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         return false;
     }
     
+    /**
+     * Metodo responsavel pelo salvamento
+     */
     private void salvar() {
         campoDeLog.append("Salvando " + nomeDoMundo + "... ");
         ObjectOutputStream oos = null;
@@ -813,6 +955,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Mundo salvo!", "O Manicômio de Zulu", JOptionPane.INFORMATION_MESSAGE);
     }
     
+    /**
+     * Metodo responsavel pelo salvar como
+     */
     private void salvarComo() {
         String nome;
         boolean salvou = false;

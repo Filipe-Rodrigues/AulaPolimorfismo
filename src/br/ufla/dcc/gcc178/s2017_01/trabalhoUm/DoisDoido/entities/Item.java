@@ -95,7 +95,7 @@ public class Item implements Serializable{
      * 
      * retorna os efeitos de um Item.
      *
-     * @return List do tipo {@link Efeito) com os efeitos causados
+     * @return List do tipo Efeito com os efeitos causados
      */
     public List<Efeito> getEfeitos () {
         return Collections.unmodifiableList(efeitos);
@@ -123,6 +123,10 @@ public class Item implements Serializable{
         return coletavel;
     }
 
+    /**
+     * Metodo responsavel por retorna um item
+     * @return String contendo o caminho do icone
+     */
     public String getIcone() {
         return icone;
     }

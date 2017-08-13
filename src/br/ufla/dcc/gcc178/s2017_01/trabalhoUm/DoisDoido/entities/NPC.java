@@ -81,6 +81,7 @@ public abstract class NPC extends Ator {
     /**
      * Metodo Abstrato entregarItemDeQuest.
      *
+     * @return Item 
      */
     public abstract Item entregarItemDeQuest ();
     

@@ -113,10 +113,18 @@ public class TelaInicialDoGame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo responsavel pelas ações do botão editor
+     * @param evt espera um ActionEvent
+     */
     private void botaoEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEditorActionPerformed
         new JanelaEditorDeRecursos().setVisible(true);
     }//GEN-LAST:event_botaoEditorActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão Jogar
+     * @param evt espera um ActionEvent
+     */
     private void botaoJogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoJogarActionPerformed
         new JanelaNovoJogo().setVisible(true);
     }//GEN-LAST:event_botaoJogarActionPerformed
