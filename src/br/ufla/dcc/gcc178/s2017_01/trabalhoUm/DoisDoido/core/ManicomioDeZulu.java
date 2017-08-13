@@ -46,12 +46,7 @@ public class ManicomioDeZulu implements Serializable{
     private transient List<ComandoDeJogoListener> interfacesDeJogo;
     private Entrada entrada;
     
-    private Ambiente casaDoCesar;
-    private Ambiente manicomio;
-    private Ambiente portaDaFaculdade;
-    private Ambiente loja;
-    private Ambiente farmacia;
-    
+
     private boolean finalizado;
     
     private NPC npcAtivo;
