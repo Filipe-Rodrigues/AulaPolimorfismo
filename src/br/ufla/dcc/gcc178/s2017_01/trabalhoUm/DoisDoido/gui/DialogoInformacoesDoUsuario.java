@@ -10,11 +10,7 @@ import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ambiente;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.user.Usuario;
 import java.awt.Color;
-import java.awt.event.MouseListener;
-import javax.swing.InputMap;
-import javax.swing.JCheckBox;
 import javax.swing.JTable;
-import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +28,9 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
 
     /**
      * Creates new form DialogoInformacoesDoUsuario
+     * @param usuarioAtual do tipo Usuario
+     * @param parent do tipo JanelaNovoJogo
+     * @param modal booleando que informa o modulo
      */
     public DialogoInformacoesDoUsuario(Usuario usuarioAtual, JanelaNovoJogo parent, boolean modal) {
         super(parent, modal);
@@ -231,6 +230,10 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo responsavel pela ação do botão NovoJogo
+     * @param evt Recebe um evento
+     */
     private void botaoNovoJogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoJogoActionPerformed
         novoComeco = true;
         Ambiente ambiente = DialogoSelecionarMapa.getMapa(this);
@@ -239,11 +242,19 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_botaoNovoJogoActionPerformed
 
+    /**
+     * Metodo responsavel por fechar a janela
+     * @param evt Evento passado 
+     */
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         rankingGeral.setVisible(true);
         rankingGeral.atualizarRanking();
     }//GEN-LAST:event_formWindowClosed
 
+    /**
+     * Metodo responsavel por tratar os eventos do mouse
+     * @param evt Recebe o evento a ser tratado
+     */
     private void tabelaDeJogosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDeJogosMouseClicked
         if (evt.getClickCount() == 2 && !evt.isConsumed()) {
             int pos = (int) tabelaDeJogos.getModel().getValueAt(tabelaDeJogos.getSelectedRow(), 0) - 1;
@@ -252,12 +263,21 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tabelaDeJogosMouseClicked
 
+    /**
+     * Metodo responsavel por tratar o evento do botão continuar
+     * @param evt Recebe o evento por parametro
+     */
     private void botaoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoContinuarActionPerformed
         int pos = (int) tabelaDeJogos.getModel().getValueAt(tabelaDeJogos.getSelectedRow(), 0) - 1;
         novoComeco = false;
         iniciarJogo(usuarioAtual.getInformacoesDeJogos().get(pos).getJogo(), false);
     }//GEN-LAST:event_botaoContinuarActionPerformed
 
+    /**
+     * Metodo responsavel por inicializar o jogo
+     * @param jogo Recebe o Jogo do tipo ManicomioDeZulu
+     * @param novoJogo e um booleando informando o estado do novo jogo
+     */
     private void iniciarJogo(ManicomioDeZulu jogo, boolean novoJogo) {
         this.setVisible(false);
         interfaceDoGame = new JanelaPrincipal(jogo, this, novoJogo);
@@ -265,6 +285,10 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
         //this.getParent().setVisible(false);
     }
     
+    /**
+     * Metodo responsavel por atualizar as label's de Status
+     * @param evt recebe um evento do tipo ListSelectionEvent
+     */
     private void atualizarLabelDeStatus(ListSelectionEvent evt) {
         if (!tabelaDeJogos.getSelectionModel().isSelectionEmpty()) {
             int pos = (int) tabelaDeJogos.getModel().getValueAt(tabelaDeJogos.getSelectedRow(), 0) - 1;
@@ -294,10 +318,17 @@ public class DialogoInformacoesDoUsuario extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel por inicializar os atributos 
+     * @param usuarioAtual Recebe um Usuario para inicializar seus atributos
+     */
     private void initAtributos(Usuario usuarioAtual) {
         this.usuarioAtual = usuarioAtual;
     }
     
+    /**
+     * Metodo responsavel por preencher a tabela de Scores
+     */
     private void preencherTabelaScores() {
         DefaultTableModel model = (DefaultTableModel) tabelaDeJogos.getModel();
         model.getDataVector().removeAllElements();

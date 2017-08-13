@@ -59,6 +59,7 @@ public class ManicomioDeZulu implements Serializable{
     /**
      * Construtor da classe ManicomioDeZulu.
      *
+     * @param ambiente Recebe um ambiente por parametro
      */
     public ManicomioDeZulu(Ambiente ambiente) {
         ambienteAtual = ambiente;
@@ -701,7 +702,7 @@ public class ManicomioDeZulu implements Serializable{
     }
 
     /**
-     *  
+     *  Exibe mensagem de boas vindas
      */
     public void mostrarBoasVindas() {
         receberComando("welcome");
@@ -934,14 +935,26 @@ public class ManicomioDeZulu implements Serializable{
         status.setFinalizado(true);
     }
     
+    /**
+     * Metodo utilizado para verificar a finalização
+     * @return true caso verdadeiro e false caso ao contrario 
+     */
     public boolean foiFinalizado() {
         return status.taFinalizado();
     }
     
+    /**
+     * Metodo que retorna o estado do protagonista
+     * @return Resultado do jogador
+     */
     public Resultado getEstadoDoProtagonista() {
         return status.getEstadoDoProtagonista();
     }
     
+    /**
+     * Metodo que retorna a pontuação
+     * @return Inteiro contendo o estatus da pontuação
+     */
     public int getPontuacao() {
         return status.getPontuacao();
     }

@@ -48,11 +48,17 @@ public class DialogoSelecionarMapa extends javax.swing.JDialog {
         initDialogo();
     }
     
+    /**
+     * Metodo responsavel por inicializar o dialogo
+     */
     private void initDialogo() {
         initComponents();
         initAtributos();
     }
 
+    /**
+     * Metodo responsavel por inicializar os atributos
+     */
     private void initAtributos() {
         mapaSelecionado = null;
         nomes = new ArrayList<>();
@@ -164,6 +170,10 @@ public class DialogoSelecionarMapa extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel por carregar os arquivos
+     * @param arquivo 
+     */
     private void carregarArquivo(File arquivo) {
         ObjectInputStream ooi = null;
         try {
@@ -193,6 +203,9 @@ public class DialogoSelecionarMapa extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel pelo preenchimento das listas
+     */
     private void preencherLista() {
         DefaultListModel<String> listModel = (DefaultListModel<String>) listaDeMundos.getModel();
         for(String nome : nomes) {
@@ -200,15 +213,26 @@ public class DialogoSelecionarMapa extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel pelas ações do botão Selecionar
+     * @param evt espera um ActionEvent
+     */
     private void botaoSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSelecionarActionPerformed
         mapaSelecionado = mapas.get(listaDeMundos.getSelectedIndex());
         dispose();
     }//GEN-LAST:event_botaoSelecionarActionPerformed
 
+    /**
+     * Metodo responsavel por pegar o mapa selecionado
+     * @return Ambiente do mapa selecionado
+     */
     public Ambiente getMapaSelecionado() {
         return mapaSelecionado;
     }
     
+    /**
+     * Metodo responsavel por checar a seleção das listas
+     */
     private void checarSelecaoDaLista() {
         if (listaDeMundos.getSelectedIndex() != -1) {
             botaoSelecionar.setEnabled(true);
@@ -217,17 +241,32 @@ public class DialogoSelecionarMapa extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Metodo responsavel por pegar mapa
+     * @param dialogo espera um DialogoSelecionarMapa
+     * @return Ambiente
+     */
     private static Ambiente getMapa(DialogoSelecionarMapa dialogo) {
         dialogo.setVisible(true);
         JOptionPane pane = new JOptionPane();
         return dialogo.getMapaSelecionado();
     }
     
+    /**
+     * Metodo responsavel por pegar um mapa
+     * @param parent espera um Frame
+     * @return Ambiente
+     */
     public static Ambiente getMapa(Frame parent) {
         DialogoSelecionarMapa selecionarMapa = new DialogoSelecionarMapa(parent, true);
         return getMapa(selecionarMapa);
     }
     
+    /**
+     * Metodo responsavel por pegar um mapa
+     * @param parent espera um Dialog
+     * @return Ambinete
+     */
     public static Ambiente getMapa(Dialog parent) {
         DialogoSelecionarMapa selecionarMapa = new DialogoSelecionarMapa(parent, true);
         return getMapa(selecionarMapa);

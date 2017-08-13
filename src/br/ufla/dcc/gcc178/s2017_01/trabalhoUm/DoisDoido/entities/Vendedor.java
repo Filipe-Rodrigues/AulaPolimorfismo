@@ -71,6 +71,10 @@ public class Vendedor extends NPC {
         return fraseDeEfeito;
 	}
 
+    /**
+     * Metodo responsavel por retornar a quantidade maxima de HP's
+     * @return inteiro contendo o valor maximo de HP's
+     */
     @Override
     public int getHPMaximo() {
         return 25;

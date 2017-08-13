@@ -487,6 +487,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         comecarJogo();
     }
 
+    /**
+     * Metodo responsavel por colorir as barras de HP's
+     */
     private void colorirBarras() {
         UIManager.put("barraHPdoCesar.background", Color.GRAY);
         UIManager.put("barraHPdoCesar.foreground", Color.BLACK);
@@ -502,6 +505,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         UIManager.put("barraHPdoInimigo.selectionForeground", Color.BLACK);
     }
     
+    /**
+     * Metodo responsavel por inicializar a sonorização
+     */
     private void initSom () {
         try {
             //AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/sound/background.wav").getAbsoluteFile());
@@ -535,6 +541,9 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         });
     }
     
+    /**
+     * Metodo responsavel por começar o jogo
+     */
     private void comecarJogo() {
         if (novoJogo) {
             jogo.mostrarBoasVindas();
@@ -639,15 +648,27 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jogo.receberComando("ir sul");
     }//GEN-LAST:event_botaoSulActionPerformed
 
+    /**
+     * Metodo responsavel pelo fechamento da janela
+     * @param evt espera um WindowEvent
+     */
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         clip.stop();
         pontuacoes.receberFinalizacaoDeJogo(new InformacoesDeJogo(jogo.getPontuacao(), new Date(), jogo));
     }//GEN-LAST:event_formWindowClosed
 
+    /**
+     * Metodo responsavel pelas ações do botão Habilidade
+     * @param evt espera um ActionEvent
+     */
     private void botaoHabilidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoHabilidadeActionPerformed
         jogo.receberComando("usar habilidade");
     }//GEN-LAST:event_botaoHabilidadeActionPerformed
 
+    /**
+     * Metodo responsavel pelas ações do botão Cancelar
+     * @param evt espera um ActionEvent
+     */
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
         jogo.receberComando("sair");
     }//GEN-LAST:event_botaoCancelarActionPerformed

@@ -74,6 +74,10 @@ public class Farmaceuta extends NPC {
         return darItem("Clonazepam");
     }
 
+    /**
+     * Retorna a quantidade maxima de HP's
+     * @return inteiro contendo o valor maximo
+     */
     @Override
     public int getHPMaximo() {
         return 20;

@@ -62,6 +62,10 @@ public class Chilofompila extends NPC {
         return null;
     }
 
+    /**
+     * Metodo responsavel por retornar a quantidade maxima de Hp's
+     * @return inteiro contendo o valor do HPMaximo
+     */
     @Override
     public int getHPMaximo() {
         return -1;

@@ -6,7 +6,7 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui;
 
 /**
- *
+ * Enum contendo os tipos de recursos
  * @author biiirl
  */
 public enum TipoDeRecurso {

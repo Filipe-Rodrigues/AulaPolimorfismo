@@ -14,8 +14,8 @@ import java.util.List;
  * Esta classe eh parte da aplicacao "World of Zuul - O Manicômio de Zulu".
  * "World of Zuul" é um jogo de aventura muito simples, baseado em texto.
  *
- * Representa os os ambientes do jogo, com todos os itens da classe {@link Item),
- * e com os NPC derivados da classe {@link NPC}.
+ * Representa os os ambientes do jogo, com todos os itens da classe Item,
+ * e com os NPC derivados da classe NPC.
  *
  * @author  Filipe Barros Rodrigues
  * @version 2017.06.07
@@ -69,10 +69,18 @@ public class Ambiente implements Serializable{
         npcs = new ArrayList<>();
     }
 
+    /**
+     * Metodo que retorna o estado da marcação
+     * @return true caso marcado false caso ao contrario
+     */
     public boolean taMarcado() {
         return marcado;
     }
     
+    /**
+     * Metodo para alterar o estado da marcação
+     * @param marcado true caso queira alterar para verdadeiro e false para ao contrario
+     */
     public void setMarcado(boolean marcado) {
         this.marcado = marcado;
     }
@@ -82,8 +90,8 @@ public class Ambiente implements Serializable{
      *
      * inicializa as saidas dos ambientes, e pra onde essas saidas levam
      *
-     * @param comando do tipo {@link Comando} recebe o sentido.
-     * @param ambiente do tipo {@link Ambiente} recebe um ambiente de destino.
+     * @param comando do tipo Comando recebe o sentido.
+     * @param ambiente do tipo Ambiente recebe um ambiente de destino.
      */
     public void ajustarSaida(String comando, Ambiente ambiente) {
         saidas.put(comando, ambiente);
@@ -308,7 +316,7 @@ public class Ambiente implements Serializable{
      *
      * coloca NPC no ambiente.
      *
-     * @param NPC do tipo {@link NPC}
+     * @param ator recebe um ator para ser adicionado
      */
     public void colocarNPC(NPC ator) {
         npcs.add(ator);
@@ -329,10 +337,18 @@ public class Ambiente implements Serializable{
         return null;
     }
     
+    /**
+     * Metodo responsavel por montar um NPC 
+     * @param alvo NPC que será removido
+     */
     public void matarNPC (NPC alvo) {
         npcs.remove(alvo);
     }
     
+    /**
+     * Metodo responsavel por remover um NPC
+     * @param alvo String com o nome do NPC que deseja remover
+     */
     public void removerNPC (String alvo) {
         NPC temp = null;
         for (NPC npc : npcs) {

@@ -632,6 +632,10 @@ public class Mapa extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo responsavel pela ação do mouse sobre o JRadioButton60
+     * @param evt espera um MouseEvent
+     */
     private void jRadioButton60MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton60MouseReleased
         jRadioButton52.setSelected(false);
         jRadioButton53.setSelected(false);

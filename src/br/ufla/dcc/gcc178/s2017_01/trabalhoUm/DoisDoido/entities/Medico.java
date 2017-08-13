@@ -70,6 +70,10 @@ public class Medico extends NPC {
     	return darItem("Largactil");
     }
 
+    /**
+     * Metodo responsavel por retornar a quantidade maxima de HP's
+     * @return o valor maximo de HP's
+     */
     @Override
     public int getHPMaximo() {
         return 50;
