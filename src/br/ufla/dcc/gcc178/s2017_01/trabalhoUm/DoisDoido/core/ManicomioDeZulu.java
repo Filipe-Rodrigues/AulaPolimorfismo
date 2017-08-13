@@ -13,19 +13,10 @@ import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
 import java.util.ArrayList;
 import java.util.List;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.EstadoDeJogo.*;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.AlteracaoDeHP;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.AlteracaoDeSanidade;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ambiente.SEM_SAIDA;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado.*;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Atributo.*;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Cachorro;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Chilofompila;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Efeito;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Farmaceuta;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Medico;
-import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Vendedor;
 import java.io.Serializable;
-import java.util.Random;
 
 /**
  * Classe ManicomioDeZulu - responsável por criar os ambientes colocar os
@@ -137,31 +128,6 @@ public class ManicomioDeZulu implements Serializable{
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     /**
      * Metodo receberComando.
      * 
