@@ -103,7 +103,7 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
      * Guarda os componentes coletados durante o jogo.
      */
     private void empacotarComponentes () {
-        if (tipo == TipoDeGUI.ITEM_DO_NPC) {
+        if (tipo == TipoDeGUI.ITEM_DO_NPC || tipo == TipoDeGUI.EDITOR_NPC || tipo == TipoDeGUI.EDITOR_ITEM) {
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
             setLayout(layout);
             layout.setHorizontalGroup(
@@ -163,6 +163,12 @@ public class ModeloDeNavegacao extends javax.swing.JPanel {
                     break;
                 case ITEM_DO_NPC:
                     atualizarInterfaces(new NavegacaoEvent("pedir " + nome));
+                    break;
+                case EDITOR_ITEM:
+                    atualizarInterfaces(new NavegacaoEvent("remover item " + nome));
+                    break;
+                case EDITOR_NPC:
+                    atualizarInterfaces(new NavegacaoEvent("remover npc " + nome));
                     break;
                 default:
                     atualizarInterfaces(new NavegacaoEvent("atacar " + nome));

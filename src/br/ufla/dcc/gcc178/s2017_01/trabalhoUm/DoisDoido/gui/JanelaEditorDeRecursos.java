@@ -9,37 +9,28 @@ import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Ambiente;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Item;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.NPC;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
-import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_ICONES;
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_MAPAS;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *
  * @author filip
  */
 public class JanelaEditorDeRecursos extends javax.swing.JFrame {
-    private static int ITEM = 0;
-    private static int NPC = 1;
     private Ambiente ambienteAtual;
     private String nomeDoMundo;
     private boolean alterouAlgumaCoisa;
+    private List<String> nomesDeTodosOsAmbientes;
     
     /**
      * Creates new form JanelaEditorDeAmbientes
@@ -56,6 +47,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     private void criarNovoMundo() {
         ambienteAtual = new Ambiente("Ambiente atual");
         carregarAmbiente();
+        nomesDeTodosOsAmbientes = new ArrayList<>();
         nomeDoMundo = null;
         alterouAlgumaCoisa = false;
         campoDeLog.append("***INICIADO NOVO AMBIENTE VAZIO!\n");
@@ -101,6 +93,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         menuItemNovo = new javax.swing.JMenuItem();
         menuItemAbrir = new javax.swing.JMenuItem();
         menuItemSalvar = new javax.swing.JMenuItem();
+        menuItemSalvarComo = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         menuItemSair = new javax.swing.JMenuItem();
         menuEditar = new javax.swing.JMenu();
@@ -335,9 +328,9 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         barraDeStatus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         barraDeStatus.setPreferredSize(new java.awt.Dimension(1233, 150));
 
+        campoDeLog.setEditable(false);
         campoDeLog.setColumns(20);
         campoDeLog.setRows(5);
-        campoDeLog.setFocusable(false);
         jScrollPane1.setViewportView(campoDeLog);
 
         javax.swing.GroupLayout barraDeStatusLayout = new javax.swing.GroupLayout(barraDeStatus);
@@ -376,13 +369,22 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         menuArquivo.add(menuItemAbrir);
 
         menuItemSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        menuItemSalvar.setText("Salvar mundo");
+        menuItemSalvar.setText("Salvar");
         menuItemSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemSalvarActionPerformed(evt);
             }
         });
         menuArquivo.add(menuItemSalvar);
+
+        menuItemSalvarComo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        menuItemSalvarComo.setText("Salvar mundo como...");
+        menuItemSalvarComo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSalvarComoActionPerformed(evt);
+            }
+        });
+        menuArquivo.add(menuItemSalvarComo);
         menuArquivo.add(jSeparator1);
 
         menuItemSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
@@ -417,7 +419,12 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         menuEditar.add(menuItemAdicionarNPC);
 
         menuItemDescricaoAmbiente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        menuItemDescricaoAmbiente.setText("Editar descrição do ambiente");
+        menuItemDescricaoAmbiente.setText("Editar nome do ambiente");
+        menuItemDescricaoAmbiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDescricaoAmbienteActionPerformed(evt);
+            }
+        });
         menuEditar.add(menuItemDescricaoAmbiente);
 
         barraDeMenus.add(menuEditar);
@@ -426,6 +433,11 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
 
         menuItemAjuda.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         menuItemAjuda.setText("Sobre");
+        menuItemAjuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemAjudaActionPerformed(evt);
+            }
+        });
         menuAjuda.add(menuItemAjuda);
 
         barraDeMenus.add(menuAjuda);
@@ -435,39 +447,38 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void criarNavegacao(int tipo, String nome, String icone) {
-        JLabel label = new JLabel(new ImageIcon(new ImageIcon(CAMINHO_DOS_ICONES + icone)
-                .getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
-        JButton remover = new JButton(new ImageIcon(CAMINHO_DOS_ICONES+ "descartar.png")) {
-            @Override
-            public String toString() {
-                return getToolTipText(); //To change body of generated methods, choose Tools | Templates.
+    private void receberNome(Ambiente atual) {
+        if (atual != null && !atual.taMarcado()) {
+            atual.setMarcado(true);
+            if (!nomesDeTodosOsAmbientes.contains(atual.getDescricao())) {
+                nomesDeTodosOsAmbientes.add(atual.getDescricao());
             }
-        };
-        remover.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                botaoRemoverActionPerformed(e);
-            }
-        });
-        remover.setFocusable(false);
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.X_AXIS));
-        painel.add(label);
-        painel.add(Box.createRigidArea(new Dimension(150, 5)));
-        painel.add(remover);
-
-        if (tipo == ITEM) {
-            remover.setToolTipText("Remover item " + nome);
-            painelItens.add(painel);
-        } else if (tipo == NPC) {
-            remover.setToolTipText("Remover npc " + nome);
-            painelNPCs.add(painel);
+            
+            receberNome(atual.getAmbiente("norte"));
+            receberNome(atual.getAmbiente("sul"));
+            receberNome(atual.getAmbiente("leste"));
+            receberNome(atual.getAmbiente("oeste"));
         }
     }
     
-    private void botaoRemoverActionPerformed(ActionEvent evt) {
-        String comando = evt.getSource().toString();
+    private void desmarcarTodos(Ambiente atual) {
+        if (atual != null && atual.taMarcado()) {
+            atual.setMarcado(false);
+            receberNome(atual.getAmbiente("norte"));
+            receberNome(atual.getAmbiente("sul"));
+            receberNome(atual.getAmbiente("leste"));
+            receberNome(atual.getAmbiente("oeste"));
+        }
+    }
+    
+    private void receberTodosOsNomes(Ambiente ambiente) {
+        nomesDeTodosOsAmbientes = new ArrayList<>();
+        receberNome(ambiente);
+        desmarcarTodos(ambiente);
+    }
+    
+    private void botaoRemoverActionPerformed(NavegacaoEvent evt) {
+        String comando = evt.getLinhaDeComando();
         String[] palavras = comando.split(" ");
         if (palavras.length == 3) {
             if (palavras[1].equals("item")) {
@@ -475,6 +486,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
             } else if (palavras[1].equals("npc")) {
                 ambienteAtual.removerNPC(palavras[2]);
             }
+            carregarAmbiente();
         }
     }
     
@@ -485,11 +497,16 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     
     private void colocarItens() {
         painelItens.removeAll();
-        if (ambienteAtual != null) {
-            List<Item> itens = ambienteAtual.getItens();
-            for (Item item : itens) {
-                criarNavegacao(ITEM, item.getNome(), item.getIcone());
-            }
+        for (Item item : ambienteAtual.getItens()) {
+            ModeloDeNavegacao modelo = new ModeloDeNavegacao(TipoDeGUI.EDITOR_ITEM, item.getNome(), 
+                    item.getDescricao(), item.getIcone());
+            modelo.addInterfaceDeNavegacaoListener(new InterfaceDeNavegacaoListenter() {
+                @Override
+                public void solicitacaoDeNavegacaoPerformed(NavegacaoEvent evt) {
+                    botaoRemoverActionPerformed(evt);
+                }
+            });
+            painelItens.add(modelo);
         }
         revalidate();
         repaint();
@@ -497,11 +514,16 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     
     private void colocarNPCs() {
         painelNPCs.removeAll();
-        if (ambienteAtual != null) {
-            List<NPC> npcs = ambienteAtual.getNPCs();
-            for (NPC npc : npcs) {
-                criarNavegacao(NPC, npc.getNome(), npc.getImagem());
-            }
+        for (NPC npc : ambienteAtual.getNPCs()) {
+            ModeloDeNavegacao modelo = new ModeloDeNavegacao(TipoDeGUI.EDITOR_NPC, npc.getNome(), 
+                    npc.getNome(), npc.getImagem());
+            modelo.addInterfaceDeNavegacaoListener(new InterfaceDeNavegacaoListenter() {
+                @Override
+                public void solicitacaoDeNavegacaoPerformed(NavegacaoEvent evt) {
+                    botaoRemoverActionPerformed(evt);
+                }
+            });
+            painelNPCs.add(modelo);
         }
         revalidate();
         repaint();
@@ -569,19 +591,36 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         return "invalido";
     }
     
+    public boolean jaTemAmbiente(String nomeNovo) {
+        for (String nome : nomesDeTodosOsAmbientes) {
+            if (nome.equals(nomeNovo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void selecionarOuAdicionarAmbiente(String direcao) {
         Ambiente ambiente = ambienteAtual.getAmbiente(direcao);
         if (ambiente != null) {
             ambienteAtual = ambiente;
             carregarAmbiente();
+            campoDeLog.append("Mudando para ambiente nomeado \"" + ambiente.getDescricao() + "\"\n");
         } else {
             String nome = JOptionPane.showInputDialog(this, "Qual o nome desse novo ambiente?", 
                     "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
             if (nome != null) {
-                ambienteAtual.ajustarSaida(direcao, new Ambiente(nome));
-                ambienteAtual.getAmbiente(direcao).ajustarSaida(getDirecaoOposta(direcao), ambienteAtual);
-                ambienteAtual = ambienteAtual.getAmbiente(direcao);
-                carregarAmbiente();
+                if (jaTemAmbiente(nome)) {
+                    JOptionPane.showMessageDialog(this, "Já existe um ambiente com esse nome!", 
+                            "Atenção", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    ambienteAtual.ajustarSaida(direcao, new Ambiente(nome));
+                    ambienteAtual.getAmbiente(direcao).ajustarSaida(getDirecaoOposta(direcao), ambienteAtual);
+                    ambienteAtual = ambienteAtual.getAmbiente(direcao);
+                    nomesDeTodosOsAmbientes.add(nome);
+                    carregarAmbiente();
+                    campoDeLog.append("Ambiente " + ambienteAtual.getDescricao() + " criado com sucesso!\n");
+                }
             }
         }
     }
@@ -616,16 +655,19 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         campoDeLog.append("Aguarde, carregando imagens.......");
     }//GEN-LAST:event_labelImagemMousePressed
 
-    private void menuItemSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarActionPerformed
-        salvar();
-    }//GEN-LAST:event_menuItemSalvarActionPerformed
+    private void menuItemSalvarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarComoActionPerformed
+        salvarComo();
+    }//GEN-LAST:event_menuItemSalvarComoActionPerformed
 
     private void menuItemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAbrirActionPerformed
-        requerirSaida(false);
-        Ambiente ambiente = DialogoSelecionarMapa.getMapa(this);
-        if (ambiente != null) {
-            ambienteAtual = ambiente;
-            carregarAmbiente();
+        boolean querSaida = requerirSaida(false);
+        if (querSaida) {
+            Ambiente ambiente = DialogoSelecionarMapa.getMapa(this);
+            if (ambiente != null) {
+                ambienteAtual = ambiente;
+                receberTodosOsNomes(ambiente);
+                carregarAmbiente();
+            }
         }
     }//GEN-LAST:event_menuItemAbrirActionPerformed
 
@@ -649,12 +691,45 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         adicionarNPCNoAmbiente();
     }//GEN-LAST:event_menuItemAdicionarNPCActionPerformed
 
+    private void menuItemSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalvarActionPerformed
+        if (nomeDoMundo == null) {
+            salvarComo();
+        } else {
+            salvar();
+        }
+    }//GEN-LAST:event_menuItemSalvarActionPerformed
+
+    private void menuItemDescricaoAmbienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDescricaoAmbienteActionPerformed
+        String nome = JOptionPane.showInputDialog(this, "Digite o novo nome do ambiente:", 
+                    "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
+        if (!nome.equals(ambienteAtual.getDescricao())) {
+            if (jaTemAmbiente(nome)) {
+                JOptionPane.showMessageDialog(this, "Já existe um ambiente com esse nome!", 
+                            "Atenção", JOptionPane.WARNING_MESSAGE);
+            } else {
+                nomesDeTodosOsAmbientes.add(nome);
+                nomesDeTodosOsAmbientes.remove(ambienteAtual.getDescricao());
+                ambienteAtual.setDescricao(nome);
+                campoDeLog.append("Ambiente renomeado para \"" + nome + "\"!");
+            }
+        } else {
+            
+        }
+    }//GEN-LAST:event_menuItemDescricaoAmbienteActionPerformed
+
+    private void menuItemAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAjudaActionPerformed
+        new DialogoSobre(this, true).setVisible(true);
+    }//GEN-LAST:event_menuItemAjudaActionPerformed
+
     private void adicionarItemNoAmbiente() {
         campoDeLog.append("Aguarde, carregando Itens.......");
         Item itemNovo = DialogoNavegadoraDeRecursos.selecionarItem(this);
         if (itemNovo != null) {
             ambienteAtual.colocarItem(itemNovo);
             carregarAmbiente();
+            campoDeLog.append(" Adicionado " + itemNovo.getNome() + "!\n");
+        } else {
+            campoDeLog.append(" Cancelado!\n");
         }
     }
     
@@ -664,6 +739,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         if (npcNovo != null) {
             ambienteAtual.colocarNPC(npcNovo);
             carregarAmbiente();
+            campoDeLog.append(" Adicionado NPC " + npcNovo.getNome() + "!\n");
         }
     }
     
@@ -675,13 +751,13 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         }
     }
     
-    private void requerirSaida(boolean querFecharJanela) {
+    private boolean requerirSaida(boolean querFecharJanela) {
         if (alterouAlgumaCoisa) {
             int opcao = JOptionPane.showOptionDialog(this, "Você deseja salvar suas alterações?", "O Manicômio de Zulu", 
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[]{"Sim", "Não", "Cancelar"}, null);
             switch (opcao) {
                 case JOptionPane.CANCEL_OPTION:
-                    break;
+                    return false;
                 case JOptionPane.YES_OPTION:
                     salvar();
                 default:
@@ -690,17 +766,22 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         } else {
             sairDoMundo(querFecharJanela);
         }
+        return true;
     }
     
-    private void obterNomeDoMundo() {
-        do {
-            nomeDoMundo = JOptionPane.showInputDialog(this, "Qual o nome desse mapa?", 
-                    "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
-        } while (nomeDoMundo == null);
+    private boolean jaExisteArquivo(String nome) {
+        File folder = new File(CAMINHO_DOS_MAPAS);
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles) {
+            if (file.isFile() && file.getName().substring(0, file.getName().length() - 4).equals(nome)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     private void salvar() {
-        obterNomeDoMundo();
+        campoDeLog.append("Salvando " + nomeDoMundo + "... ");
         ObjectOutputStream oos = null;
         try {
             FileOutputStream fout = new FileOutputStream(new File(CAMINHO_DOS_MAPAS + nomeDoMundo + ".dat"));
@@ -713,54 +794,51 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Ocorreu algum problema com sua unidade de armazenamento!", 
                     "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+            campoDeLog.append("Não foi possível salvar!\n");
             ex.printStackTrace();
         } finally {
             if (oos != null) {
                 try {
                     oos.close();
+                    campoDeLog.append("Salvo com sucesso!\n");
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(this, "Ocorreu algum problema com sua unidade de armazenamento!", 
                             "OH MY GOD!!", JOptionPane.ERROR_MESSAGE);
+                    campoDeLog.append("Não foi possível salvar!\n");
                 }
+            } else {
+                campoDeLog.append("Não foi possível salvar!\n");
             }
         }
         JOptionPane.showMessageDialog(this, "Mundo salvo!", "O Manicômio de Zulu", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+    private void salvarComo() {
+        String nome;
+        boolean salvou = false;
+        do {
+            nome = JOptionPane.showInputDialog(this, "Qual o nome desse mapa?", 
+                        "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
+            if (nome != null) {
+                if (jaExisteArquivo(nome)) {
+                    int opcao = JOptionPane.showOptionDialog(this, 
+                        "Já existe um mapa com esse nome. Deseja sobrescrever?",
+                        "O Manicômio de Zulu", 
+                        JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.WARNING_MESSAGE, null, 
+                        new String[]{"Sim", "Não"}, null);
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        nomeDoMundo = nome;
+                        salvar();
+                        salvou = true;
+                    }
+                } else {
+                    nomeDoMundo = nome;
+                    salvar();
+                    salvou = true;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JanelaEditorDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JanelaEditorDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JanelaEditorDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JanelaEditorDeRecursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JanelaEditorDeRecursos().setVisible(true);
-            }
-        });
+        } while (nome != null && !salvou);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -795,6 +873,7 @@ public class JanelaEditorDeRecursos extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemNovo;
     private javax.swing.JMenuItem menuItemSair;
     private javax.swing.JMenuItem menuItemSalvar;
+    private javax.swing.JMenuItem menuItemSalvarComo;
     private javax.swing.JPanel painelAmbiente;
     private javax.swing.JPanel painelEditor;
     private javax.swing.JPanel painelImagem;

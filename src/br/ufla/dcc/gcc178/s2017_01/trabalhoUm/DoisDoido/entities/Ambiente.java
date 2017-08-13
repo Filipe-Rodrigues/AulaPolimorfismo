@@ -1,7 +1,6 @@
 package br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities;
 
 import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado.ITEM_NAO_ENCONTRADO;
-import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.entities.Resultado.SUCESSO;
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ public class Ambiente implements Serializable{
     private HashMap<String, Ambiente> saidas;
     private List<Item> itens;
     private List<NPC> npcs;
+    private boolean marcado;
 
     /**
      * Construtor da classe Ambiente.
@@ -40,6 +40,7 @@ public class Ambiente implements Serializable{
      */
     public Ambiente(String descricao, String nomeDaImagem) {
         this();
+        this.marcado = false;
         this.descricao = descricao;
         this.nomeDaImagem = nomeDaImagem;
     }
@@ -51,6 +52,7 @@ public class Ambiente implements Serializable{
      */
     public Ambiente(String descricao) {
         this();
+        this.marcado = false;
         this.descricao = descricao;
     }
     
@@ -59,6 +61,7 @@ public class Ambiente implements Serializable{
      *
      */
     public Ambiente() {
+        this.marcado = false;
         this.descricao = "";
         this.nomeDaImagem = "vazio.png";
         saidas = new HashMap<>();
@@ -66,6 +69,14 @@ public class Ambiente implements Serializable{
         npcs = new ArrayList<>();
     }
 
+    public boolean taMarcado() {
+        return marcado;
+    }
+    
+    public void setMarcado(boolean marcado) {
+        this.marcado = marcado;
+    }
+    
     /**
      * Metodo ajustarSaida.
      *
@@ -87,6 +98,17 @@ public class Ambiente implements Serializable{
      */
     public String getDescricao() {
         return this.descricao;
+    }
+    
+    /**
+     * Metodo setDescricao.
+     *
+     * Muda a descricao do ambiente.
+     *
+     * @param descricao String com a descricao do ambiente.
+     */
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     /**
@@ -312,11 +334,13 @@ public class Ambiente implements Serializable{
     }
     
     public void removerNPC (String alvo) {
+        NPC temp = null;
         for (NPC npc : npcs) {
             if (npc.getNome().equals(alvo)) {
-                npcs.remove(npc);
+                temp = npc;
             }
         }
+        npcs.remove(temp);
     }
 
     /**

@@ -798,7 +798,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         botaoFarmaceuta.setMaximumSize(new java.awt.Dimension(100, 100));
         botaoFarmaceuta.setMinimumSize(new java.awt.Dimension(100, 100));
         botaoFarmaceuta.setPreferredSize(new java.awt.Dimension(100, 100));
-        botaoFarmaceuta.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Filipe.png"));
+        botaoFarmaceuta.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Farma.png"));
         botaoFarmaceuta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoFarmaceutaActionPerformed(evt);
@@ -814,7 +814,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         botaoMedico.setMaximumSize(new java.awt.Dimension(100, 100));
         botaoMedico.setMinimumSize(new java.awt.Dimension(100, 100));
         botaoMedico.setPreferredSize(new java.awt.Dimension(100, 100));
-        botaoMedico.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Raydson.png"));
+        botaoMedico.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Medico.png"));
         botaoMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoMedicoActionPerformed(evt);
@@ -846,7 +846,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         botaoVelho.setMaximumSize(new java.awt.Dimension(100, 100));
         botaoVelho.setMinimumSize(new java.awt.Dimension(100, 100));
         botaoVelho.setPreferredSize(new java.awt.Dimension(100, 100));
-        botaoCachorro.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Velho.png"));
+        botaoVelho.setIcon(new ImageIcon(CAMINHO_DOS_ICONES + "Vendedor.png"));
         botaoVelho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoVelhoActionPerformed(evt);
@@ -1397,9 +1397,8 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
                 "O Manicômio de Zulu", JOptionPane.QUESTION_MESSAGE);
     }
     
-    private void imprimirAtorEscolhido(String tipoDeAtor, String nome) {
-        labelNPCselecionado.setText(tipoDeAtor + " conhecido como " + nome 
-                    + " gerado com sucesso! Clique OK para continuar...");
+    private void imprimirAtorEscolhido(String tipoDeAtor) {
+        labelNPCselecionado.setText(tipoDeAtor + " gerado com sucesso! Clique OK para continuar...");
     }
     
     private void botaoFarmaceutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoFarmaceutaActionPerformed
@@ -1407,7 +1406,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         if (nome != null) {
             nome = nome.split(" ")[0];
             auxNPC = new Farmaceuta(nome);
-            imprimirAtorEscolhido("Farmaceuta", nome);
+            imprimirAtorEscolhido("Farmaceuta");
         }
     }//GEN-LAST:event_botaoFarmaceutaActionPerformed
 
@@ -1416,7 +1415,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         if (nome != null) {
             nome = nome.split(" ")[0];
             auxNPC = new Medico(nome);
-            imprimirAtorEscolhido("Médico", nome);
+            imprimirAtorEscolhido("Médico");
         }
     }//GEN-LAST:event_botaoMedicoActionPerformed
 
@@ -1425,13 +1424,13 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         if (nome != null) {
             nome = nome.split(" ")[0];
             auxNPC = new Cachorro(nome);
-            imprimirAtorEscolhido("Cachorro", nome);
+            imprimirAtorEscolhido("Cachorro");
         }
     }//GEN-LAST:event_botaoCachorroActionPerformed
 
     private void botaoChilofompilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoChilofompilaActionPerformed
         auxNPC = new Chilofompila();
-        imprimirAtorEscolhido("Chilofompila", "Chilofompila (óbvio)");
+        imprimirAtorEscolhido("Chilofompila");
     }//GEN-LAST:event_botaoChilofompilaActionPerformed
 
     private void botaoVelhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoVelhoActionPerformed
@@ -1439,7 +1438,7 @@ public class DialogoNavegadoraDeRecursos extends javax.swing.JDialog {
         if (nome != null) {
             nome = nome.split(" ")[0];
             auxNPC = new Vendedor(nome);
-            imprimirAtorEscolhido("Vendedor", nome);
+            imprimirAtorEscolhido("Vendedor");
         }
     }//GEN-LAST:event_botaoVelhoActionPerformed
 
