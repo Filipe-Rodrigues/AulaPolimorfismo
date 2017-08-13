@@ -118,7 +118,7 @@ public class JanelaNovoJogo extends javax.swing.JFrame {
         listaUsuarios = new javax.swing.JList<>();
         botaoEntrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(" O Manicômio de Zulu");
         setMinimumSize(new java.awt.Dimension(328, 436));
         setResizable(false);

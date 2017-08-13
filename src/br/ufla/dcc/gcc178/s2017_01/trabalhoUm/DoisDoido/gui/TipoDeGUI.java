@@ -16,5 +16,7 @@ public enum TipoDeGUI {
     ITEM_DO_AMBIENTE,
     ITEM_DO_INVENTARIO,
     ITEM_DO_NPC,
-    NPC;
+    NPC,
+    EDITOR_NPC,
+    EDITOR_ITEM;
 }

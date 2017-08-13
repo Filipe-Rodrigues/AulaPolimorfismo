@@ -19,7 +19,9 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.swing.ImageIcon;
 import br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.core.ComandoDeJogoListener;
+import static br.ufla.dcc.gcc178.s2017_01.trabalhoUm.DoisDoido.gui.UtilitariosGUI.CAMINHO_DOS_BACKGROUNDS;
 import java.awt.Color;
+import java.awt.Image;
 import java.util.Date;
 import javax.swing.UIManager;
 
@@ -800,17 +802,21 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         botaoCancelar.setEnabled(false);
         botaoHabilidade.setEnabled(false);
         if (!evt.taFinalizado()) {
-            List<String> saidas = evt.getSaidasDisponiveis();
-            for (String direcao : saidas) {
-                if (direcao.equals("leste")) {
-                    botaoLeste.setEnabled(true);
-                } else if (direcao.equals("oeste")) {
-                    botaoOeste.setEnabled(true);
-                } else if (direcao.equals("norte")) {
-                    botaoNorte.setEnabled(true);
-                } else if (direcao.equals("sul")) {
-                    botaoSul.setEnabled(true);
+            try{
+                List<String> saidas = evt.getSaidasDisponiveis();
+                for (String direcao : saidas) {
+                    if (direcao.equals("leste")) {
+                        botaoLeste.setEnabled(true);
+                    } else if (direcao.equals("oeste")) {
+                        botaoOeste.setEnabled(true);
+                    } else if (direcao.equals("norte")) {
+                        botaoNorte.setEnabled(true);
+                    } else if (direcao.equals("sul")) {
+                        botaoSul.setEnabled(true);
+                    }
                 }
+            } catch (NullPointerException e) {
+                jTextArea1.append("Não tem saídas pra você!\n");
             }
             if (evt.getEstadoAtual() != EstadoDeJogo.NAVEGANDO) {
                 botaoCancelar.setEnabled(true);
@@ -903,8 +909,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private void atualizarImagem(String nomeDaImagem) {
         if (!nomeDaImagem.equals("")) {
             try {
-                BufferedImage img = ImageIO.read(new File("res/images/bg/" + nomeDaImagem));
-                labelImagem.setIcon(new ImageIcon(img));
+                BufferedImage img = ImageIO.read(new File(CAMINHO_DOS_BACKGROUNDS + nomeDaImagem));
+                labelImagem.setIcon(new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(800, 400, Image.SCALE_SMOOTH)));
             } catch (IOException ex) {
                 labelImagem.setIcon(new ImageIcon(notFound));
             }
